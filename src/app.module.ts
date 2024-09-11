@@ -5,7 +5,6 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { User } from './user.entity';
 import { UserService } from './user.service';
 import { UserController } from './user.controller';
-import { ApiController } from './api.controller';
 
 @Module({
   imports: [
@@ -21,7 +20,7 @@ import { ApiController } from './api.controller';
     }),
     TypeOrmModule.forFeature([User]),
   ],
-  controllers: [AppController, UserController, ApiController],
+  controllers: [AppController, UserController],
   providers: [AppService, UserService],
 })
 export class AppModule {}
