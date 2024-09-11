@@ -15,6 +15,10 @@ export class UserService {
   }
 
   findOne(telegram_id: string): Promise<User> {
-    return this.userRepository.findOneBy({ telegram_id });
+    const user = await this.userRepository.findOneBy({ telegram_id });
+    if (!user) {
+      throw new NotFoundException(`User with telegram_id ${telegram_id} not found`);
+    }
+    return user;
   }
 }
