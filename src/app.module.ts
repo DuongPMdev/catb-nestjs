@@ -20,7 +20,7 @@ import { UserController } from './user.controller';
     }),
     TypeOrmModule.forFeature([User]),
   ],
-  controllers: [AppController],
-  providers: [AppService],
+  controllers: [AppController, UserController],
+  providers: [AppService, UserService],
 })
 export class AppModule {}
