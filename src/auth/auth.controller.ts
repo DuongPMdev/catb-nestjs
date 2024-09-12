@@ -25,8 +25,8 @@ export class AuthController {
     return { message: 'Invalid credentials' };
   }
   
-  @UseGuards(AuthGuard('jwt'))
   @Get('profile')
+  @UseGuards(AuthGuard('jwt'))
   @ApiOperation({ summary: 'Get Profile' })
   @ApiResponse({ status: 200, description: 'Successful retrieval of user profile'})
   @ApiResponse({ status: 401, description: 'Unauthorized' })
