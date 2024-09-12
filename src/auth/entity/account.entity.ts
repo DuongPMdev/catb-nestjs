@@ -8,6 +8,9 @@ export class Account {
   @Column({ unique: true })
   telegram_id: string;
 
+  @Column({ unique: true })
+  account_id: string;
+
   @Column()
   display_name: string;
 }
