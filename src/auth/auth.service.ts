@@ -4,7 +4,7 @@ import { Repository } from 'typeorm';
 import { JwtService } from '@nestjs/jwt';
 import { Account } from './entity/account.entity';
 import { Currency } from './entity/currency.entity';
-import { LoginDto } from './dto/login.dto';
+import { LoginDTO } from './dto/login.dto';
 
 @Injectable()
 export class AuthService {
@@ -16,20 +16,23 @@ export class AuthService {
     private jwtService: JwtService,
   ) {}
 
-  async validateAccount(loginDto: LoginDto): Promise<any> {
-    const account = await this.accountRepository.findOne({ where: { telegram_id: loginDto.telegram_id } });
+  async validateAccount(loginDTO: LoginDTO): Promise<any> {
+    const account = await this.accountRepository.findOne({ where: { telegram_id: loginDTO.telegram_id } });
     if (account) {
-      const { ...result } = account;
-      return result;
+      account.display_name = loginDTO.display_name;
+      account.last_login = new Date();
+      const updatedAccount = await this.accountRepository.update(loginDTO.telegram_id, account);
+      return updatedAccount;
     }
     else {
       var account_id = "";
       const newAccount = this.accountRepository.create({
-        telegram_id: loginDto.telegram_id,
+        telegram_id: loginDTO.telegram_id,
         account_id: account_id,
-        display_name: loginDto.display_name,
+        display_name: loginDTO.display_name,
+        landuage_code: loginDTO.landuage_code,
         avatar: 0,
-        platform: loginDto.platform
+        platform: loginDTO.platform
       });
       return this.accountRepository.save(newAccount);
     }

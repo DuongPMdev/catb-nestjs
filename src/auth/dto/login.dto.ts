@@ -1,6 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 
-export class LoginDto {
+export class LoginDTO {
   @ApiProperty({ example: '1894903459', description: 'Telegram ID' })
   telegram_id: string;
 
