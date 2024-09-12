@@ -1,7 +1,6 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { AuthModule } from './auth/auth.module';
-import { ProfileModule } from './profile/profile.module';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
@@ -22,7 +21,6 @@ import { User } from './auth/user/user.entity';
     TypeOrmModule.forFeature([User]),
     ConfigModule.forRoot({ isGlobal: true }),
     AuthModule,
-    ProfileModule,
   ],
   controllers: [AppController],
   providers: [AppService],

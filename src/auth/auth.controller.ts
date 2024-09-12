@@ -1,7 +1,9 @@
-import { Controller, Post, Body } from '@nestjs/common';
+import { Controller, Post, Get, Body, Request, UseGuards} from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { LoginDto } from './dto/login.dto';
 import { ApiTags, ApiOperation, ApiResponse, ApiBearerAuth } from '@nestjs/swagger';
+import { AuthGuard } from '@nestjs/passport';
+
 
 @ApiTags('auth')
 @Controller('auth')
@@ -21,5 +23,16 @@ export class AuthController {
       return this.authService.login(user);
     }
     return { message: 'Invalid credentials' };
+  }
+  
+  @UseGuards(AuthGuard('jwt'))
+  @Get()
+  @ApiOperation({ summary: 'Get Profile' })
+  @ApiResponse({ status: 200, description: 'Successful retrieval of user profile'})
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  async getProfile(@Request() req) {
+    const telegram_id = req.user.telegram_id;
+    const profile = await this.authService.getProfile(telegram_id);
+    return profile;
   }
 }
