@@ -2,7 +2,7 @@ import { Controller, Post, Get, Body, Request, UseGuards} from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { JwtAuthGuard } from './jwt-auth.guard';
 import { LoginDto } from './dto/login.dto';
-import { ApiTags, ApiOperation, ApiResponse } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiTags, ApiOperation, ApiResponse } from '@nestjs/swagger';
 
 
 @ApiTags('auth')
@@ -27,6 +27,7 @@ export class AuthController {
   
   @UseGuards(JwtAuthGuard)
   @Get('profile')
+  @ApiBearerAuth() // Swagger will expect the JWT token in the header
   @ApiOperation({ summary: 'Get Profile' })
   @ApiResponse({ status: 200, description: 'Successful retrieval of user profile'})
   @ApiResponse({ status: 401, description: 'Unauthorized' })
