@@ -19,10 +19,7 @@ export class CatLuckyController {
   @ApiResponse({ status: 401, description: 'Unauthorized' })
   async getProfile(@Request() req) {
     const account_id = req.user.account_id;
-    var catLucky = await this.catLuckyService.getCatLuckyByAccountID(account_id);
-    if (catLucky == null) {
-        catLucky = new catLucky(account_id);
-    }
+    const catLucky = await this.catLuckyService.getCatLuckyByAccountID(account_id);
     return classToPlain(catLucky);
   }
 }
