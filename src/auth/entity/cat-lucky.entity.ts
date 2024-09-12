@@ -21,7 +21,7 @@ export class CatLucky {
   collected_gem: number;
 
   @Column()
-  collected_fragment: number;
+  collected_shard: number;
 
   @Column()
   collected_ton: number;
@@ -44,7 +44,7 @@ export class CatLucky {
     this.stage = 0;
     this.current_stage_result = "";
     this.collected_gem = 0;
-    this.collected_fragment = 0;
+    this.collected_shard = 0;
     this.collected_ton = 0;
     this.collected_star = 0;
     this.collected_bnb = 0;
