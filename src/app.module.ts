@@ -5,9 +5,7 @@ import { ProfileModule } from './profile/profile.module';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { User } from './user.entity';
-import { UserService } from './user.service';
-import { UserController } from './user.controller';
+import { User } from './auth/user.entity';
 
 @Module({
   imports: [
@@ -22,11 +20,11 @@ import { UserController } from './user.controller';
       synchronize: false,
     }),
     TypeOrmModule.forFeature([User]),
-    ConfigModule.forRoot({ isGlobal: true }), // To load environment variables
+    ConfigModule.forRoot({ isGlobal: true }),
     AuthModule,
     ProfileModule,
   ],
-  controllers: [AppController, UserController],
-  providers: [AppService, UserService],
+  controllers: [AppController],
+  providers: [AppService],
 })
 export class AppModule {}
