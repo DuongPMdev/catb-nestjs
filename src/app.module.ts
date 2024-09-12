@@ -1,4 +1,7 @@
 import { Module } from '@nestjs/common';
+import { ConfigModule } from '@nestjs/config';
+import { AuthModule } from './auth/auth.module';
+import { ProfileModule } from './profile/profile.module';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
@@ -19,6 +22,9 @@ import { UserController } from './user.controller';
       synchronize: false,
     }),
     TypeOrmModule.forFeature([User]),
+    AuthModule,
+    ProfileModule,
+    ConfigModule.forRoot({ isGlobal: true }), // To load environment variables
   ],
   controllers: [AppController, UserController],
   providers: [AppService, UserService],
