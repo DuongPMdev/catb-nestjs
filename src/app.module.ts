@@ -5,7 +5,6 @@ import { ProfileModule } from './profile/profile.module';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { User } from './auth/user.entity';
 
 @Module({
   imports: [
