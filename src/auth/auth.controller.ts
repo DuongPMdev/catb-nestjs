@@ -15,6 +15,9 @@ export class AuthController {
   async login(@Body() loginDto: LoginDto) {
     const user = await this.authService.validateUser(loginDto.telegram_id);
     if (user) {
+      if (loginDto.referral_id) {
+
+      }
       return this.authService.login(user);
     }
     return { message: 'Invalid credentials' };

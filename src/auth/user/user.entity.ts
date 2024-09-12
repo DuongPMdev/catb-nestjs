@@ -7,4 +7,7 @@ export class User {
 
   @Column({ unique: true })
   telegram_id: string;
+
+  @Column()
+  display_name: string;
 }
