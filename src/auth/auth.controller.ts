@@ -13,8 +13,8 @@ export class AuthController {
   @ApiOperation({ summary: 'Login' })
   @ApiResponse({ status: 200, description: 'Successful login', schema: { example: { access_token: 'your-jwt-token-here' } } })
   @ApiResponse({ status: 401, description: 'Unauthorized' })
-  async login(@Body() loginDto: LoginDto, testDto: TestDto) {
-    const user = await this.authService.validateUser(loginDto.username, loginDto.password);
+  async login(@Body() testDto: TestDto) {
+    const user = await this.authService.validateUser(testDto.username, testDto.password);
     if (user) {
       return this.authService.login(user);
     }
