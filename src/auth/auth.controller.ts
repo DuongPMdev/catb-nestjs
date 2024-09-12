@@ -37,7 +37,6 @@ export class AuthController {
     const profile = await this.authService.getAccountByTelegramID(telegram_id);
     if (profile) {
       const statistic = await this.authService.getStatisticByAccountID(profile.account_id);
-      delete profile.account_id;
       return { "profile": profile, "statistic": statistic };
     }
     else {
