@@ -5,7 +5,7 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Account } from './auth/entity/account.entity';
-import { Statistic } from './auth/entity/statistic.entity';
+import { Currency } from './auth/entity/currency.entity';
 
 @Module({
   imports: [
@@ -15,11 +15,11 @@ import { Statistic } from './auth/entity/statistic.entity';
       port: 3306,
       username: 'duongpm13',
       password: 'NGen2024@',
-      database: 'cat_battle',
-      entities: [ Account, Statistic ],
+      database: 'plays_hub',
+      entities: [ Account, Currency ],
       synchronize: false,
     }),
-    TypeOrmModule.forFeature([Account, Statistic]),
+    TypeOrmModule.forFeature([Account, Currency]),
     ConfigModule.forRoot({ isGlobal: true }),
     AuthModule
   ],

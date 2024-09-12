@@ -3,15 +3,15 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { JwtService } from '@nestjs/jwt';
 import { Account } from './entity/account.entity';
-import { Statistic } from './entity/statistic.entity';
+import { Currency } from './entity/currency.entity';
 
 @Injectable()
 export class AuthService {
   constructor(
     @InjectRepository(Account)
     private accountRepository: Repository<Account>,
-    @InjectRepository(Statistic)
-    private statisticRepository: Repository<Statistic>,
+    @InjectRepository(Currency)
+    private currencyRepository: Repository<Currency>,
     private jwtService: JwtService,
   ) {}
 
@@ -35,8 +35,8 @@ export class AuthService {
     return await this.accountRepository.findOne({ where: { telegram_id: telegram_id } });
   }
 
-  async getStatisticByAccountID(account_id: string) {
-    return await this.statisticRepository.findOne({ where: { account_id: account_id } });
+  async getCurrencyByAccountID(account_id: string) {
+    return await this.currencyRepository.findOne({ where: { account_id: account_id } });
   }
 
 }
