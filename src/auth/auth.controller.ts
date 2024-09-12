@@ -15,12 +15,12 @@ export class AuthController {
   @ApiResponse({ status: 200, description: 'Successful login', schema: { example: { access_token: 'your-jwt-token-here' } } })
   @ApiResponse({ status: 401, description: 'Unauthorized' })
   async login(@Body() loginDto: LoginDto) {
-    const user = await this.authService.validateUser(loginDto.telegram_id);
-    if (user) {
+    const account = await this.authService.validateAccountByTelegramID(loginDto.telegram_id);
+    if (account) {
       if (loginDto.referral_id) {
 
       }
-      return this.authService.login(user);
+      return this.authService.login(account);
     }
     return { message: 'Invalid credentials' };
   }
@@ -29,11 +29,11 @@ export class AuthController {
   @Get('profile')
   @ApiBearerAuth() // Swagger will expect the JWT token in the header
   @ApiOperation({ summary: 'Get Profile' })
-  @ApiResponse({ status: 200, description: 'Successful retrieval of user profile'})
+  @ApiResponse({ status: 200, description: 'Successful retrieval of account profile'})
   @ApiResponse({ status: 401, description: 'Unauthorized' })
   async getProfile(@Request() req) {
     const telegram_id = req.user.telegram_id;
-    const profile = await this.authService.getProfile(telegram_id);
+    const profile = await this.authService.getAccountByTelegramID(telegram_id);
     return profile;
   }
 }

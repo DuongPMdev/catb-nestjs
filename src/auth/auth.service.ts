@@ -2,33 +2,33 @@ import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { JwtService } from '@nestjs/jwt';
-import { User } from './user/user.entity';
+import { Account } from './entity/account.entity';
 
 @Injectable()
 export class AuthService {
   constructor(
-    @InjectRepository(User)
-    private usersRepository: Repository<User>,
+    @InjectRepository(Account)
+    private accountRepository: Repository<Account>,
     private jwtService: JwtService,
   ) {}
 
-  async validateUser(telegram_id: string): Promise<any> {
-    const user = await this.usersRepository.findOne({ where: { telegram_id } });
-    if (user) {
-      const { ...result } = user;
+  async validateAccountByTelegramID(telegram_id: string): Promise<any> {
+    const account = await this.accountRepository.findOne({ where: { telegram_id } });
+    if (account) {
+      const { ...result } = account;
       return result;
     }
     return null;
   }
 
-  async login(user: any) {
-    const payload = { telegram_id: user.telegram_id };
+  async login(account: any) {
+    const payload = { telegram_id: account.telegram_id };
     return {
       access_token: this.jwtService.sign(payload),
     };
   }
 
-  async getProfile(telegram_id: string) {
-    return await this.usersRepository.findOne({ where: { telegram_id: telegram_id } });
+  async getAccountByTelegramID(telegram_id: string) {
+    return await this.accountRepository.findOne({ where: { telegram_id: telegram_id } });
   }
 }
