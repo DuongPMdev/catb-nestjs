@@ -1,4 +1,5 @@
 import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
+import { Exclude } from 'class-transformer';
 
 @Entity('statistic_test')
 export class Statistic {
@@ -6,6 +7,7 @@ export class Statistic {
   id: number;
 
   @Column({ unique: true })
+  @Exclude()
   account_id: string;
 
   @Column()

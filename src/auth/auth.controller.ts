@@ -38,7 +38,7 @@ export class AuthController {
     const profile = await this.authService.getAccountByTelegramID(telegram_id);
     if (profile) {
       const statistic = await this.authService.getStatisticByAccountID(profile.account_id);
-      return { "profile": classToPlain(profile), "statistic": statistic };
+      return { "profile": classToPlain(profile), "statistic": classToPlain(statistic) };
     }
     else {
       throw new NotFoundException('Profile not found');
