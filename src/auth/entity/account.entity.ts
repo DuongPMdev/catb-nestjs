@@ -42,13 +42,13 @@ export class Account {
   @Column()
   platform: string;
 
-  @Column()
+  @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
   last_login: Date;
-
-  @Column()
+  
+  @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
   last_logout: Date;
 
-  @Column()
+  @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
   created_datetime: Date;
 
 }

@@ -4,6 +4,7 @@ import { Repository } from 'typeorm';
 import { JwtService } from '@nestjs/jwt';
 import { Account } from './entity/account.entity';
 import { Currency } from './entity/currency.entity';
+import { LoginDto } from './dto/login.dto';
 
 @Injectable()
 export class AuthService {
@@ -15,11 +16,22 @@ export class AuthService {
     private jwtService: JwtService,
   ) {}
 
-  async validateAccountByTelegramID(telegram_id: string): Promise<any> {
-    const account = await this.accountRepository.findOne({ where: { telegram_id } });
+  async validateAccount(loginDto: LoginDto): Promise<any> {
+    const account = await this.accountRepository.findOne({ where: { telegram_id: loginDto.telegram_id } });
     if (account) {
       const { ...result } = account;
       return result;
+    }
+    else {
+      var account_id = "";
+      const user = this.accountRepository.create({
+        telegram_id: loginDto.telegram_id,
+        account_id: account_id,
+        display_name: loginDto.display_name,
+        avatar: 0,
+        platform: loginDto.platform
+      });
+      return this.accountRepository.save(user);
     }
     return null;
   }

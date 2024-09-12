@@ -14,10 +14,9 @@ export class AuthController {
 
   @Post('login')
   @ApiOperation({ summary: 'Login' })
-  @ApiResponse({ status: 200, description: 'Successful login', schema: { example: { access_token: 'your-jwt-token-here' } } })
-  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiResponse({ status: 200, description: 'Successful login', schema: { example: { access_token: 'your-jwt-token-here' }}})
   async login(@Body() loginDto: LoginDto) {
-    const account = await this.authService.validateAccountByTelegramID(loginDto.telegram_id);
+    const account = await this.authService.validateAccount(loginDto);
     if (account) {
       if (loginDto.referral_id) {
 
