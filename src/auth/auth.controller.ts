@@ -1,10 +1,11 @@
-import { Controller, Post, Get, Body, Request, UseGuards} from '@nestjs/common';
+import { Controller, Post, Get, Body, Request, UseGuards, Injectable, NotFoundException} from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { JwtAuthGuard } from './jwt-auth.guard';
 import { LoginDto } from './dto/login.dto';
 import { ApiBearerAuth, ApiTags, ApiOperation, ApiResponse } from '@nestjs/swagger';
 
 
+@Injectable()
 @ApiTags('account')
 @Controller('auth')
 export class AuthController {
@@ -34,7 +35,13 @@ export class AuthController {
   async getProfile(@Request() req) {
     const telegram_id = req.user.telegram_id;
     const profile = await this.authService.getAccountByTelegramID(telegram_id);
-    const statistic = await this.authService.getStatisticByAccountID(profile.account_id);
-    return { "profile": profile, "statistic": statistic };
+    if (profile) {
+      const statistic = await this.authService.getStatisticByAccountID(profile.account_id);
+      delete profile.account_id;
+      return { "profile": profile, "statistic": statistic };
+    }
+    else {
+      throw new NotFoundException('Profile not found');
+    }
   }
 }
