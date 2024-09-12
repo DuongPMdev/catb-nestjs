@@ -3,6 +3,7 @@ import { AuthService } from './auth.service';
 import { JwtAuthGuard } from './jwt-auth.guard';
 import { LoginDto } from './dto/login.dto';
 import { ApiBearerAuth, ApiTags, ApiOperation, ApiResponse } from '@nestjs/swagger';
+import { classToPlain } from 'class-transformer';
 
 
 @Injectable()
@@ -37,7 +38,7 @@ export class AuthController {
     const profile = await this.authService.getAccountByTelegramID(telegram_id);
     if (profile) {
       const statistic = await this.authService.getStatisticByAccountID(profile.account_id);
-      return { "profile": profile, "statistic": statistic };
+      return { "profile": classToPlain(profile), "statistic": statistic };
     }
     else {
       throw new NotFoundException('Profile not found');
