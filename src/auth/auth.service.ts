@@ -24,16 +24,15 @@ export class AuthService {
     }
     else {
       var account_id = "";
-      const user = this.accountRepository.create({
+      const newAccount = this.accountRepository.create({
         telegram_id: loginDto.telegram_id,
         account_id: account_id,
         display_name: loginDto.display_name,
         avatar: 0,
         platform: loginDto.platform
       });
-      return this.accountRepository.save(user);
+      return this.accountRepository.save(newAccount);
     }
-    return null;
   }
 
   async login(account: any) {
@@ -48,7 +47,11 @@ export class AuthService {
   }
 
   async getCurrencyByAccountID(account_id: string) {
-    return await this.currencyRepository.findOne({ where: { account_id: account_id } });
+    var currency = await this.currencyRepository.findOne({ where: { account_id: account_id } });
+    if (currency == null) {
+      currency = new Currency(account_id);
+    }
+    return currency;
   }
 
 }
