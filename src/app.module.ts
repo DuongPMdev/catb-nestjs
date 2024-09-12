@@ -20,7 +20,7 @@ import { User } from './auth/user/user.entity';
     }),
     TypeOrmModule.forFeature([User]),
     ConfigModule.forRoot({ isGlobal: true }),
-    AuthModule,
+    AuthModule
   ],
   controllers: [AppController],
   providers: [AppService],
