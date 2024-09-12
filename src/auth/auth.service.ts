@@ -19,9 +19,7 @@ export class AuthService {
   async validateAccount(loginDTO: LoginDTO): Promise<any> {
     const account = await this.accountRepository.findOne({ where: { telegram_id: loginDTO.telegram_id } });
     if (account) {
-      account.display_name = loginDTO.display_name;
-      account.last_login = new Date();
-      const updatedAccount = await this.accountRepository.update(loginDTO.telegram_id, account);
+      const updatedAccount = await this.accountRepository.update(loginDTO.telegram_id, { display_name: loginDTO.display_name, last_login: new Date() });
       return updatedAccount;
     }
     else {
