@@ -1,19 +1,22 @@
 import { Controller, Get, Request, UseGuards } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { ApiTags, ApiBearerAuth, ApiOperation, ApiResponse } from '@nestjs/swagger';
+import { AuthService } from '../auth/auth.service';
 
 @ApiTags('profile')
 @ApiBearerAuth()
 @Controller('profile')
 export class ProfileController {
-  // Protect the route using JWT AuthGuard
+  constructor(private readonly authService: AuthService) {}
+  
   @UseGuards(AuthGuard('jwt'))
   @Get()
   @ApiOperation({ summary: 'Get Profile' })
-  @ApiResponse({ status: 200, description: 'Successful retrieval of user profile', schema: { example: { userId: 1, username: 'testuser' } } })
+  @ApiResponse({ status: 200, description: 'Successful retrieval of user profile'})
   @ApiResponse({ status: 401, description: 'Unauthorized' })
-  getProfile(@Request() req) {
-    // Return the user's profile based on the JWT token's payload
-    return req.user;
+  async getProfile(@Request() req) {
+    const telegram_id = req.user.telegram_id;
+    const profile = await this.authService.getProfile(telegram_id);
+    return profile;
   }
 }

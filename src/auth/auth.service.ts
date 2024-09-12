@@ -27,4 +27,8 @@ export class AuthService {
       access_token: this.jwtService.sign(payload),
     };
   }
+
+  async getProfile(telegram_id: string) {
+    return await this.usersRepository.findOne({ where: { telegram_id: telegram_id } });
+  }
 }
