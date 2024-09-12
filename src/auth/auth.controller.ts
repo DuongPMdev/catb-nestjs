@@ -8,7 +8,7 @@ import { classToPlain } from 'class-transformer';
 
 @Injectable()
 @ApiTags('account')
-@Controller('auth')
+@Controller('account')
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
