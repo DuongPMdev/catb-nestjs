@@ -22,9 +22,9 @@ import { UserController } from './user.controller';
       synchronize: false,
     }),
     TypeOrmModule.forFeature([User]),
+    ConfigModule.forRoot({ isGlobal: true }), // To load environment variables
     AuthModule,
     ProfileModule,
-    ConfigModule.forRoot({ isGlobal: true }), // To load environment variables
   ],
   controllers: [AppController, UserController],
   providers: [AppService, UserService],
