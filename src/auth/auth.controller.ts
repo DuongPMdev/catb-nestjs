@@ -34,6 +34,7 @@ export class AuthController {
   async getProfile(@Request() req) {
     const telegram_id = req.user.telegram_id;
     const profile = await this.authService.getAccountByTelegramID(telegram_id);
-    return profile;
+    const statistic = await this.authService.getStatisticByAccountID(profile.account_id);
+    return { "profile": profile, "statistic": statistic };
   }
 }
