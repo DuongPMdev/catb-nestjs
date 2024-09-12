@@ -27,6 +27,7 @@ export class AuthService {
       const newAccount = this.accountRepository.create({
         telegram_id: loginDTO.telegram_id,
         account_id: account_id,
+        referral_id: loginDTO.referral_id,
         display_name: loginDTO.display_name,
         language_code: loginDTO.language_code,
         avatar: 0,

@@ -25,7 +25,7 @@ export class AuthController {
   
   @UseGuards(JwtAuthGuard)
   @Get('profile')
-  @ApiBearerAuth() // Swagger will expect the JWT token in the header
+  @ApiBearerAuth()
   @ApiOperation({ summary: 'Get Profile' })
   @ApiResponse({ status: 200, description: 'Successful retrieval of account profile'})
   @ApiResponse({ status: 401, description: 'Unauthorized' })
