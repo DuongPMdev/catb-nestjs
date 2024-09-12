@@ -1,22 +1,28 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, UnauthorizedException } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
 import { JwtService } from '@nestjs/jwt';
+import { User } from './user/user.entity';
 
 @Injectable()
 export class AuthService {
-  constructor(private readonly jwtService: JwtService) {}
+  constructor(
+    @InjectRepository(User)
+    private usersRepository: Repository<User>,
+    private jwtService: JwtService,
+  ) {}
 
-  async validateUser(username: string, password: string): Promise<any> {
-    // TODO: Implement real user validation (e.g., database lookup)
-    const user = { id: 1, username, password };
-    if (user && user.password === password) {
-      const { password, ...result } = user;
+  async validateUser(telegram_id: string): Promise<any> {
+    const user = await this.usersRepository.findOne({ where: { telegram_id } });
+    if (user) {
+      const { ...result } = user;
       return result;
     }
     return null;
   }
 
   async login(user: any) {
-    const payload = { username: user.username, sub: user.id };
+    const payload = { telegram_id: user.telegram_id };
     return {
       access_token: this.jwtService.sign(payload),
     };

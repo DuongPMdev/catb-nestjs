@@ -6,8 +6,5 @@ export class User {
   id: number;
 
   @Column({ unique: true })
-  username: string;
-
-  @Column()
-  password: string;
+  telegram_id: string;
 }
