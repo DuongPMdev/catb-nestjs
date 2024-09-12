@@ -30,7 +30,7 @@ export class AuthService {
         telegram_id: loginDTO.telegram_id,
         account_id: account_id,
         display_name: loginDTO.display_name,
-        landuage_code: loginDTO.landuage_code,
+        language_code: loginDTO.language_code,
         avatar: 0,
         platform: loginDTO.platform
       });

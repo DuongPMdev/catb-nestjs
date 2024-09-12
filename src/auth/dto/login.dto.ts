@@ -17,7 +17,7 @@ export class LoginDTO {
   display_name: string;
 
   @ApiProperty({ example: 'en', description: 'Language Code' })
-  landuage_code: string;
+  language_code: string;
 
   @ApiProperty({ example: 'ios', description: 'Playform' })
   platform: string;
