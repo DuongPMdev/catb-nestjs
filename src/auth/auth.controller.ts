@@ -21,6 +21,7 @@ export class AuthController {
       throw new BadRequestException('Invalid credentials');
     }
     if (account) {
+      console.log(account);
       return this.authService.login(account);
     }
     return { message: 'Invalid credentials' };
