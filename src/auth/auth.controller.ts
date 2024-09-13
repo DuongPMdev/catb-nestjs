@@ -1,4 +1,4 @@
-import { Controller, Post, Get, Body, Request, UseGuards, Injectable, NotFoundException} from '@nestjs/common';
+import { Controller, Post, Get, Body, Request, UseGuards, Injectable, NotFoundException, BadRequestException } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { JwtAuthGuard } from './jwt-auth.guard';
 import { LoginDTO } from './dto/login.dto';
@@ -17,6 +17,9 @@ export class AuthController {
   @ApiResponse({ status: 200, description: 'Successful login', schema: { example: { access_token: 'your-jwt-token-here' }}})
   async login(@Body() loginDTO: LoginDTO) {
     const account = await this.authService.validateAccount(loginDTO);
+    if (loginDTO.telegram_id == "") {
+      throw new BadRequestException('Invalid credentials');
+    }
     if (account) {
       return this.authService.login(account);
     }
