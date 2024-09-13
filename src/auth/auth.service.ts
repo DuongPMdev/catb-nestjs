@@ -15,6 +15,8 @@ export class AuthService {
     private currencyRepository: Repository<Currency>,
     private jwtService: JwtService,
   ) {}
+  
+  private readonly characters = 'abcdefghijklmnopqrstuvwxyz0123456789a';
 
   async validateAccount(loginDTO: LoginDTO): Promise<any> {
     const account = await this.accountRepository.findOne({ where: { telegram_id: loginDTO.telegram_id } });
@@ -22,7 +24,7 @@ export class AuthService {
       await this.accountRepository.update({ telegram_id: loginDTO.telegram_id }, { display_name: loginDTO.display_name, last_login: new Date() });
     }
     else {
-      var account_id = "";
+      var account_id = this.generateAccountID(8);
       const newAccount = this.accountRepository.create({
         telegram_id: loginDTO.telegram_id,
         account_id: account_id,
@@ -38,9 +40,19 @@ export class AuthService {
     return finalAccount;
   }
 
+  generateAccountID(length: number): string {
+    let result = '';
+    const charactersLength = this.characters.length;
+    
+    for (let i = 0; i < length; i++) {
+      const randomIndex = Math.floor(Math.random() * charactersLength);
+      result += this.characters.charAt(randomIndex);
+    }
+    
+    return result;
+  }
+
   async login(account: any) {
-    console.log("login account_id : " + account.account_id);
-    console.log("login telegram_id : " + account.telegram_id);
     const payload = { account_id: account.account_id, telegram_id: account.telegram_id };
     return {
       access_token: this.jwtService.sign(payload),

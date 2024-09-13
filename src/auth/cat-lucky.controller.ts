@@ -19,8 +19,6 @@ export class CatLuckyController {
   @ApiResponse({ status: 401, description: 'Unauthorized' })
   async status(@Request() req) {
     const account_id = req.user.account_id;
-    console.log("account_id account_id : " + account_id);
-    return;
     const catLucky = await this.catLuckyService.getCatLuckyStatus(account_id);
     return catLucky;
   }
@@ -33,8 +31,6 @@ export class CatLuckyController {
   @ApiResponse({ status: 401, description: 'Unauthorized' })
   async play(@Request() req, @Body() catLuckyDTO: CatLuckyDTO) {
     const account_id = req.user.account_id;
-    console.log("account_id account_id : " + account_id);
-    return;
     const catLucky = await this.catLuckyService.playCatLucky(account_id, catLuckyDTO.stage);
     return catLucky;
   }
