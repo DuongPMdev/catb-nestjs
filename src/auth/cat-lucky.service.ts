@@ -23,6 +23,7 @@ export class CatLuckyService {
 
   async playCatLucky(account_id: string, stage: number) {
     console.log("account_id account_id : " + account_id);
+    return;
     var catLucky = await this.catLuckyRepository.findOne({ where: { account_id: account_id } });
     if (catLucky == null) {
         catLucky = new CatLucky(account_id);
