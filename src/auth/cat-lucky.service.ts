@@ -39,6 +39,13 @@ export class CatLuckyService {
         if (itemType == "GAMEOVER") {
           catLucky.stage = 0;
           catLucky.current_stage_result = "";
+          catLucky.collected_gem = 0;
+          catLucky.collected_shard = 0;
+          catLucky.collected_ton = 0;
+          catLucky.collected_star = 0;
+          catLucky.collected_bnb = 0;
+          catLucky.collected_plays = 0;
+          catLucky.collected_ticket = 0;
         }
         else {
           if (itemType == "GEM") {
@@ -66,6 +73,10 @@ export class CatLuckyService {
           catLucky.current_stage_result = this.generateStageResult(catLucky.stage);
         }
       }
+      else {
+        catLucky.stage++;
+        catLucky.current_stage_result = this.generateStageResult(catLucky.stage);
+      }
       await this.catLuckyRepository.save(catLucky);
     }
     else {
@@ -78,7 +89,10 @@ export class CatLuckyService {
 
   generateStageResult(stage: number): string {
     let result = '';
-    const gameoverIndex = Math.floor(Math.random() * 4);
+    let gameoverIndex = Math.floor(Math.random() * 4);
+    if (stage % 5 == 0) {
+      gameoverIndex = -1;
+    }
     for (let i = 0; i < 4; i++) {
       if (i == gameoverIndex) {
         result += "GAMEOVER:1";
@@ -125,9 +139,16 @@ export class CatLuckyService {
     }
     var forceUpdate = false;
     if (stage > 0 && stage == catLucky.stage) {
+      catLucky.ticket += catLucky.collected_ticket;
       catLucky.stage = 0;
-      catLucky.collected_gem = 0;
       catLucky.current_stage_result = "";
+      catLucky.collected_gem = 0;
+      catLucky.collected_shard = 0;
+      catLucky.collected_ton = 0;
+      catLucky.collected_star = 0;
+      catLucky.collected_bnb = 0;
+      catLucky.collected_plays = 0;
+      catLucky.collected_ticket = 0;
       await this.catLuckyRepository.save(catLucky);
     }
     else {
