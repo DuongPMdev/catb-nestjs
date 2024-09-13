@@ -19,8 +19,7 @@ export class AuthService {
   async validateAccount(loginDTO: LoginDTO): Promise<any> {
     const account = await this.accountRepository.findOne({ where: { telegram_id: loginDTO.telegram_id } });
     if (account) {
-      const updatedAccount = await this.accountRepository.update({ telegram_id: loginDTO.telegram_id }, { display_name: loginDTO.display_name, last_login: new Date() });
-      return updatedAccount;
+      await this.accountRepository.update({ telegram_id: loginDTO.telegram_id }, { display_name: loginDTO.display_name, last_login: new Date() });
     }
     else {
       var account_id = "";
@@ -33,8 +32,10 @@ export class AuthService {
         avatar: 0,
         platform: loginDTO.platform
       });
-      return this.accountRepository.save(newAccount);
+      await this.accountRepository.save(newAccount);
     }
+    const finalAccount = await this.accountRepository.findOne({ where: { telegram_id: loginDTO.telegram_id } });
+    return finalAccount;
   }
 
   async login(account: any) {
