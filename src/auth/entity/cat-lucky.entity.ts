@@ -12,6 +12,9 @@ export class CatLucky {
   account_id: string;
 
   @Column()
+  ticket: number;
+
+  @Column()
   stage: number;
 
   @Column()
@@ -41,6 +44,7 @@ export class CatLucky {
   constructor(account_id: string) {
     this.id = 0;
     this.account_id = account_id;
+    this.ticket = 0;
     this.stage = 0;
     this.current_stage_result = "";
     this.collected_gem = 0;
