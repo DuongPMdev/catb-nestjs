@@ -27,6 +27,10 @@ export class CatLuckyService {
         catLucky = new CatLucky(account_id);
     }
     if (stage == catLucky.stage) {
+      catLucky.stage++;
+      catLucky.collected_gem += 100;
+      catLucky.current_stage_result = "GEM:100,GEM:100,GEM:100,GAMEOVER:1";
+      catLucky = this.catLuckyRepository.save(catLucky);
       return { "force_update": false, "status": classToPlain(catLucky) };
     }
     else {
@@ -34,12 +38,21 @@ export class CatLuckyService {
     }
   }
 
-  async finishCatLucky(account_id: string) {
+  async finishCatLucky(account_id: string, stage: number) {
     var catLucky = await this.catLuckyRepository.findOne({ where: { account_id: account_id } });
     if (catLucky == null) {
         catLucky = new CatLucky(account_id);
     }
-    return catLucky;
+    if (stage == catLucky.stage) {
+      catLucky.stage = 0;
+      catLucky.collected_gem = 0;
+      catLucky.current_stage_result = "";
+      catLucky = this.catLuckyRepository.save(catLucky);
+      return { "force_update": false, "status": classToPlain(catLucky) };
+    }
+    else {
+      return { "force_update": true, "status": classToPlain(catLucky) };
+    }
   }
 
 }

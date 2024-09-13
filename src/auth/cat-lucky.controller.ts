@@ -25,20 +25,24 @@ export class CatLuckyController {
   @UseGuards(JwtAuthGuard)
   @Post('play')
   @ApiBearerAuth()
-  @ApiOperation({ summary: 'Get Cat Lucky Game status' })
-  @ApiResponse({ status: 200, description: 'Successful retrieval of Cat Lucky Game status'})
+  @ApiOperation({ summary: 'Play Cat Lucky Game' })
+  @ApiResponse({ status: 200, description: 'Played Cat Lucky Game'})
   @ApiResponse({ status: 401, description: 'Unauthorized' })
   async play(@Request() req, stage: number) {
-    return {};
+    const account_id = req.user.account_id;
+    const catLucky = await this.catLuckyService.playCatLucky(account_id, stage);
+    return catLucky;
   }
   
   @UseGuards(JwtAuthGuard)
   @Post('finish')
   @ApiBearerAuth()
-  @ApiOperation({ summary: 'Get Cat Lucky Game status' })
-  @ApiResponse({ status: 200, description: 'Successful retrieval of Cat Lucky Game status'})
+  @ApiOperation({ summary: 'Finish Cat Lucky Game' })
+  @ApiResponse({ status: 200, description: 'Finished Cat Lucky Game'})
   @ApiResponse({ status: 401, description: 'Unauthorized' })
   async finish(@Request() req, stage: number) {
-    return {};
+    const account_id = req.user.account_id;
+    const catLucky = await this.catLuckyService.finishCatLucky(account_id, stage);
+    return catLucky;
   }
 }
