@@ -38,6 +38,8 @@ export class AuthService {
   }
 
   async login(account: any) {
+    console.log("login account_id : " + account.account_id);
+    console.log("login telegram_id : " + account.telegram_id);
     const payload = { account_id: account.account_id, telegram_id: account.telegram_id };
     return {
       access_token: this.jwtService.sign(payload),
