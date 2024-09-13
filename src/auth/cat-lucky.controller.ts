@@ -28,7 +28,7 @@ export class CatLuckyController {
   @ApiOperation({ summary: 'Play Cat Lucky Game' })
   @ApiResponse({ status: 200, description: 'Played Cat Lucky Game'})
   @ApiResponse({ status: 401, description: 'Unauthorized' })
-  async play(@Request() req, stage: number) {
+  async play(@Request() req, @Body() stage: number) {
     const account_id = req.user.account_id;
     const catLucky = await this.catLuckyService.playCatLucky(account_id, stage);
     return catLucky;
@@ -40,7 +40,7 @@ export class CatLuckyController {
   @ApiOperation({ summary: 'Finish Cat Lucky Game' })
   @ApiResponse({ status: 200, description: 'Finished Cat Lucky Game'})
   @ApiResponse({ status: 401, description: 'Unauthorized' })
-  async finish(@Request() req, stage: number) {
+  async finish(@Request() req, @Body() stage: number) {
     const account_id = req.user.account_id;
     const catLucky = await this.catLuckyService.finishCatLucky(account_id, stage);
     return catLucky;
