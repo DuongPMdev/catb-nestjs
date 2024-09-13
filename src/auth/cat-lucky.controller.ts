@@ -2,6 +2,7 @@ import { Controller, Post, Get, Body, Request, UseGuards, Injectable, NotFoundEx
 import { CatLuckyService } from './cat-lucky.service';
 import { JwtAuthGuard } from './jwt-auth.guard';
 import { ApiBearerAuth, ApiTags, ApiOperation, ApiResponse } from '@nestjs/swagger';
+import { CatLuckyDTO } from './dto/cat-lucky.dto';
 
 
 @Injectable()
@@ -28,9 +29,9 @@ export class CatLuckyController {
   @ApiOperation({ summary: 'Play Cat Lucky Game' })
   @ApiResponse({ status: 200, description: 'Played Cat Lucky Game'})
   @ApiResponse({ status: 401, description: 'Unauthorized' })
-  async play(@Request() req, @Body() stage: number) {
+  async play(@Request() req, @Body() catLuckyDTO: CatLuckyDTO) {
     const account_id = req.user.account_id;
-    const catLucky = await this.catLuckyService.playCatLucky(account_id, stage);
+    const catLucky = await this.catLuckyService.playCatLucky(account_id, catLuckyDTO.stage);
     return catLucky;
   }
   
@@ -40,9 +41,9 @@ export class CatLuckyController {
   @ApiOperation({ summary: 'Finish Cat Lucky Game' })
   @ApiResponse({ status: 200, description: 'Finished Cat Lucky Game'})
   @ApiResponse({ status: 401, description: 'Unauthorized' })
-  async finish(@Request() req, @Body() stage: number) {
+  async finish(@Request() req, @Body() catLuckyDTO: CatLuckyDTO) {
     const account_id = req.user.account_id;
-    const catLucky = await this.catLuckyService.finishCatLucky(account_id, stage);
+    const catLucky = await this.catLuckyService.finishCatLucky(account_id, catLuckyDTO.stage);
     return catLucky;
   }
 }
