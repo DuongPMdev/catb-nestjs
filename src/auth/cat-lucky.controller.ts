@@ -2,7 +2,6 @@ import { Controller, Post, Get, Body, Request, UseGuards, Injectable, NotFoundEx
 import { CatLuckyService } from './cat-lucky.service';
 import { JwtAuthGuard } from './jwt-auth.guard';
 import { ApiBearerAuth, ApiTags, ApiOperation, ApiResponse } from '@nestjs/swagger';
-import { classToPlain } from 'class-transformer';
 
 
 @Injectable()
@@ -17,9 +16,29 @@ export class CatLuckyController {
   @ApiOperation({ summary: 'Get Cat Lucky Game status' })
   @ApiResponse({ status: 200, description: 'Successful retrieval of Cat Lucky Game status'})
   @ApiResponse({ status: 401, description: 'Unauthorized' })
-  async getProfile(@Request() req) {
+  async status(@Request() req) {
     const account_id = req.user.account_id;
-    const catLucky = await this.catLuckyService.getCatLuckyByAccountID(account_id);
-    return classToPlain(catLucky);
+    const catLucky = await this.catLuckyService.getCatLuckyStatus(account_id);
+    return catLucky;
+  }
+  
+  @UseGuards(JwtAuthGuard)
+  @Post('play')
+  @ApiBearerAuth()
+  @ApiOperation({ summary: 'Get Cat Lucky Game status' })
+  @ApiResponse({ status: 200, description: 'Successful retrieval of Cat Lucky Game status'})
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  async play(@Request() req, stage: number) {
+    return {};
+  }
+  
+  @UseGuards(JwtAuthGuard)
+  @Post('finish')
+  @ApiBearerAuth()
+  @ApiOperation({ summary: 'Get Cat Lucky Game status' })
+  @ApiResponse({ status: 200, description: 'Successful retrieval of Cat Lucky Game status'})
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  async finish(@Request() req, stage: number) {
+    return {};
   }
 }
