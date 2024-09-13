@@ -30,8 +30,8 @@ export class CatLuckyService {
       catLucky.stage++;
       catLucky.collected_gem += 100;
       catLucky.current_stage_result = "GEM:100,GEM:100,GEM:100,GAMEOVER:1";
-      catLucky = this.catLuckyRepository.save(catLucky);
-      return { "force_update": false, "status": classToPlain(catLucky) };
+      const savedCatLucky = this.catLuckyRepository.save(catLucky);
+      return { "force_update": false, "status": classToPlain(savedCatLucky) };
     }
     else {
       return { "force_update": true, "status": classToPlain(catLucky) };
@@ -47,8 +47,8 @@ export class CatLuckyService {
       catLucky.stage = 0;
       catLucky.collected_gem = 0;
       catLucky.current_stage_result = "";
-      catLucky = this.catLuckyRepository.save(catLucky);
-      return { "force_update": false, "status": classToPlain(catLucky) };
+      const savedCatLucky = this.catLuckyRepository.save(catLucky);
+      return { "force_update": false, "status": classToPlain(savedCatLucky) };
     }
     else {
       return { "force_update": true, "status": classToPlain(catLucky) };
