@@ -38,6 +38,9 @@ export class CatLucky {
   @Column()
   collected_plays: number;
 
+  @Column()
+  collected_ticket: number;
+
   @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
   lock_until: Date;
   
@@ -53,6 +56,7 @@ export class CatLucky {
     this.collected_star = 0;
     this.collected_bnb = 0;
     this.collected_plays = 0;
+    this.collected_ticket = 0;
     this.lock_until = new Date();
   }
 
