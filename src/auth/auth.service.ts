@@ -24,7 +24,7 @@ export class AuthService {
       await this.accountRepository.update({ telegram_id: loginDTO.telegram_id }, { display_name: loginDTO.display_name, last_login: new Date() });
     }
     else {
-      var account_id = this.generateAccountID(8);
+      let account_id = this.generateAccountID(8);
       const newAccount = this.accountRepository.create({
         telegram_id: loginDTO.telegram_id,
         account_id: account_id,
@@ -64,7 +64,7 @@ export class AuthService {
   }
 
   async getCurrencyByAccountID(account_id: string) {
-    var currency = await this.currencyRepository.findOne({ where: { account_id: account_id } });
+    let currency = await this.currencyRepository.findOne({ where: { account_id: account_id } });
     if (currency == null) {
       currency = new Currency(account_id);
     }

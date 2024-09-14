@@ -14,7 +14,7 @@ export class GameCatLuckyService {
   private itemType = ["GEM", "SHARD", "TON", "STAR", "BNB", "PLAYS", "TICKET"];
 
   async getGameCatLuckyStatus(account_id: string) {
-    var finalGameCatLuckyStatistic = await this.gameCatLuckyRepository.findOne({ where: { account_id: account_id } });
+    let finalGameCatLuckyStatistic = await this.gameCatLuckyRepository.findOne({ where: { account_id: account_id } });
     if (finalGameCatLuckyStatistic == null) {
       finalGameCatLuckyStatistic = new GameCatLuckyStatistic(account_id);
     }
@@ -22,11 +22,11 @@ export class GameCatLuckyService {
   }
 
   async playGameCatLucky(account_id: string, stage: number) {
-    var gameCatLuckyStatistic = await this.gameCatLuckyRepository.findOne({ where: { account_id: account_id } });
+    let gameCatLuckyStatistic = await this.gameCatLuckyRepository.findOne({ where: { account_id: account_id } });
     if (gameCatLuckyStatistic == null) {
       gameCatLuckyStatistic = new GameCatLuckyStatistic(account_id);
     }
-    var forceUpdate = false;
+    let forceUpdate = false;
     if (stage == gameCatLuckyStatistic.stage) {
       if (gameCatLuckyStatistic.current_stage_result != "") {
         const items = gameCatLuckyStatistic.current_stage_result.split(",");
@@ -77,7 +77,7 @@ export class GameCatLuckyService {
     else {
       forceUpdate = true;
     }
-    var finalGameCatLuckyStatistic = await this.gameCatLuckyRepository.findOne({ where: { account_id: account_id } });
+    let finalGameCatLuckyStatistic = await this.gameCatLuckyRepository.findOne({ where: { account_id: account_id } });
     return { "force_update": forceUpdate, "status": classToPlain(finalGameCatLuckyStatistic) };
   }
   
@@ -95,7 +95,7 @@ export class GameCatLuckyService {
       else {
         const itemIndex = Math.floor(Math.random() * this.itemType.length);
         const itemType = this.itemType[itemIndex];
-        var itemValue = 0;
+        let itemValue = 0;
         if (itemType == "GEM") {
           itemValue = 100;
         }
@@ -128,11 +128,11 @@ export class GameCatLuckyService {
   }
 
   async finishGameCatLucky(account_id: string, stage: number) {
-    var gameCatLuckyStatistic = await this.gameCatLuckyRepository.findOne({ where: { account_id: account_id } });
+    let gameCatLuckyStatistic = await this.gameCatLuckyRepository.findOne({ where: { account_id: account_id } });
     if (gameCatLuckyStatistic == null) {
       gameCatLuckyStatistic = new GameCatLuckyStatistic(account_id);
     }
-    var forceUpdate = false;
+    let forceUpdate = false;
     if (stage > 0 && stage == gameCatLuckyStatistic.stage) {
       gameCatLuckyStatistic.ticket += gameCatLuckyStatistic.collected_ticket;
       gameCatLuckyStatistic.game_over = 0;
@@ -150,16 +150,16 @@ export class GameCatLuckyService {
     else {
       forceUpdate = true;
     }
-    var finalGameCatLuckyStatistic = await this.gameCatLuckyRepository.findOne({ where: { account_id: account_id } });
+    let finalGameCatLuckyStatistic = await this.gameCatLuckyRepository.findOne({ where: { account_id: account_id } });
     return { "force_update": forceUpdate, "status": classToPlain(finalGameCatLuckyStatistic) };
   }
 
   async playOnGameCatLucky(account_id: string, stage: number) {
-    var gameCatLuckyStatistic = await this.gameCatLuckyRepository.findOne({ where: { account_id: account_id } });
+    let gameCatLuckyStatistic = await this.gameCatLuckyRepository.findOne({ where: { account_id: account_id } });
     if (gameCatLuckyStatistic == null) {
       gameCatLuckyStatistic = new GameCatLuckyStatistic(account_id);
     }
-    var forceUpdate = false;
+    let forceUpdate = false;
     if (stage > 0 && stage == gameCatLuckyStatistic.stage) {
       if (gameCatLuckyStatistic.ticket >= gameCatLuckyStatistic.play_on_ticket) {
         gameCatLuckyStatistic.ticket -= gameCatLuckyStatistic.play_on_ticket;
@@ -171,16 +171,16 @@ export class GameCatLuckyService {
     else {
       forceUpdate = true;
     }
-    var finalGameCatLuckyStatistic = await this.gameCatLuckyRepository.findOne({ where: { account_id: account_id } });
+    let finalGameCatLuckyStatistic = await this.gameCatLuckyRepository.findOne({ where: { account_id: account_id } });
     return { "force_update": forceUpdate, "status": classToPlain(finalGameCatLuckyStatistic) };
   }
 
   async giveUpGameCatLucky(account_id: string, stage: number) {
-    var gameCatLuckyStatistic = await this.gameCatLuckyRepository.findOne({ where: { account_id: account_id } });
+    let gameCatLuckyStatistic = await this.gameCatLuckyRepository.findOne({ where: { account_id: account_id } });
     if (gameCatLuckyStatistic == null) {
       gameCatLuckyStatistic = new GameCatLuckyStatistic(account_id);
     }
-    var forceUpdate = false;
+    let forceUpdate = false;
     if (stage > 0 && stage == gameCatLuckyStatistic.stage) {
       gameCatLuckyStatistic.game_over = 0;
       gameCatLuckyStatistic.stage = 0;
@@ -197,7 +197,7 @@ export class GameCatLuckyService {
     else {
       forceUpdate = true;
     }
-    var finalGameCatLuckyStatistic = await this.gameCatLuckyRepository.findOne({ where: { account_id: account_id } });
+    let finalGameCatLuckyStatistic = await this.gameCatLuckyRepository.findOne({ where: { account_id: account_id } });
     return { "force_update": forceUpdate, "status": classToPlain(finalGameCatLuckyStatistic) };
   }
 
