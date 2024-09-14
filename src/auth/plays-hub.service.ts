@@ -32,7 +32,7 @@ export class PlaysHubService {
         playHubDataQuest["reward"] = playsHubConfigQuest.reward;
         playHubDataQuest["additional"] = playsHubConfigQuest.additional;
         if (playsHubConfigQuest.type == "DAILY") {
-          let playsHubProgressQuest = this.playsHubProgressQuestRepository.findOne({ where: { account_id: account_id, type: playsHubConfigQuest.type, request_type: playsHubConfigQuest.request_type } });
+          let playsHubProgressQuest = await this.playsHubProgressQuestRepository.findOne({ where: { account_id: account_id, type: playsHubConfigQuest.type, request_type: playsHubConfigQuest.request_type } });
           if (playsHubProgressQuest == null) {
             playsHubProgressQuest = new PlaysHubProgressQuest(account_id);
           }
@@ -41,7 +41,7 @@ export class PlaysHubService {
           playHubDataQuest["daily_date"] = playsHubProgressQuest.daily_date;
         }
         else {
-          let playsHubProgressQuest = this.playsHubProgressQuestRepository.findOne({ where: { account_id: account_id, type: playsHubConfigQuest.type, request_type: playsHubConfigQuest.request_type } });
+          let playsHubProgressQuest = await this.playsHubProgressQuestRepository.findOne({ where: { account_id: account_id, type: playsHubConfigQuest.type, request_type: playsHubConfigQuest.request_type } });
           if (playsHubProgressQuest == null) {
             playsHubProgressQuest = new PlaysHubProgressQuest(account_id);
           }
