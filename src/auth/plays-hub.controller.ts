@@ -24,14 +24,14 @@ export class PlaysHubController {
   }
   
   @UseGuards(JwtAuthGuard)
-  @Post('collect_quest')
+  @Post('check_quest')
   @ApiBearerAuth()
-  @ApiOperation({ summary: 'Get Plays Hub quests status' })
-  @ApiResponse({ status: 200, description: 'Successful retrieval of Plays Hub quests'})
+  @ApiOperation({ summary: 'Check and collect quest if able' })
+  @ApiResponse({ status: 200, description: 'Successful Check and collect quest if able'})
   @ApiResponse({ status: 401, description: 'Unauthorized' })
-  async collect_quest(@Request() req, @Body() playHubQuestDTO: PlaysHubQuestDTO) {
+  async check_quest(@Request() req, @Body() playHubQuestDTO: PlaysHubQuestDTO) {
     const account_id = req.user.account_id;
-    const playsHubQuestStatus = await this.playsHubService.collectPlaysHubQuest(account_id, playHubQuestDTO.type, playHubQuestDTO.request_type);
+    const playsHubQuestStatus = await this.playsHubService.checkPlaysHubQuest(account_id, playHubQuestDTO.type, playHubQuestDTO.request_type);
     return playsHubQuestStatus;
   }
 
