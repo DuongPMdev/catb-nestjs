@@ -32,20 +32,12 @@ export class CatLuckyService {
     if (stage == catLucky.stage) {
       if (catLucky.current_stage_result != "") {
         const items = catLucky.current_stage_result.split(",");
-        const firstItem = items[0];
-        const itemDetail = firstItem.split(":");
+        const selectedItem = items[catLucky.playing_on];
+        const itemDetail = selectedItem.split(":");
         const itemType = itemDetail[0];
         const itemValue = itemDetail[1];
         if (itemType == "GAMEOVER") {
-          catLucky.stage = 0;
-          catLucky.current_stage_result = "";
-          catLucky.collected_gem = 0;
-          catLucky.collected_shard = 0;
-          catLucky.collected_ton = 0;
-          catLucky.collected_star = 0;
-          catLucky.collected_bnb = 0;
-          catLucky.collected_plays = 0;
-          catLucky.collected_ticket = 0;
+          catLucky.game_over = 1;
         }
         else {
           if (itemType == "GEM") {
@@ -70,11 +62,16 @@ export class CatLuckyService {
             catLucky.collected_ticket += +itemValue;
           }
           catLucky.stage++;
+          catLucky.game_over = 0;
+          catLucky.playing_on = 0;
+          catLucky.play_on_ticket = 100 + catLucky.stage * 10;
           catLucky.current_stage_result = this.generateStageResult(catLucky.stage);
         }
       }
       else {
         catLucky.stage++;
+        catLucky.playing_on = 0;
+        catLucky.play_on_ticket = 100 + catLucky.stage * 10;
         catLucky.current_stage_result = this.generateStageResult(catLucky.stage);
       }
       await this.catLuckyRepository.save(catLucky);
@@ -140,6 +137,54 @@ export class CatLuckyService {
     var forceUpdate = false;
     if (stage > 0 && stage == catLucky.stage) {
       catLucky.ticket += catLucky.collected_ticket;
+      catLucky.game_over = 0;
+      catLucky.stage = 0;
+      catLucky.current_stage_result = "";
+      catLucky.collected_gem = 0;
+      catLucky.collected_shard = 0;
+      catLucky.collected_ton = 0;
+      catLucky.collected_star = 0;
+      catLucky.collected_bnb = 0;
+      catLucky.collected_plays = 0;
+      catLucky.collected_ticket = 0;
+      await this.catLuckyRepository.save(catLucky);
+    }
+    else {
+      forceUpdate = true;
+    }
+    var finalCatLucky = await this.catLuckyRepository.findOne({ where: { account_id: account_id } });
+    return { "force_update": forceUpdate, "status": classToPlain(finalCatLucky) };
+  }
+
+  async playOnCatLucky(account_id: string, stage: number) {
+    var catLucky = await this.catLuckyRepository.findOne({ where: { account_id: account_id } });
+    if (catLucky == null) {
+        catLucky = new CatLucky(account_id);
+    }
+    var forceUpdate = false;
+    if (stage > 0 && stage == catLucky.stage) {
+      if (catLucky.ticket >= catLucky.play_on_ticket) {
+        catLucky.ticket -= catLucky.play_on_ticket;
+        catLucky.game_over = 0;
+        catLucky.playing_on = 1;
+        await this.catLuckyRepository.save(catLucky);
+      }
+    }
+    else {
+      forceUpdate = true;
+    }
+    var finalCatLucky = await this.catLuckyRepository.findOne({ where: { account_id: account_id } });
+    return { "force_update": forceUpdate, "status": classToPlain(finalCatLucky) };
+  }
+
+  async giveUpCatLucky(account_id: string, stage: number) {
+    var catLucky = await this.catLuckyRepository.findOne({ where: { account_id: account_id } });
+    if (catLucky == null) {
+        catLucky = new CatLucky(account_id);
+    }
+    var forceUpdate = false;
+    if (stage > 0 && stage == catLucky.stage) {
+      catLucky.game_over = 0;
       catLucky.stage = 0;
       catLucky.current_stage_result = "";
       catLucky.collected_gem = 0;

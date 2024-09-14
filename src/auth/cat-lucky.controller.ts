@@ -46,4 +46,29 @@ export class CatLuckyController {
     const catLucky = await this.catLuckyService.finishCatLucky(account_id, catLuckyDTO.stage);
     return catLucky;
   }
+  
+  @UseGuards(JwtAuthGuard)
+  @Post('play_on')
+  @ApiBearerAuth()
+  @ApiOperation({ summary: 'Play On Cat Lucky Game' })
+  @ApiResponse({ status: 200, description: 'Finished Cat Lucky Game'})
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  async play_on(@Request() req, @Body() catLuckyDTO: CatLuckyDTO) {
+    const account_id = req.user.account_id;
+    const catLucky = await this.catLuckyService.playOnCatLucky(account_id, catLuckyDTO.stage);
+    return catLucky;
+  }
+  
+  @UseGuards(JwtAuthGuard)
+  @Post('give_up')
+  @ApiBearerAuth()
+  @ApiOperation({ summary: 'Play On Cat Lucky Game' })
+  @ApiResponse({ status: 200, description: 'Finished Cat Lucky Game'})
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  async give_up(@Request() req, @Body() catLuckyDTO: CatLuckyDTO) {
+    const account_id = req.user.account_id;
+    const catLucky = await this.catLuckyService.giveUpCatLucky(account_id, catLuckyDTO.stage);
+    return catLucky;
+  }
+
 }

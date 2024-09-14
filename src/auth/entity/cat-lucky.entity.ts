@@ -15,6 +15,15 @@ export class CatLucky {
   ticket: number;
 
   @Column()
+  game_over: number;
+
+  @Column()
+  play_on_ticket: number;
+
+  @Column()
+  playing_on: number;
+
+  @Column()
   stage: number;
 
   @Column()
@@ -48,6 +57,9 @@ export class CatLucky {
     this.id = 0;
     this.account_id = account_id;
     this.ticket = 0;
+    this.game_over = 0;
+    this.play_on_ticket = 100;
+    this.playing_on = 0;
     this.stage = 0;
     this.current_stage_result = "";
     this.collected_gem = 0;
