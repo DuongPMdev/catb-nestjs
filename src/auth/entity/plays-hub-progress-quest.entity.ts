@@ -21,7 +21,7 @@ export class PlaysHubProgressQuest {
   progress_amount: number;
 
   @Column()
-  reward_step: number;
+  rewarded_step: number;
 
   @Column()
   daily_date: Date;
@@ -32,7 +32,7 @@ export class PlaysHubProgressQuest {
     this.type = "";
     this.request_type = "";
     this.progress_amount = 0;
-    this.reward_step = 0;
+    this.rewarded_step = 0;
     this.daily_date = new Date();
   }
 
