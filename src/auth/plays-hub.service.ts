@@ -15,7 +15,7 @@ export class PlaysHubService {
   ) {}
 
   async getPlaysHubQuestStatus(account_id: string) {
-    const playsHubConfigQuest = await this.playsHubConfigQuestRepository.findAll();
+    const playsHubConfigQuest = await this.playsHubConfigQuestRepository.find();
     const playsHubProgressQuest = await this.playsHubProgressQuestRepository.findOne({ where: { account_id: account_id } });
     return { "config_quest": classToPlain(playsHubConfigQuest), "progress_quest": classToPlain(playsHubProgressQuest) };
   }
