@@ -22,37 +22,35 @@ export class PlaysHubService {
     const playsHubConfigQuests = await this.playsHubConfigQuestRepository.find();
     
     playsHubConfigQuests.forEach(async playsHubConfigQuest => {
-      console.log("alo");
       let playHubDataQuest = {
         "type": playsHubConfigQuest.type,
         "request_type": playsHubConfigQuest.request_type,
       };
-      if (playsHubConfigQuest) {
-        playHubDataQuest["icon_name"] = playsHubConfigQuest.icon_name;
-        playHubDataQuest["description"] = playsHubConfigQuest.description;
-        playHubDataQuest["request_amount"] = playsHubConfigQuest.request_amount;
-        playHubDataQuest["reward"] = playsHubConfigQuest.reward;
-        playHubDataQuest["additional"] = playsHubConfigQuest.additional;
-        if (playsHubConfigQuest.type == "DAILY") {
-          let playsHubProgressQuest = await this.playsHubProgressQuestRepository.findOne({ where: { account_id: account_id, type: playsHubConfigQuest.type, request_type: playsHubConfigQuest.request_type } });
-          if (playsHubProgressQuest == null) {
-            playsHubProgressQuest = new PlaysHubProgressQuest(account_id);
-          }
-          playHubDataQuest["progress_amount"] = playsHubProgressQuest.progress_amount;
-          playHubDataQuest["rewarded_step"] = playsHubProgressQuest.rewarded_step;
-          playHubDataQuest["daily_date"] = playsHubProgressQuest.daily_date;
+      playHubDataQuest["icon_name"] = playsHubConfigQuest.icon_name;
+      playHubDataQuest["description"] = playsHubConfigQuest.description;
+      playHubDataQuest["request_amount"] = playsHubConfigQuest.request_amount;
+      playHubDataQuest["reward"] = playsHubConfigQuest.reward;
+      playHubDataQuest["additional"] = playsHubConfigQuest.additional;
+      if (playsHubConfigQuest.type == "DAILY") {
+        let playsHubProgressQuest = await this.playsHubProgressQuestRepository.findOne({ where: { account_id: account_id, type: playsHubConfigQuest.type, request_type: playsHubConfigQuest.request_type } });
+        if (playsHubProgressQuest == null) {
+          playsHubProgressQuest = new PlaysHubProgressQuest(account_id);
         }
-        else {
-          let playsHubProgressQuest = await this.playsHubProgressQuestRepository.findOne({ where: { account_id: account_id, type: playsHubConfigQuest.type, request_type: playsHubConfigQuest.request_type } });
-          if (playsHubProgressQuest == null) {
-            playsHubProgressQuest = new PlaysHubProgressQuest(account_id);
-          }
-          playHubDataQuest["progress_amount"] = playsHubProgressQuest.progress_amount;
-          playHubDataQuest["rewarded_step"] = playsHubProgressQuest.rewarded_step;
-          playHubDataQuest["daily_date"] = playsHubProgressQuest.daily_date;
-        }
-        playsHubDataQuests.push(playHubDataQuest);
+        playHubDataQuest["progress_amount"] = playsHubProgressQuest.progress_amount;
+        playHubDataQuest["rewarded_step"] = playsHubProgressQuest.rewarded_step;
+        playHubDataQuest["daily_date"] = playsHubProgressQuest.daily_date;
       }
+      else {
+        let playsHubProgressQuest = await this.playsHubProgressQuestRepository.findOne({ where: { account_id: account_id, type: playsHubConfigQuest.type, request_type: playsHubConfigQuest.request_type } });
+        if (playsHubProgressQuest == null) {
+          playsHubProgressQuest = new PlaysHubProgressQuest(account_id);
+        }
+        playHubDataQuest["progress_amount"] = playsHubProgressQuest.progress_amount;
+        playHubDataQuest["rewarded_step"] = playsHubProgressQuest.rewarded_step;
+        playHubDataQuest["daily_date"] = playsHubProgressQuest.daily_date;
+      }
+      playsHubDataQuests.push(playHubDataQuest);
+      console.log(playsHubDataQuests.length);
     });
     return { "data_quests": playsHubDataQuests };
   }
