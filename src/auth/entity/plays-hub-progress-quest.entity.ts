@@ -1,7 +1,7 @@
 import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
 import { Exclude } from 'class-transformer';
 
-@Entity('plays_hub_config_quest')
+@Entity('plays_hub_progress_quest')
 export class PlaysHubProgressQuest {
 
   @PrimaryGeneratedColumn()
