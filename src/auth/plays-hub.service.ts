@@ -36,7 +36,10 @@ export class PlaysHubService {
       playHubDataQuest["reward"] = playsHubConfigQuest.reward;
       playHubDataQuest["additional"] = playsHubConfigQuest.additional;
       if (type == "DAILY") {
-        const playsHubProgressQuest = await this.playsHubProgressQuestRepository.findOne({ where: { account_id: account_id, type: type, request_type:request_type } });
+        let playsHubProgressQuest = await this.playsHubProgressQuestRepository.findOne({ where: { account_id: account_id, type: type, request_type:request_type } });
+        if (playsHubProgressQuest == null) {
+          playsHubProgressQuest = new PlaysHubProgressQuest(account_id);
+        }
         playHubDataQuest["progress_amount"] = playsHubProgressQuest.progress_amount;
         playHubDataQuest["rewarded_step"] = playsHubProgressQuest.rewarded_step;
         playHubDataQuest["daily_date"] = playsHubProgressQuest.daily_date;
