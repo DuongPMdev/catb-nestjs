@@ -1,10 +1,13 @@
 import { Module } from '@nestjs/common';
+import { ConfigModule } from '@nestjs/config';
+import { AuthModule } from './auth/auth.module';
+import { CatLuckyModule } from './auth/cat-lucky.module';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { User } from './user.entity';
-import { UserService } from './user.service';
-import { UserController } from './user.controller';
+import { Account } from './auth/entity/account.entity';
+import { Currency } from './auth/entity/currency.entity';
+import { CatLucky } from './auth/entity/cat-lucky.entity';
 
 @Module({
   imports: [
@@ -14,13 +17,16 @@ import { UserController } from './user.controller';
       port: 3306,
       username: 'duongpm13',
       password: 'NGen2024@',
-      database: 'cat_battle',
-      entities: [User],
+      database: 'plays_hub',
+      entities: [ Account, Currency, CatLucky ],
       synchronize: false,
     }),
-    TypeOrmModule.forFeature([User]),
+    TypeOrmModule.forFeature([Account, Currency]),
+    ConfigModule.forRoot({ isGlobal: true }),
+    AuthModule,
+    CatLuckyModule
   ],
-  controllers: [AppController, UserController],
-  providers: [AppService, UserService],
+  controllers: [AppController],
+  providers: [AppService],
 })
 export class AppModule {}
