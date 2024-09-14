@@ -2,7 +2,7 @@ import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
 import { Exclude } from 'class-transformer';
 
 @Entity('game_cat_lucky_statistic')
-export class CatLucky {
+export class GameCatLuckyStatistic {
 
   @PrimaryGeneratedColumn()
   @Exclude()

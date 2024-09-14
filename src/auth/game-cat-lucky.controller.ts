@@ -1,15 +1,15 @@
 import { Controller, Post, Get, Body, Request, UseGuards, Injectable, NotFoundException} from '@nestjs/common';
-import { CatLuckyService } from './cat-lucky.service';
+import { GameCatLuckyService } from './game-cat-lucky.service';
 import { JwtAuthGuard } from './jwt-auth.guard';
 import { ApiBearerAuth, ApiTags, ApiOperation, ApiResponse } from '@nestjs/swagger';
-import { CatLuckyDTO } from './dto/cat-lucky.dto';
+import { GameCatLuckyDTO } from './dto/game-cat-lucky.dto';
 
 
 @Injectable()
-@ApiTags('cat-lucky')
-@Controller('cat-lucky')
-export class CatLuckyController {
-  constructor(private readonly catLuckyService: CatLuckyService) {}
+@ApiTags('game-cat-lucky')
+@Controller('game-cat-lucky')
+export class GameCatLuckyController {
+  constructor(private readonly gameCatLuckyService: GameCatLuckyService) {}
   
   @UseGuards(JwtAuthGuard)
   @Get('status')
@@ -19,8 +19,8 @@ export class CatLuckyController {
   @ApiResponse({ status: 401, description: 'Unauthorized' })
   async status(@Request() req) {
     const account_id = req.user.account_id;
-    const catLucky = await this.catLuckyService.getCatLuckyStatus(account_id);
-    return catLucky;
+    const gameCatLuckyStatus = await this.gameCatLuckyService.getGameCatLuckyStatus(account_id);
+    return gameCatLuckyStatus;
   }
   
   @UseGuards(JwtAuthGuard)
@@ -29,10 +29,10 @@ export class CatLuckyController {
   @ApiOperation({ summary: 'Play Cat Lucky Game' })
   @ApiResponse({ status: 200, description: 'Played Cat Lucky Game'})
   @ApiResponse({ status: 401, description: 'Unauthorized' })
-  async play(@Request() req, @Body() catLuckyDTO: CatLuckyDTO) {
+  async play(@Request() req, @Body() gameCatLuckyDTO: GameCatLuckyDTO) {
     const account_id = req.user.account_id;
-    const catLucky = await this.catLuckyService.playCatLucky(account_id, catLuckyDTO.stage);
-    return catLucky;
+    const gameCatLuckyStatus = await this.gameCatLuckyService.playGameCatLucky(account_id, gameCatLuckyDTO.stage);
+    return gameCatLuckyStatus;
   }
   
   @UseGuards(JwtAuthGuard)
@@ -41,10 +41,10 @@ export class CatLuckyController {
   @ApiOperation({ summary: 'Finish Cat Lucky Game' })
   @ApiResponse({ status: 200, description: 'Finished Cat Lucky Game'})
   @ApiResponse({ status: 401, description: 'Unauthorized' })
-  async finish(@Request() req, @Body() catLuckyDTO: CatLuckyDTO) {
+  async finish(@Request() req, @Body() gameCatLuckyDTO: GameCatLuckyDTO) {
     const account_id = req.user.account_id;
-    const catLucky = await this.catLuckyService.finishCatLucky(account_id, catLuckyDTO.stage);
-    return catLucky;
+    const gameCatLuckyStatus = await this.gameCatLuckyService.finishGameCatLucky(account_id, gameCatLuckyDTO.stage);
+    return gameCatLuckyStatus;
   }
   
   @UseGuards(JwtAuthGuard)
@@ -53,10 +53,10 @@ export class CatLuckyController {
   @ApiOperation({ summary: 'Play On Cat Lucky Game' })
   @ApiResponse({ status: 200, description: 'Finished Cat Lucky Game'})
   @ApiResponse({ status: 401, description: 'Unauthorized' })
-  async play_on(@Request() req, @Body() catLuckyDTO: CatLuckyDTO) {
+  async play_on(@Request() req, @Body() gameCatLuckyDTO: GameCatLuckyDTO) {
     const account_id = req.user.account_id;
-    const catLucky = await this.catLuckyService.playOnCatLucky(account_id, catLuckyDTO.stage);
-    return catLucky;
+    const gameCatLuckyStatus = await this.gameCatLuckyService.playOnGameCatLucky(account_id, gameCatLuckyDTO.stage);
+    return gameCatLuckyStatus;
   }
   
   @UseGuards(JwtAuthGuard)
@@ -65,10 +65,10 @@ export class CatLuckyController {
   @ApiOperation({ summary: 'Play On Cat Lucky Game' })
   @ApiResponse({ status: 200, description: 'Finished Cat Lucky Game'})
   @ApiResponse({ status: 401, description: 'Unauthorized' })
-  async give_up(@Request() req, @Body() catLuckyDTO: CatLuckyDTO) {
+  async give_up(@Request() req, @Body() gameCatLuckyDTO: GameCatLuckyDTO) {
     const account_id = req.user.account_id;
-    const catLucky = await this.catLuckyService.giveUpCatLucky(account_id, catLuckyDTO.stage);
-    return catLucky;
+    const gameCatLuckyStatus = await this.gameCatLuckyService.giveUpGameCatLucky(account_id, gameCatLuckyDTO.stage);
+    return gameCatLuckyStatus;
   }
 
 }
