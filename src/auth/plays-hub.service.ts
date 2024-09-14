@@ -22,6 +22,7 @@ export class PlaysHubService {
     const playsHubConfigQuests = await this.playsHubConfigQuestRepository.find();
     
     playsHubConfigQuests.forEach(async playsHubConfigQuest => {
+      console.log("alo");
       let playHubDataQuest = {
         "type": playsHubConfigQuest.type,
         "request_type": playsHubConfigQuest.request_type,
