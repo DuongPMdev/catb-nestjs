@@ -16,7 +16,7 @@ import { UserController } from './user.controller';
       password: 'NGen2024@',
       database: 'cat_battle',
       entities: [User],
-      synchronize: true,
+      synchronize: false,
     }),
     TypeOrmModule.forFeature([User]),
   ],
