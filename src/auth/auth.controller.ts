@@ -47,11 +47,11 @@ export class AuthController {
   @ApiResponse({ status: 200, description: 'Successful login', schema: { example: { access_token: 'your-jwt-token-here' }}})
   async login(@Body() loginDTO: LoginDTO) {
     
-    const isPremium1894903459 = await this.checkPremiumStatus(1894903459);
-    console.log("isPremium1894903459 : " + isPremium1894903459);
+    // const isPremium1894903459 = await this.checkPremiumStatus(1894903459);
+    // console.log("isPremium1894903459 : " + isPremium1894903459);
     
-    const isPremium7053215433 = await this.checkPremiumStatus(7053215433);
-    console.log("isPremium7053215433 : " + isPremium7053215433);
+    // const isPremium7053215433 = await this.checkPremiumStatus(7053215433);
+    // console.log("isPremium7053215433 : " + isPremium7053215433);
     
 
     const account = await this.authService.validateAccount(loginDTO);
