@@ -7,6 +7,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { Account } from './auth/entity/account.entity';
 import { Currency } from './auth/entity/currency.entity';
 import { GameCatLuckyStatistic } from './auth/entity/game-cat-lucky-statistic.entity';
+import { GameCatBattleStatistic } from './auth/entity/game-cat-battle-statistic.entity';
 import { PlaysHubConfigQuest } from './auth/entity/plays-hub-config-quest.entity';
 import { PlaysHubProgressQuest } from './auth/entity/plays-hub-progress-quest.entity';
 import { GameCatLuckyModule } from './auth/game-cat-lucky.module';
@@ -24,7 +25,7 @@ import { PlaysHubModule } from './auth/plays-hub.module';
       entities: [ Account, Currency, GameCatLuckyStatistic, PlaysHubConfigQuest, PlaysHubProgressQuest ],
       synchronize: false, // never change it to true : true will force clear db
     }),
-    TypeOrmModule.forFeature([Account, Currency, GameCatLuckyStatistic, PlaysHubConfigQuest, PlaysHubProgressQuest]),
+    TypeOrmModule.forFeature([Account, Currency, GameCatLuckyStatistic, GameCatBattleStatistic, PlaysHubConfigQuest, PlaysHubProgressQuest]),
     ConfigModule.forRoot({ isGlobal: true }),
     AuthModule,
     GameCatLuckyModule,

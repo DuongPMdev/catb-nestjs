@@ -5,7 +5,7 @@ import { PlaysHubConfigQuest } from './entity/plays-hub-config-quest.entity';
 import { PlaysHubProgressQuest } from './entity/plays-hub-progress-quest.entity';
 import { Account } from './entity/account.entity';
 import { Currency } from './entity/currency.entity';
-import { GameCatBattleStatistic } from './entity/game_cat_battle_statistic.entity';
+import { GameCatBattleStatistic } from './entity/game-cat-battle-statistic.entity';
 import { classToPlain } from 'class-transformer';
 
 @Injectable()
@@ -30,7 +30,6 @@ export class PlaysHubService {
     for (const playsHubConfigQuest of playsHubConfigQuests) {
       let playsHubDataQuest = await this.getPlaysHubDataQuest(account_id, playsHubConfigQuest);
       playsHubDataQuests.push(playsHubDataQuest);
-      console.log(playsHubDataQuests.length);
     }
     return { "data_quests": playsHubDataQuests };
   }
