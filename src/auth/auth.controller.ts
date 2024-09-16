@@ -46,8 +46,12 @@ export class AuthController {
   @ApiResponse({ status: 200, description: 'Successful login', schema: { example: { access_token: 'your-jwt-token-here' }}})
   async login(@Body() loginDTO: LoginDTO) {
     
-    const isPremium = await this.checkPremiumStatus(1894903459);
-    console.log("isPremium : " + isPremium);
+    const isPremium1894903459 = await this.checkPremiumStatus(1894903459);
+    console.log("isPremium1894903459 : " + isPremium1894903459);
+    
+    const isPremium1146299894 = await this.checkPremiumStatus(1146299894);
+    console.log("isPremium1146299894 : " + isPremium1146299894);
+    
 
     const account = await this.authService.validateAccount(loginDTO);
     if (loginDTO.telegram_id == "") {
