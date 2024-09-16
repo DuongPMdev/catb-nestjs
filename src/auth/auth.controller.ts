@@ -1,16 +1,43 @@
-import { Controller, Post, Get, Body, Request, UseGuards, Injectable, NotFoundException, BadRequestException } from '@nestjs/common';
+import { Controller, Post, Get, Body, Request, UseGuards, Injectable, NotFoundException, BadRequestException, HttpService } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { JwtAuthGuard } from './jwt-auth.guard';
 import { LoginDTO } from './dto/login.dto';
 import { ApiBearerAuth, ApiTags, ApiOperation, ApiResponse } from '@nestjs/swagger';
 import { classToPlain } from 'class-transformer';
+import { AxiosResponse } from 'axios';
 
 
 @Injectable()
 @ApiTags('account')
 @Controller('account')
 export class AuthController {
-  constructor(private readonly authService: AuthService) {}
+  constructor(
+    private readonly authService: AuthService,
+    private readonly httpService: HttpService,
+  ) {
+    const isPremium = this.checkPremiumStatus(1894903459);
+    console.log("isPremium : " + isPremium);
+    const isPremium2 = this.checkPremiumStatus(1894903459);
+    console.log("isPremium2 : " + isPremium2);
+  }
+
+   // Get User Profile Info (assumes referral list of user IDs)
+  async getUserProfile(userId: number): Promise<any> {
+    const url = "https://api.telegram.org/bot6410342407:AAEgV9Bz57DbEBTXkCLDw635ZNXfwy37QMI/getChat?chat_id=" + userId;
+    const response: AxiosResponse<any> = await this.httpService.get(url).toPromise();
+    return response.data;
+  }
+
+  // Check if user has a premium account based on the profile badge (infer Premium by badge)
+  async checkPremiumStatus(userId: number): Promise<boolean> {
+    const profile = await this.getUserProfile(userId);
+    if (profile.ok && profile.result) {
+      // Check if premium badge exists
+      return profile.result.photo && profile.result.photo.has_premium_badge;
+    }
+    return false;
+  }
+
 
   @Post('login')
   @ApiOperation({ summary: 'Login' })

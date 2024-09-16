@@ -11,7 +11,7 @@ async function bootstrap() {
     cert: fs.readFileSync('/etc/letsencrypt/live/catb.io/fullchain.pem'),  // Path to the full certificate chain
   };
   const app = await NestFactory.create(AppModule, {
-    httpsOptions,  // Enabling HTTPS with the provided options
+    httpsOptions,
   });
 
   // Enable CORS
