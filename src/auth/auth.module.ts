@@ -11,6 +11,7 @@ import { Account } from './entity/account.entity';
 import { Currency } from './entity/currency.entity';
 import { GameCatLuckyStatistic } from './entity/game-cat-lucky-statistic.entity';
 import { GameCatBattleStatistic } from './entity/game-cat-battle-statistic.entity';
+import { HttpModule } from '@nestjs/axios';
 
 @Module({
   imports: [
@@ -27,6 +28,7 @@ import { GameCatBattleStatistic } from './entity/game-cat-battle-statistic.entit
     ConfigModule.forRoot({
       isGlobal: true,
     }),
+    HttpModule
   ],
   providers: [AuthService, JwtStrategy, JwtAuthGuard],
   controllers: [AuthController],
