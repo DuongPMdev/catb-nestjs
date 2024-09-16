@@ -1,9 +1,18 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
+import * as fs from 'fs';
+import * as https from 'https';
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
+  
+  const httpsOptions = {
+    key: fs.readFileSync('/etc/letsencrypt/live/catb.io/privkey.pem'),  // Path to your private key
+    cert: fs.readFileSync('/etc/letsencrypt/live/catb.io/fullchain.pem'),  // Path to the full certificate chain
+  };
+  const app = await NestFactory.create(AppModule, {
+    httpsOptions,  // Enabling HTTPS with the provided options
+  });
 
   // Enable CORS
   app.enableCors({
