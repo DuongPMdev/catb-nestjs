@@ -4,6 +4,8 @@ import { Repository } from 'typeorm';
 import { JwtService } from '@nestjs/jwt';
 import { Account } from './entity/account.entity';
 import { Currency } from './entity/currency.entity';
+import { GameCatLuckyStatistic } from './entity/game-cat-lucky-statistic.entity';
+import { GameCatBattleStatistic } from './entity/game-cat-battle-statistic.entity';
 import { LoginDTO } from './dto/login.dto';
 
 @Injectable()
@@ -13,6 +15,10 @@ export class AuthService {
     private accountRepository: Repository<Account>,
     @InjectRepository(Currency)
     private currencyRepository: Repository<Currency>,
+    @InjectRepository(GameCatLuckyStatistic)
+    private gameCatLuckyStatisticRepository: Repository<GameCatLuckyStatistic>,
+    @InjectRepository(GameCatBattleStatistic)
+    private gameCatBattleStatisticRepository: Repository<GameCatBattleStatistic>,
     private jwtService: JwtService,
   ) {}
   
@@ -69,6 +75,22 @@ export class AuthService {
       currency = new Currency(account_id);
     }
     return currency;
+  }
+
+  async getGameCatLuckyStatisticByAccountID(account_id: string) {
+    let gameCatLuckyStatistic = await this.gameCatLuckyStatisticRepository.findOne({ where: { account_id: account_id } });
+    if (gameCatLuckyStatistic == null) {
+      gameCatLuckyStatistic = new GameCatLuckyStatistic(account_id);
+    }
+    return gameCatLuckyStatistic;
+  }
+
+  async getGameCatBattleStatisticByAccountID(account_id: string) {
+    let gameCatBattleStatistic = await this.gameCatBattleStatisticRepository.findOne({ where: { account_id: account_id } });
+    if (gameCatBattleStatistic == null) {
+      gameCatBattleStatistic = new GameCatBattleStatistic(account_id);
+    }
+    return gameCatBattleStatistic;
   }
 
 }

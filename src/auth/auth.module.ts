@@ -9,10 +9,12 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Account } from './entity/account.entity';
 import { Currency } from './entity/currency.entity';
+import { GameCatLuckyStatistic } from './entity/game-cat-lucky-statistic.entity';
+import { GameCatBattleStatistic } from './entity/game-cat-battle-statistic.entity';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([ Account, Currency ]),
+    TypeOrmModule.forFeature([ Account, Currency, GameCatLuckyStatistic, GameCatBattleStatistic ]),
     PassportModule.register({ defaultStrategy: 'jwt' }),
     JwtModule.registerAsync({
       imports: [ConfigModule],

@@ -23,7 +23,7 @@ import { PlaysHubModule } from './auth/plays-hub.module';
       username: 'duongpm13',
       password: 'NGen2024@',
       database: 'plays_hub',
-      entities: [ Account, Currency, GameCatLuckyStatistic, PlaysHubConfigQuest, PlaysHubProgressQuest ],
+      entities: [ Account, Currency, GameCatLuckyStatistic, GameCatBattleStatistic, PlaysHubConfigQuest, PlaysHubProgressQuest ],
       synchronize: false, // never change it to true : true will force clear db
     }),
     TypeOrmModule.forFeature([Account, Currency, GameCatLuckyStatistic, GameCatBattleStatistic, PlaysHubConfigQuest, PlaysHubProgressQuest]),
