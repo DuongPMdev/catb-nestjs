@@ -11,6 +11,7 @@ import { GameCatBattleStatistic } from './auth/entity/game-cat-battle-statistic.
 import { PlaysHubConfigQuest } from './auth/entity/plays-hub-config-quest.entity';
 import { PlaysHubProgressQuest } from './auth/entity/plays-hub-progress-quest.entity';
 import { GameCatLuckyModule } from './auth/game-cat-lucky.module';
+import { GameCatBattleModule } from './auth/game-cat-battle.module';
 import { PlaysHubModule } from './auth/plays-hub.module';
 
 @Module({
@@ -28,8 +29,9 @@ import { PlaysHubModule } from './auth/plays-hub.module';
     TypeOrmModule.forFeature([Account, Currency, GameCatLuckyStatistic, GameCatBattleStatistic, PlaysHubConfigQuest, PlaysHubProgressQuest]),
     ConfigModule.forRoot({ isGlobal: true }),
     AuthModule,
+    PlaysHubModule,
     GameCatLuckyModule,
-    PlaysHubModule
+    GameCatBattleModule
   ],
   controllers: [AppController],
   providers: [AppService],

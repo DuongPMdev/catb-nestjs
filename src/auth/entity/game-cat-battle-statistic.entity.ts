@@ -12,6 +12,18 @@ export class GameCatBattleStatistic {
   account_id: string;
 
   @Column()
+  gem: number;
+
+  @Column()
+  shard: number;
+
+  @Column()
   last_login_datetime: Date;
+
+  constructor(account_id: string) {
+    this.account_id = account_id;
+    this.gem = 0;
+    this.shard = 0;
+  }
 
 }

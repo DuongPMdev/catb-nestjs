@@ -1,28 +1,34 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
+import { Currency } from './entity/currency.entity';
 import { GameCatLuckyStatistic } from './entity/game-cat-lucky-statistic.entity';
+import { GameCatBattleStatistic } from './entity/game-cat-battle-statistic.entity';
 import { classToPlain } from 'class-transformer';
 
 @Injectable()
 export class GameCatLuckyService {
   constructor(
+    @InjectRepository(Currency)
+    private currencyRepository: Repository<Currency>,
     @InjectRepository(GameCatLuckyStatistic)
-    private gameCatLuckyRepository: Repository<GameCatLuckyStatistic>,
+    private gameCatLuckyStatisticRepository: Repository<GameCatLuckyStatistic>,
+    @InjectRepository(GameCatBattleStatistic)
+    private gameCatBattleStatisticRepository: Repository<GameCatBattleStatistic>,
   ) {}
 
-  private itemType = ["GEM", "SHARD", "TON", "STAR", "BNB", "PLAYS", "TICKET"];
+  private itemType = ["GEM", "SHARD", "TON", "BNB", "PLAYS", "TICKET"];
 
-  async getGameCatLuckyStatus(account_id: string) {
-    let finalGameCatLuckyStatistic = await this.gameCatLuckyRepository.findOne({ where: { account_id: account_id } });
+  async getGameCatLuckyStatistic(account_id: string) {
+    let finalGameCatLuckyStatistic = await this.gameCatLuckyStatisticRepository.findOne({ where: { account_id: account_id } });
     if (finalGameCatLuckyStatistic == null) {
       finalGameCatLuckyStatistic = new GameCatLuckyStatistic(account_id);
     }
-    return { "status": classToPlain(finalGameCatLuckyStatistic) };
+    return { "statistic": classToPlain(finalGameCatLuckyStatistic) };
   }
 
   async playGameCatLucky(account_id: string, stage: number) {
-    let gameCatLuckyStatistic = await this.gameCatLuckyRepository.findOne({ where: { account_id: account_id } });
+    let gameCatLuckyStatistic = await this.gameCatLuckyStatisticRepository.findOne({ where: { account_id: account_id } });
     if (gameCatLuckyStatistic == null) {
       gameCatLuckyStatistic = new GameCatLuckyStatistic(account_id);
     }
@@ -47,9 +53,6 @@ export class GameCatLuckyService {
           else if (itemType == "TON") {
             gameCatLuckyStatistic.collected_ton += +itemValue;
           }
-          else if (itemType == "STAR") {
-            gameCatLuckyStatistic.collected_star += +itemValue;
-          }
           else if (itemType == "BNB") {
             gameCatLuckyStatistic.collected_bnb += +itemValue;
           }
@@ -72,12 +75,12 @@ export class GameCatLuckyService {
         gameCatLuckyStatistic.play_on_ticket = 100 + gameCatLuckyStatistic.stage * 10;
         gameCatLuckyStatistic.current_stage_result = this.generateStageResult(gameCatLuckyStatistic.stage);
       }
-      await this.gameCatLuckyRepository.save(gameCatLuckyStatistic);
+      await this.gameCatLuckyStatisticRepository.save(gameCatLuckyStatistic);
     }
     else {
       forceUpdate = true;
     }
-    let finalGameCatLuckyStatistic = await this.gameCatLuckyRepository.findOne({ where: { account_id: account_id } });
+    let finalGameCatLuckyStatistic = await this.gameCatLuckyStatisticRepository.findOne({ where: { account_id: account_id } });
     return { "force_update": forceUpdate, "status": classToPlain(finalGameCatLuckyStatistic) };
   }
   
@@ -105,9 +108,6 @@ export class GameCatLuckyService {
         else if (itemType == "TON") {
           itemValue = 0.01;
         }
-        else if (itemType == "STAR") {
-          itemValue = 10;
-        }
         else if (itemType == "BNB") {
           itemValue = 0.001;
         }
@@ -128,34 +128,51 @@ export class GameCatLuckyService {
   }
 
   async finishGameCatLucky(account_id: string, stage: number) {
-    let gameCatLuckyStatistic = await this.gameCatLuckyRepository.findOne({ where: { account_id: account_id } });
+    let currency = await this.currencyRepository.findOne({ where: { account_id: account_id } });
+    if (currency == null) {
+      currency = new Currency(account_id);
+    }
+    let gameCatLuckyStatistic = await this.gameCatLuckyStatisticRepository.findOne({ where: { account_id: account_id } });
     if (gameCatLuckyStatistic == null) {
       gameCatLuckyStatistic = new GameCatLuckyStatistic(account_id);
     }
+    let gameCatBattleStatistic = await this.gameCatBattleStatisticRepository.findOne({ where: { account_id: account_id } });
+    if (gameCatBattleStatistic == null) {
+      gameCatBattleStatistic = new GameCatBattleStatistic(account_id);
+    }
+    
     let forceUpdate = false;
     if (stage > 0 && stage == gameCatLuckyStatistic.stage) {
+      currency.ton += gameCatLuckyStatistic.collected_ton;
+      currency.bnb += gameCatLuckyStatistic.collected_bnb;
+      currency.plays += gameCatLuckyStatistic.collected_plays;
       gameCatLuckyStatistic.ticket += gameCatLuckyStatistic.collected_ticket;
+      gameCatBattleStatistic.gem += gameCatLuckyStatistic.collected_gem;
+      gameCatBattleStatistic.shard += gameCatLuckyStatistic.collected_shard;
+
       gameCatLuckyStatistic.game_over = 0;
       gameCatLuckyStatistic.stage = 0;
       gameCatLuckyStatistic.current_stage_result = "";
       gameCatLuckyStatistic.collected_gem = 0;
       gameCatLuckyStatistic.collected_shard = 0;
       gameCatLuckyStatistic.collected_ton = 0;
-      gameCatLuckyStatistic.collected_star = 0;
       gameCatLuckyStatistic.collected_bnb = 0;
       gameCatLuckyStatistic.collected_plays = 0;
       gameCatLuckyStatistic.collected_ticket = 0;
-      await this.gameCatLuckyRepository.save(gameCatLuckyStatistic);
+
+      await this.currencyRepository.save(currency);
+      await this.gameCatBattleStatisticRepository.save(gameCatBattleStatistic);
+      await this.gameCatLuckyStatisticRepository.save(gameCatLuckyStatistic);
     }
     else {
       forceUpdate = true;
     }
-    let finalGameCatLuckyStatistic = await this.gameCatLuckyRepository.findOne({ where: { account_id: account_id } });
+    let finalGameCatLuckyStatistic = await this.gameCatLuckyStatisticRepository.findOne({ where: { account_id: account_id } });
     return { "force_update": forceUpdate, "status": classToPlain(finalGameCatLuckyStatistic) };
   }
 
   async playOnGameCatLucky(account_id: string, stage: number) {
-    let gameCatLuckyStatistic = await this.gameCatLuckyRepository.findOne({ where: { account_id: account_id } });
+    let gameCatLuckyStatistic = await this.gameCatLuckyStatisticRepository.findOne({ where: { account_id: account_id } });
     if (gameCatLuckyStatistic == null) {
       gameCatLuckyStatistic = new GameCatLuckyStatistic(account_id);
     }
@@ -165,18 +182,18 @@ export class GameCatLuckyService {
         gameCatLuckyStatistic.ticket -= gameCatLuckyStatistic.play_on_ticket;
         gameCatLuckyStatistic.game_over = 0;
         gameCatLuckyStatistic.playing_on = 1;
-        await this.gameCatLuckyRepository.save(gameCatLuckyStatistic);
+        await this.gameCatLuckyStatisticRepository.save(gameCatLuckyStatistic);
       }
     }
     else {
       forceUpdate = true;
     }
-    let finalGameCatLuckyStatistic = await this.gameCatLuckyRepository.findOne({ where: { account_id: account_id } });
+    let finalGameCatLuckyStatistic = await this.gameCatLuckyStatisticRepository.findOne({ where: { account_id: account_id } });
     return { "force_update": forceUpdate, "status": classToPlain(finalGameCatLuckyStatistic) };
   }
 
   async giveUpGameCatLucky(account_id: string, stage: number) {
-    let gameCatLuckyStatistic = await this.gameCatLuckyRepository.findOne({ where: { account_id: account_id } });
+    let gameCatLuckyStatistic = await this.gameCatLuckyStatisticRepository.findOne({ where: { account_id: account_id } });
     if (gameCatLuckyStatistic == null) {
       gameCatLuckyStatistic = new GameCatLuckyStatistic(account_id);
     }
@@ -188,16 +205,15 @@ export class GameCatLuckyService {
       gameCatLuckyStatistic.collected_gem = 0;
       gameCatLuckyStatistic.collected_shard = 0;
       gameCatLuckyStatistic.collected_ton = 0;
-      gameCatLuckyStatistic.collected_star = 0;
       gameCatLuckyStatistic.collected_bnb = 0;
       gameCatLuckyStatistic.collected_plays = 0;
       gameCatLuckyStatistic.collected_ticket = 0;
-      await this.gameCatLuckyRepository.save(gameCatLuckyStatistic);
+      await this.gameCatLuckyStatisticRepository.save(gameCatLuckyStatistic);
     }
     else {
       forceUpdate = true;
     }
-    let finalGameCatLuckyStatistic = await this.gameCatLuckyRepository.findOne({ where: { account_id: account_id } });
+    let finalGameCatLuckyStatistic = await this.gameCatLuckyStatisticRepository.findOne({ where: { account_id: account_id } });
     return { "force_update": forceUpdate, "status": classToPlain(finalGameCatLuckyStatistic) };
   }
 

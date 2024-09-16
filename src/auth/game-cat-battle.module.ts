@@ -1,16 +1,15 @@
 import { Module } from '@nestjs/common';
 import { JwtModule } from '@nestjs/jwt';
 import { PassportModule } from '@nestjs/passport';
-import { Currency } from './entity/currency.entity';
-import { GameCatLuckyStatistic } from './entity/game-cat-lucky-statistic.entity';
-import { GameCatLuckyService } from './game-cat-lucky.service';
-import { GameCatLuckyController } from './game-cat-lucky.controller';
+import { GameCatBattleStatistic } from './entity/game-cat-battle-statistic.entity';
+import { GameCatBattleService } from './game-cat-battle.service';
+import { GameCatBattleController } from './game-cat-battle.controller';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([ Currency, GameCatLuckyStatistic ]),
+    TypeOrmModule.forFeature([ GameCatBattleStatistic ]),
     PassportModule.register({ defaultStrategy: 'jwt' }),
     JwtModule.registerAsync({
       imports: [ConfigModule],
@@ -24,9 +23,9 @@ import { TypeOrmModule } from '@nestjs/typeorm';
       isGlobal: true,
     }),
   ],
-  providers: [GameCatLuckyService],
-  controllers: [GameCatLuckyController],
-  exports: [GameCatLuckyService],
+  providers: [GameCatBattleService],
+  controllers: [GameCatBattleController],
+  exports: [GameCatBattleService],
 })
 
-export class GameCatLuckyModule {}
+export class GameCatBattleModule {}

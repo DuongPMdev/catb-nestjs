@@ -39,9 +39,6 @@ export class GameCatLuckyStatistic {
   collected_ton: number;
 
   @Column()
-  collected_star: number;
-
-  @Column()
   collected_bnb: number;
 
   @Column()
@@ -65,7 +62,6 @@ export class GameCatLuckyStatistic {
     this.collected_gem = 0;
     this.collected_shard = 0;
     this.collected_ton = 0;
-    this.collected_star = 0;
     this.collected_bnb = 0;
     this.collected_plays = 0;
     this.collected_ticket = 0;

@@ -12,15 +12,15 @@ export class GameCatLuckyController {
   constructor(private readonly gameCatLuckyService: GameCatLuckyService) {}
   
   @UseGuards(JwtAuthGuard)
-  @Get('status')
+  @Get('statistic')
   @ApiBearerAuth()
-  @ApiOperation({ summary: 'Get Cat Lucky Game status' })
-  @ApiResponse({ status: 200, description: 'Successful retrieval of Cat Lucky Game status'})
+  @ApiOperation({ summary: 'Get Cat Lucky Game statistic' })
+  @ApiResponse({ status: 200, description: 'Successful retrieval of Cat Lucky Game statistic'})
   @ApiResponse({ status: 401, description: 'Unauthorized' })
-  async status(@Request() req) {
+  async statistic(@Request() req) {
     const account_id = req.user.account_id;
-    const gameCatLuckyStatus = await this.gameCatLuckyService.getGameCatLuckyStatus(account_id);
-    return gameCatLuckyStatus;
+    const gameCatLuckyStatistic = await this.gameCatLuckyService.getGameCatLuckyStatistic(account_id);
+    return gameCatLuckyStatistic;
   }
   
   @UseGuards(JwtAuthGuard)
