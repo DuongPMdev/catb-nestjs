@@ -3,6 +3,7 @@ import { JwtModule } from '@nestjs/jwt';
 import { PassportModule } from '@nestjs/passport';
 import { Currency } from './entity/currency.entity';
 import { GameCatLuckyStatistic } from './entity/game-cat-lucky-statistic.entity';
+import { GameCatBattleStatistic } from './entity/game-cat-battle-statistic.entity';
 import { GameCatLuckyService } from './game-cat-lucky.service';
 import { GameCatLuckyController } from './game-cat-lucky.controller';
 import { ConfigModule, ConfigService } from '@nestjs/config';
@@ -10,7 +11,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([ Currency, GameCatLuckyStatistic ]),
+    TypeOrmModule.forFeature([ Currency, GameCatLuckyStatistic, GameCatBattleStatistic ]),
     PassportModule.register({ defaultStrategy: 'jwt' }),
     JwtModule.registerAsync({
       imports: [ConfigModule],
