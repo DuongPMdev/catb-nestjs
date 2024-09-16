@@ -1,10 +1,10 @@
-import { Controller, Post, Get, Body, Request, UseGuards, Injectable, NotFoundException, BadRequestException, HttpService } from '@nestjs/common';
+import { Controller, Post, Get, Body, Request, UseGuards, Injectable, NotFoundException, BadRequestException } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { JwtAuthGuard } from './jwt-auth.guard';
 import { LoginDTO } from './dto/login.dto';
 import { ApiBearerAuth, ApiTags, ApiOperation, ApiResponse } from '@nestjs/swagger';
 import { classToPlain } from 'class-transformer';
-import { AxiosResponse } from 'axios';
+import { HttpService, AxiosResponse } from 'axios';
 
 
 @Injectable()
