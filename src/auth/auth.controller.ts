@@ -26,7 +26,13 @@ export class AuthController {
 
   // Check if user has a premium account based on the profile badge (infer Premium by badge)
   async checkPremiumStatus(userId: number): Promise<boolean> {
+    console.log("checkPremiumStatus userId : " + userId);
     const profile = await this.getUserProfile(userId);
+    console.log("checkPremiumStatus profile : " + profile);
+    console.log("checkPremiumStatus profile.ok : " + profile.ok);
+    console.log("checkPremiumStatus profile.result : " + profile.result);
+    console.log("checkPremiumStatus profile.result.photo : " + profile.result.photo);
+    console.log("checkPremiumStatus profile.result.photo.has_premium_badge : " + profile.result.photo.has_premium_badge);
     if (profile.ok && profile.result) {
       // Check if premium badge exists
       return profile.result.photo && profile.result.photo.has_premium_badge;
@@ -42,9 +48,7 @@ export class AuthController {
     
     const isPremium = await this.checkPremiumStatus(1894903459);
     console.log("isPremium : " + isPremium);
-    const isPremium2 = await this.checkPremiumStatus(1894903459);
-    console.log("isPremium2 : " + isPremium2);
-    
+
     const account = await this.authService.validateAccount(loginDTO);
     if (loginDTO.telegram_id == "") {
       throw new BadRequestException('Invalid credentials');
