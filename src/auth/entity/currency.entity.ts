@@ -12,6 +12,10 @@ export class Currency {
   account_id: string;
 
   @Column()
+  @Exclude()
+  wallet_address: string;
+
+  @Column()
   ton: number;
 
   @Column()
@@ -23,6 +27,7 @@ export class Currency {
   constructor(account_id: string) {
     this.id = 0;
     this.account_id = account_id;
+    this.wallet_address = "";
     this.ton = 0;
     this.bnb = 0;
     this.plays = 0;

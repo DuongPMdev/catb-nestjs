@@ -77,6 +77,16 @@ export class AuthService {
     return currency;
   }
 
+  async connectWalletByAccountID(account_id: string, wallet_address: string) {
+    let currency = await this.currencyRepository.findOne({ where: { account_id: account_id } });
+    if (currency == null) {
+      currency = new Currency(account_id);
+    }
+    currency.wallet_address = wallet_address;
+    
+    return await this.currencyRepository.save(currency);;
+  }
+
   async getGameCatLuckyStatisticByAccountID(account_id: string) {
     let gameCatLuckyStatistic = await this.gameCatLuckyStatisticRepository.findOne({ where: { account_id: account_id } });
     if (gameCatLuckyStatistic == null) {

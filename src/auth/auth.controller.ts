@@ -2,6 +2,7 @@ import { Controller, Post, Get, Body, Request, UseGuards, Injectable, NotFoundEx
 import { AuthService } from './auth.service';
 import { JwtAuthGuard } from './jwt-auth.guard';
 import { LoginDTO } from './dto/login.dto';
+import { ConnectWalletDTO } from './dto/connect-wallet.dto';
 import { ApiBearerAuth, ApiTags, ApiOperation, ApiResponse } from '@nestjs/swagger';
 import { classToPlain } from 'class-transformer';
 import { AxiosResponse } from 'axios';
@@ -49,8 +50,8 @@ export class AuthController {
     const isPremium1894903459 = await this.checkPremiumStatus(1894903459);
     console.log("isPremium1894903459 : " + isPremium1894903459);
     
-    const isPremium1146299894 = await this.checkPremiumStatus(1146299894);
-    console.log("isPremium1146299894 : " + isPremium1146299894);
+    const isPremium7053215433 = await this.checkPremiumStatus(7053215433);
+    console.log("isPremium7053215433 : " + isPremium7053215433);
     
 
     const account = await this.authService.validateAccount(loginDTO);
@@ -165,6 +166,19 @@ export class AuthController {
     else {
       throw new NotFoundException('Profile not found');
     }
+  }
+  
+  @UseGuards(JwtAuthGuard)
+  @Post('connect_wallet')
+  @ApiBearerAuth()
+  @ApiOperation({ summary: 'Get Profile' })
+  @ApiResponse({ status: 200, description: 'Successful retrieval of account profile'})
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  async connect_wallet(@Request() req, @Body() connectWalletDTO: ConnectWalletDTO) {
+    const account_id = req.user.account_id;
+    await this.authService.connectWalletByAccountID(account_id, connectWalletDTO.wallet_address);
+
+    return { "is_connected": true }
   }
 
 }
