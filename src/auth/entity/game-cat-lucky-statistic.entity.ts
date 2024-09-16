@@ -12,6 +12,9 @@ export class GameCatLuckyStatistic {
   account_id: string;
 
   @Column()
+  max_ticket: number;
+
+  @Column()
   ticket: number;
 
   @Column()
@@ -53,6 +56,7 @@ export class GameCatLuckyStatistic {
   constructor(account_id: string) {
     this.id = 0;
     this.account_id = account_id;
+    this.max_ticket = 200;
     this.ticket = 0;
     this.game_over = 0;
     this.play_on_ticket = 100;
