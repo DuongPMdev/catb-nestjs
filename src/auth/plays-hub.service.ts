@@ -6,13 +6,13 @@ import { PlaysHubProgressQuest } from './entity/plays-hub-progress-quest.entity'
 import { Account } from './entity/account.entity';
 import { Currency } from './entity/currency.entity';
 import { GameCatBattleStatistic } from './entity/game-cat-battle-statistic.entity';
-import TelegramBot from 'node-telegram-bot-api';
+// import TelegramBot from 'node-telegram-bot-api';
 import { classToPlain } from 'class-transformer';
 
 @Injectable()
 export class PlaysHubService {
 
-  private telegramBot: TelegramBot;
+  // private telegramBot: TelegramBot;
 
   constructor(
     @InjectRepository(PlaysHubConfigQuest)
@@ -26,7 +26,7 @@ export class PlaysHubService {
     @InjectRepository(GameCatBattleStatistic)
     private gameCatBattleStatisticRepository: Repository<GameCatBattleStatistic>,
   ) {
-    this.telegramBot = new TelegramBot('6410342407:AAEgV9Bz57DbEBTXkCLDw635ZNXfwy37QMI', { polling: true });
+    // this.telegramBot = new TelegramBot('6410342407:AAEgV9Bz57DbEBTXkCLDw635ZNXfwy37QMI', { polling: true });
   }
 
   async getPlaysLeaderboard() {
@@ -201,15 +201,15 @@ export class PlaysHubService {
     return playsHubDataQuest;
   }
 
-  async checkIfUserIsMember(chatId: string, userId: number): Promise<boolean> {
-    try {
-      const chatMember = await this.telegramBot.getChatMember(chatId, userId);
-      return chatMember.status === 'member' || chatMember.status === 'administrator' || chatMember.status === 'creator';
-    }
-    catch (error) {
-      console.error('Error checking chat member status:', error);
-      return false;
-    }
-  }
+  // async checkIfUserIsMember(chatId: string, userId: number): Promise<boolean> {
+  //   try {
+  //     const chatMember = await this.telegramBot.getChatMember(chatId, userId);
+  //     return chatMember.status === 'member' || chatMember.status === 'administrator' || chatMember.status === 'creator';
+  //   }
+  //   catch (error) {
+  //     console.error('Error checking chat member status:', error);
+  //     return false;
+  //   }
+  // }
 
 }
