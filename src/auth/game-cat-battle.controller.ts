@@ -5,8 +5,8 @@ import { ApiBearerAuth, ApiTags, ApiOperation, ApiResponse } from '@nestjs/swagg
 
 
 @Injectable()
-@ApiTags('game-cat-lucky')
-@Controller('game-cat-lucky')
+@ApiTags('game-cat-battle')
+@Controller('game-cat-battle')
 export class GameCatBattleController {
   constructor(private readonly gameCatBattleService: GameCatBattleService) {}
   
@@ -21,5 +21,5 @@ export class GameCatBattleController {
     const gameCatBattleStatistic = await this.gameCatBattleService.getGameCatBattleStatistic(account_id);
     return gameCatBattleStatistic;
   }
-  
+
 }
