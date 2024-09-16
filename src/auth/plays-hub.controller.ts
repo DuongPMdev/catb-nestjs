@@ -11,6 +11,15 @@ import { PlaysHubQuestDTO } from './dto/plays-hub-quest.dto';
 export class PlaysHubController {
   constructor(private readonly playsHubService: PlaysHubService) {}
   
+  @Get('plays_leaderboard')
+  @ApiOperation({ summary: 'Get Plays Hub quests status' })
+  @ApiResponse({ status: 200, description: 'Successful retrieval of Plays Hub quests'})
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  async plays_leaderboard(@Request() req) {
+    const playsLeaderboard = await this.playsHubService.getPlaysLeaderboard();
+    return playsLeaderboard;
+  }
+  
   @UseGuards(JwtAuthGuard)
   @Get('quest_status')
   @ApiBearerAuth()
