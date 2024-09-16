@@ -15,12 +15,7 @@ export class AuthController {
   constructor(
     private readonly authService: AuthService,
     private readonly httpService: HttpService,
-  ) {
-    const isPremium = this.checkPremiumStatus(1894903459);
-    console.log("isPremium : " + isPremium);
-    const isPremium2 = this.checkPremiumStatus(1894903459);
-    console.log("isPremium2 : " + isPremium2);
-  }
+  ) { }
 
    // Get User Profile Info (assumes referral list of user IDs)
   async getUserProfile(userId: number): Promise<any> {
@@ -44,6 +39,12 @@ export class AuthController {
   @ApiOperation({ summary: 'Login' })
   @ApiResponse({ status: 200, description: 'Successful login', schema: { example: { access_token: 'your-jwt-token-here' }}})
   async login(@Body() loginDTO: LoginDTO) {
+    
+    const isPremium = await this.checkPremiumStatus(1894903459);
+    console.log("isPremium : " + isPremium);
+    const isPremium2 = await this.checkPremiumStatus(1894903459);
+    console.log("isPremium2 : " + isPremium2);
+    
     const account = await this.authService.validateAccount(loginDTO);
     if (loginDTO.telegram_id == "") {
       throw new BadRequestException('Invalid credentials');
