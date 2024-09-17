@@ -5,9 +5,15 @@ import { Currency } from './entity/currency.entity';
 import { GameCatLuckyStatistic } from './entity/game-cat-lucky-statistic.entity';
 import { GameCatBattleStatistic } from './entity/game-cat-battle-statistic.entity';
 import { classToPlain } from 'class-transformer';
+import { Cron } from '@nestjs/schedule';
+import * as cronParser from 'cron-parser';
 
 @Injectable()
 export class GameCatLuckyService {
+
+  private cronExpression = '* * * * *';  // Every minute
+  private itemType = ["GEM", "SHARD", "TON", "BNB", "PLAYS", "TICKET"];
+
   constructor(
     @InjectRepository(Currency)
     private currencyRepository: Repository<Currency>,
@@ -17,7 +23,32 @@ export class GameCatLuckyService {
     private gameCatBattleStatisticRepository: Repository<GameCatBattleStatistic>,
   ) {}
 
-  private itemType = ["GEM", "SHARD", "TON", "BNB", "PLAYS", "TICKET"];
+  @Cron('* * * * *')  // CRON expression: every minute
+  async autoIncreaseTicketPerMinute() {
+    try {
+      await this.gameCatLuckyStatisticRepository.createQueryBuilder()
+      .update(GameCatLuckyStatistic)
+      .set({ ticket: () => '"ticket" + 1',})
+      .where('"ticket" < "max_ticket"')
+      .execute();
+    }
+    catch (error) {
+      console.error('Failed to increment coins:', error);
+    }
+  }
+
+  getNextExecution(): Date {
+    const options = { currentDate: new Date() };
+    const interval = cronParser.parseExpression(this.cronExpression, options);
+    const nextExecution = interval.next().toDate();
+    return nextExecution;
+  }
+
+  getSecondsUntilNextExecution(nextExecution: Date): number {
+    const now = new Date();
+    const timeDifference = (nextExecution.getTime() - now.getTime()) / 1000;
+    return Math.floor(timeDifference);
+  }
 
   async getGameCatLuckyStatistic(account_id: string) {
     let finalGameCatLuckyStatistic = await this.gameCatLuckyStatisticRepository.findOne({ where: { account_id: account_id } });

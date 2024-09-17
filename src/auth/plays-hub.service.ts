@@ -145,7 +145,7 @@ export class PlaysHubService {
           let rewardItem = rewardItems[0].split(":");
           let rewardItemType = rewardItem[0];
           let rewardItemValue = rewardItem[1];
-          currency.plays += rewardItemValue;
+          currency.plays += +rewardItemValue;
 
           await this.currencyRepository.save(currency);
 
