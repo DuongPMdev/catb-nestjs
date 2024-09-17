@@ -9,6 +9,7 @@ export class Account {
   id: number;
 
   @Column({ unique: true })
+  @Exclude()
   telegram_id: string;
 
   @Column({ unique: true })
