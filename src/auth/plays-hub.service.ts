@@ -52,7 +52,12 @@ export class PlaysHubService {
   async proceedPlaysHubQuest(account_id: string, type: string, request_type: string) {
     let playsHubProgressQuest = null;
     if (type === "DAILY") {
-      playsHubProgressQuest = await this.playsHubProgressQuestRepository.findOne({ where: { account_id: account_id, type: type, request_type: request_type } });
+      const today = new Date();
+      const startOfDay = new Date(today);
+      startOfDay.setHours(0, 0, 0, 0);
+      const endOfDay = new Date(today);
+      endOfDay.setHours(23, 59, 59, 999);
+      playsHubProgressQuest = await this.playsHubProgressQuestRepository.findOne({ where: { account_id: account_id, type: type, request_type: request_type, daily_date: Between(startOfDay, endOfDay) } });
       if (playsHubProgressQuest === null) {
         playsHubProgressQuest = new PlaysHubProgressQuest(account_id);
         playsHubProgressQuest.type = type;
@@ -189,7 +194,12 @@ export class PlaysHubService {
     playsHubDataQuest["reward"] = playsHubConfigQuest.reward;
     playsHubDataQuest["additional"] = playsHubConfigQuest.additional;
     if (type === "DAILY") {
-      let playsHubProgressQuest = await this.playsHubProgressQuestRepository.findOne({ where: { account_id: account_id, type: type, request_type: request_type } });
+      const today = new Date();
+      const startOfDay = new Date(today);
+      startOfDay.setHours(0, 0, 0, 0);
+      const endOfDay = new Date(today);
+      endOfDay.setHours(23, 59, 59, 999);
+      let playsHubProgressQuest = await this.playsHubProgressQuestRepository.findOne({ where: { account_id: account_id, type: type, request_type: request_type, daily_date: Between(startOfDay, endOfDay) } });
       if (playsHubProgressQuest === null) {
         playsHubProgressQuest = new PlaysHubProgressQuest(account_id);
       }

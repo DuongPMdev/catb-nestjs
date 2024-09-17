@@ -58,7 +58,7 @@ export class GameCatLuckyService {
     return { "ticket": finalGameCatLuckyStatistic.ticket };
   }
 
-  async getGameCatLuckySecondToFreeTicket(account_id: string) {
+  async getGameCatLuckySecondToFreeTicket() {
     const nextExecution = this.getNextExecution();
     let seconds = this.getSecondsUntilNextExecution(nextExecution);
     seconds += +3;

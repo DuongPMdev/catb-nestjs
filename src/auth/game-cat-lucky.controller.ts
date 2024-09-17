@@ -30,8 +30,7 @@ export class GameCatLuckyController {
   @ApiResponse({ status: 200, description: 'Successful retrieval of Cat Lucky Game statistic'})
   @ApiResponse({ status: 401, description: 'Unauthorized' })
   async free_ticket(@Request() req) {
-    const account_id = req.user.account_id;
-    const gameCatLuckySecondToFreeTicket = await this.gameCatLuckyService.getGameCatLuckySecondToFreeTicket(account_id);
+    const gameCatLuckySecondToFreeTicket = await this.gameCatLuckyService.getGameCatLuckySecondToFreeTicket();
     return gameCatLuckySecondToFreeTicket;
   }
   
