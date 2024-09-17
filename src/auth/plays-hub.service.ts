@@ -6,7 +6,7 @@ import { PlaysHubProgressQuest } from './entity/plays-hub-progress-quest.entity'
 import { Account } from './entity/account.entity';
 import { Currency } from './entity/currency.entity';
 import { GameCatBattleStatistic } from './entity/game-cat-battle-statistic.entity';
-import TelegramBot from 'node-telegram-bot-api';
+import * as TelegramBot from 'node-telegram-bot-api';
 import { classToPlain } from 'class-transformer';
 
 @Injectable()

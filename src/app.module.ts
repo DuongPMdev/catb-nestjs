@@ -13,11 +13,9 @@ import { PlaysHubProgressQuest } from './auth/entity/plays-hub-progress-quest.en
 import { GameCatLuckyModule } from './auth/game-cat-lucky.module';
 import { GameCatBattleModule } from './auth/game-cat-battle.module';
 import { PlaysHubModule } from './auth/plays-hub.module';
-import { ScheduleModule } from '@nestjs/schedule';
 
 @Module({
   imports: [
-    ScheduleModule.forRoot(),
     TypeOrmModule.forRoot({
       type: 'mysql',
       host: 'localhost',
