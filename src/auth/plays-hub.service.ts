@@ -131,8 +131,10 @@ export class PlaysHubService {
     }
     if (isProceeded === true) {
       playsHubProgressQuest.progress_amount++;
-      return await this.playsHubProgressQuestRepository.save(playsHubProgressQuest);
+      await this.playsHubProgressQuestRepository.save(playsHubProgressQuest);
     }
+
+    return { "is_proceeded": isProceeded};
   }
 
   async checkPlaysHubQuest(account_id: string, type: string, request_type: string) {
