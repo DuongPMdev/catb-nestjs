@@ -138,7 +138,6 @@ export class PlaysHubService {
   }
 
   async checkPlaysHubQuest(account_id: string, type: string, request_type: string) {
-    console.log("checkPlaysHubQuest : " + account_id + ", " + type + ", " + request_type);
     if (request_type === "JOIN_PLAYS_CHANNEL" || request_type === "JOIN_PLAYS_CHAT") {
       await this.proceedPlaysHubQuest(account_id, type, request_type);
     }
