@@ -38,13 +38,13 @@ export class GameCatLuckyStatistic {
   @Column()
   collected_shard: number;
 
-  @Column()
+  @Column('float')
   collected_ton: number;
 
-  @Column()
+  @Column('float')
   collected_bnb: number;
 
-  @Column()
+  @Column('float')
   collected_plays: number;
 
   @Column()

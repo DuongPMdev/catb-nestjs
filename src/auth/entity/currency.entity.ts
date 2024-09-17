@@ -15,13 +15,13 @@ export class Currency {
   @Exclude()
   wallet_address: string;
 
-  @Column()
+  @Column('float')
   ton: number;
 
-  @Column()
+  @Column('float')
   bnb: number;
 
-  @Column()
+  @Column('float')
   plays: number;
 
   constructor(account_id: string) {
