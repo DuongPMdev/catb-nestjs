@@ -50,6 +50,21 @@ export class GameCatLuckyService {
     return Math.floor(timeDifference);
   }
 
+  async getGameCatLuckyTicket(account_id: string) {
+    let finalGameCatLuckyStatistic = await this.gameCatLuckyStatisticRepository.findOne({ where: { account_id: account_id } });
+    if (finalGameCatLuckyStatistic == null) {
+      finalGameCatLuckyStatistic = new GameCatLuckyStatistic(account_id);
+    }
+    return { "ticket": finalGameCatLuckyStatistic.ticket };
+  }
+
+  async getGameCatLuckySecondToFreeTicket(account_id: string) {
+    const nextExecution = this.getNextExecution();
+    const seconds = this.getSecondsUntilNextExecution(nextExecution);
+    seconds += +3;
+    return { "second": seconds };
+  }
+
   async getGameCatLuckyStatistic(account_id: string) {
     let finalGameCatLuckyStatistic = await this.gameCatLuckyStatisticRepository.findOne({ where: { account_id: account_id } });
     if (finalGameCatLuckyStatistic == null) {
