@@ -83,7 +83,7 @@ export class PlaysHubService {
       if (gameCatBattleStatistic) {
         const today = new Date();
         today.setHours(0, 0, 0, 0);
-        const lastLogin = new Date(gameCatBattleStatistic.last_login_datetime);
+        const lastLogin = gameCatBattleStatistic.last_login_datetime;
         lastLogin.setHours(0, 0, 0, 0);
         console.log("gameCatBattleStatistic : ");
         console.log("today : " + today);
