@@ -91,22 +91,22 @@ export class GameCatLuckyService {
         }
         else {
           if (itemType == "GEM") {
-            gameCatLuckyStatistic.collected_gem += +itemValue;
+            gameCatLuckyStatistic.collected_gem += itemValue;
           }
           else if (itemType == "SHARD") {
-            gameCatLuckyStatistic.collected_shard += +itemValue;
+            gameCatLuckyStatistic.collected_shard += itemValue;
           }
           else if (itemType == "TON") {
-            gameCatLuckyStatistic.collected_ton += +itemValue;
+            gameCatLuckyStatistic.collected_ton += itemValue;
           }
           else if (itemType == "BNB") {
-            gameCatLuckyStatistic.collected_bnb += +itemValue;
+            gameCatLuckyStatistic.collected_bnb += itemValue;
           }
           else if (itemType == "PLAYS") {
-            gameCatLuckyStatistic.collected_plays += +itemValue;
+            gameCatLuckyStatistic.collected_plays += itemValue;
           }
           else if (itemType == "TICKET") {
-            gameCatLuckyStatistic.collected_ticket += +itemValue;
+            gameCatLuckyStatistic.collected_ticket += itemValue;
           }
           gameCatLuckyStatistic.stage++;
           gameCatLuckyStatistic.game_over = 0;
