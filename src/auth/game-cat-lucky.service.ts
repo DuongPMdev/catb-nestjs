@@ -79,6 +79,7 @@ export class GameCatLuckyService {
       gameCatLuckyStatistic = new GameCatLuckyStatistic(account_id);
     }
     let forceUpdate = false;
+    let isNotEnoughTicket = false;
     if (stage == gameCatLuckyStatistic.stage) {
       if (gameCatLuckyStatistic.current_stage_result != "") {
         const items = gameCatLuckyStatistic.current_stage_result.split(",");
@@ -116,10 +117,16 @@ export class GameCatLuckyService {
         }
       }
       else {
-        gameCatLuckyStatistic.stage++;
-        gameCatLuckyStatistic.playing_on = 0;
         gameCatLuckyStatistic.play_on_ticket = 100 + gameCatLuckyStatistic.stage * 10;
-        gameCatLuckyStatistic.current_stage_result = this.generateStageResult(gameCatLuckyStatistic.stage);
+        if (gameCatLuckyStatistic.ticket >= gameCatLuckyStatistic.play_on_ticket) {
+          gameCatLuckyStatistic.stage++;
+          gameCatLuckyStatistic.ticket -= gameCatLuckyStatistic.play_on_ticket;
+          gameCatLuckyStatistic.playing_on = 0;
+          gameCatLuckyStatistic.current_stage_result = this.generateStageResult(gameCatLuckyStatistic.stage);
+        }
+        else {
+          isNotEnoughTicket = true;
+        }
       }
       await this.gameCatLuckyStatisticRepository.save(gameCatLuckyStatistic);
     }
@@ -127,7 +134,7 @@ export class GameCatLuckyService {
       forceUpdate = true;
     }
     let finalGameCatLuckyStatistic = await this.gameCatLuckyStatisticRepository.findOne({ where: { account_id: account_id } });
-    return { "force_update": forceUpdate, "status": classToPlain(finalGameCatLuckyStatistic) };
+    return { "is_not_enough_ticket": isNotEnoughTicket, "force_update": forceUpdate, "status": classToPlain(finalGameCatLuckyStatistic) };
   }
   
 
@@ -223,6 +230,7 @@ export class GameCatLuckyService {
       gameCatLuckyStatistic = new GameCatLuckyStatistic(account_id);
     }
     let forceUpdate = false;
+    let isNotEnoughTicket = false;
     if (stage > 0 && stage == gameCatLuckyStatistic.stage) {
       if (gameCatLuckyStatistic.ticket >= gameCatLuckyStatistic.play_on_ticket) {
         gameCatLuckyStatistic.ticket -= gameCatLuckyStatistic.play_on_ticket;
@@ -230,12 +238,15 @@ export class GameCatLuckyService {
         gameCatLuckyStatistic.playing_on = 1;
         await this.gameCatLuckyStatisticRepository.save(gameCatLuckyStatistic);
       }
+      else {
+        isNotEnoughTicket = true;
+      }
     }
     else {
       forceUpdate = true;
     }
     let finalGameCatLuckyStatistic = await this.gameCatLuckyStatisticRepository.findOne({ where: { account_id: account_id } });
-    return { "force_update": forceUpdate, "status": classToPlain(finalGameCatLuckyStatistic) };
+    return { "is_not_enough_ticket": isNotEnoughTicket, "force_update": forceUpdate, "status": classToPlain(finalGameCatLuckyStatistic) };
   }
 
   async giveUpGameCatLucky(account_id: string, stage: number) {
