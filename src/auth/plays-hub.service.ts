@@ -114,14 +114,14 @@ export class PlaysHubService {
     }
     else if (playsHubProgressQuest.request_type === "JOIN_PLAYS_CHANNEL") {
       // const account = await this.accountRepository.findOne({ where: { account_id: account_id } });
-      // const isMember = await this.checkIfUserIsMember("PlayshubAnn", +account.telegram_id);
+      // const isMember = await this.checkIfUserIsMember("7210961345", +account.telegram_id);
       // if (isMember === true) {
       //   isProceeded = true;
       // }
     }
     else if (playsHubProgressQuest.request_type === "JOIN_PLAYS_CHAT") {
       // const account = await this.accountRepository.findOne({ where: { account_id: account_id } });
-      // const isMember = await this.checkIfUserIsMember("PlayshubChat", +account.telegram_id);
+      // const isMember = await this.checkIfUserIsMember("1002202947161", +account.telegram_id);
       // if (isMember === true) {
       //   isProceeded = true;
       // }
@@ -162,12 +162,19 @@ export class PlaysHubService {
 
           await this.currencyRepository.save(currency);
 
-          let playsHubProgressQuest = new PlaysHubProgressQuest(account_id);
-          playsHubProgressQuest.type = playsHubDataQuest["type"];
-          playsHubProgressQuest.request_type = playsHubDataQuest["request_type"];
-          playsHubProgressQuest.progress_amount = playsHubDataQuest["progress_amount"];
-          playsHubProgressQuest.rewarded_step = playsHubDataQuest["rewarded_step"];
-          playsHubProgressQuest.daily_date = playsHubDataQuest["daily_date"];
+          let playsHubProgressQuest = null;
+          if (type === "DAILY") {
+            const today = new Date();
+            const startOfDay = new Date(today);
+            startOfDay.setHours(0, 0, 0, 0);
+            const endOfDay = new Date(today);
+            endOfDay.setHours(23, 59, 59, 999);
+            playsHubProgressQuest = await this.playsHubProgressQuestRepository.findOne({ where: { account_id: account_id, type: type, request_type: request_type, daily_date: Between(startOfDay, endOfDay) } });
+          }
+          else {
+            playsHubProgressQuest = await this.playsHubProgressQuestRepository.findOne({ where: { account_id: account_id, type: type, request_type: request_type } });
+          }
+          playsHubProgressQuest.rewarded_step++;
 
           await this.playsHubProgressQuestRepository.save(playsHubProgressQuest);
 
