@@ -55,12 +55,16 @@ export class PlaysHubService {
       playsHubProgressQuest = await this.playsHubProgressQuestRepository.findOne({ where: { account_id: account_id, type: type, request_type: request_type } });
       if (playsHubProgressQuest === null) {
         playsHubProgressQuest = new PlaysHubProgressQuest(account_id);
+        playsHubProgressQuest.type = type;
+        playsHubProgressQuest.request_type = request_type;
       }
     }
     else {
       playsHubProgressQuest = await this.playsHubProgressQuestRepository.findOne({ where: { account_id: account_id, type: type, request_type: request_type } });
       if (playsHubProgressQuest === null) {
         playsHubProgressQuest = new PlaysHubProgressQuest(account_id);
+        playsHubProgressQuest.type = type;
+        playsHubProgressQuest.request_type = request_type;
       }
     }
 
