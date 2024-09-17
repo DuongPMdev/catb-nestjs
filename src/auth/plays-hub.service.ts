@@ -126,9 +126,6 @@ export class PlaysHubService {
     else if (playsHubProgressQuest.request_type === "FOLLOW_PLAYS_ON_X") {
       isProceeded = true;
     }
-    console.log("isProceeded : " + isProceeded);
-    console.log("playsHubProgressQuest.type : " + playsHubProgressQuest.type);
-    console.log("playsHubProgressQuest.request_type : " + playsHubProgressQuest.request_type);
     if (isProceeded === true) {
       playsHubProgressQuest.progress_amount++;
       return await this.playsHubProgressQuestRepository.save(playsHubProgressQuest);
@@ -136,6 +133,9 @@ export class PlaysHubService {
   }
 
   async checkPlaysHubQuest(account_id: string, type: string, request_type: string) {
+    if (request_type === "JOIN_PLAYS_CHANNEL" || request_type === "JOIN_PLAYS_CHAT") {
+      await this.proceedPlaysHubQuest(account_id, type, request_type);
+    }
     const playsHubConfigQuest = await this.playsHubConfigQuestRepository.findOne({ where: { type: type, request_type: request_type } });
     if (playsHubConfigQuest) {
       let playsHubDataQuest = await this.getPlaysHubDataQuest(account_id, playsHubConfigQuest);
