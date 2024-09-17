@@ -117,9 +117,12 @@ export class PlaysHubService {
     else if (playsHubProgressQuest.request_type === "FOLLOW_PLAYS_ON_X") {
       isProceeded = true;
     }
+    console.log("isProceeded : " + isProceeded);
+    console.log("playsHubProgressQuest.type : " + playsHubProgressQuest.type);
+    console.log("playsHubProgressQuest.request_type : " + playsHubProgressQuest.request_type);
     if (isProceeded === true) {
       playsHubProgressQuest.progress_amount++;
-      await this.playsHubProgressQuestRepository.save(playsHubProgressQuest);
+      return await this.playsHubProgressQuestRepository.save(playsHubProgressQuest);
     }
   }
 
