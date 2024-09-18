@@ -30,7 +30,7 @@ export class AuthService {
   async validateAccount(loginDTO: LoginDTO): Promise<any> {
     const account = await this.accountRepository.findOne({ where: { telegram_id: loginDTO.telegram_id } });
     if (account) {
-      await this.accountRepository.update({ telegram_id: loginDTO.telegram_id }, { display_name: loginDTO.display_name, last_login: new Date() });
+      await this.accountRepository.update({ telegram_id: loginDTO.telegram_id }, { display_name: loginDTO.display_name });
     }
     else {
       const referralAccount = await this.accountRepository.findOne({ where: { account_id: loginDTO.referral_id } });
