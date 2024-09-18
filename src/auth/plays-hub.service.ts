@@ -243,11 +243,17 @@ export class PlaysHubService {
   }
 
   async checkIfUserIsMember(chatId: string, userId: number): Promise<boolean> {
+    console.log("chatId : " + chatId);
+    console.log("userId : " + userId);
     try {
+      console.log("try");
       const chatMember = await this.telegramBot.getChatMember(chatId, userId);
+      console.log("chatMember : " + chatMember);
+      console.log("chatMember.status : " + chatMember.status);
       return chatMember.status === 'member' || chatMember.status === 'administrator' || chatMember.status === 'creator';
     }
     catch (error) {
+      console.log("catch");
       console.error('Error checking chat member status:', error);
       return false;
     }
