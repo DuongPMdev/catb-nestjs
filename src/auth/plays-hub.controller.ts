@@ -21,6 +21,18 @@ export class PlaysHubController {
   }
   
   @UseGuards(JwtAuthGuard)
+  @Get('plays_leaderboard_position')
+  @ApiBearerAuth()
+  @ApiOperation({ summary: 'Get Plays Hub quests status' })
+  @ApiResponse({ status: 200, description: 'Successful retrieval of Plays Hub quests'})
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  async plays_leaderboard_position(@Request() req) {
+    const account_id = req.user.account_id;
+    const playsLeaderboardPosition = await this.playsHubService.getPlaysLeaderboardPosition(account_id);
+    return playsLeaderboardPosition;
+  }
+  
+  @UseGuards(JwtAuthGuard)
   @Get('quest_status')
   @ApiBearerAuth()
   @ApiOperation({ summary: 'Get Plays Hub quests status' })

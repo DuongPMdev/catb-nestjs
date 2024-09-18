@@ -29,13 +29,14 @@ export class Friend {
   @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
   created_datetime: Date;
 
-  constructor(request_id: string, response_id: string, request_display_name: string, response_display_name: string) {
+  constructor(request_id: string, response_id: string, request_display_name: string, response_display_name: string, status: number, by_referral: number) {
     this.id = 0;
     this.request_id = request_id;
     this.response_id = response_id;
     this.request_display_name = request_display_name;
     this.response_display_name = response_display_name;
-    this.status = 1;
+    this.status = status;
+    this.by_referral = by_referral;
     this.created_datetime = new Date();
   }
 

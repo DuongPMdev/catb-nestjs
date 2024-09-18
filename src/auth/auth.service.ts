@@ -50,7 +50,7 @@ export class AuthService {
       await this.accountRepository.save(newAccount);
 
       if (referralAccount) {
-        let friend = new Friend(referralAccount.account_id, account_id, referralAccount.display_name, loginDTO.display_name);
+        let friend = new Friend(referralAccount.account_id, account_id, referralAccount.display_name, loginDTO.display_name, 1, 1);
         await this.friendRepository.save(friend);
       }
     }
@@ -78,7 +78,36 @@ export class AuthService {
   }
 
   async getFriendsByAccountID(account_id: string) {
-    return await this.friendRepository.find({ where: [ { request_id: account_id }, { response_id: account_id } ] });
+    const friends: object[] = [];
+    const requestedFiends = await this.friendRepository.find({ where: [ { request_id: account_id } ] });
+    const responseFiends = await this.friendRepository.find({ where: [ { response_id: account_id } ] });
+    
+    for (const requestedFriend of requestedFiends) {
+      const currency = await this.getCurrencyByAccountID(requestedFriend.response_id);
+      let fiend = {
+        "account_id": requestedFriend.response_id,
+        "display_name": requestedFriend.response_display_name,
+        "status": requestedFriend.status,
+        "by_referral": requestedFriend.by_referral,
+        "created_datetime": requestedFriend.created_datetime,
+        "plays": currency.plays,
+      };
+      friends.push(fiend);
+    }
+    for (const responseFiend of responseFiends) {
+      const currency = await this.getCurrencyByAccountID(responseFiend.response_id);
+      let fiend = {
+        "account_id": responseFiend.request_id,
+        "display_name": responseFiend.request_display_name,
+        "status": responseFiend.status,
+        "by_referral": responseFiend.by_referral,
+        "created_datetime": responseFiend.created_datetime,
+        "plays": currency.plays,
+      };
+      friends.push(fiend);
+    }
+
+    return friends;
   }
 
   async getAccountByTelegramID(telegram_id: string) {

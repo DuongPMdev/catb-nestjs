@@ -46,7 +46,7 @@ export class PlaysHubService {
     return currencies;
   }
 
-  async playsLeaderboardPosition(account_id: string) {
+  async getPlaysLeaderboardPosition(account_id: string) {
     const query = `
       SELECT rank FROM (
         SELECT account_id, plays, RANK() OVER (ORDER BY plays DESC) AS rank
