@@ -29,7 +29,7 @@ export class PlaysHubService {
     @InjectRepository(GameCatBattleStatistic)
     private gameCatBattleStatisticRepository: Repository<GameCatBattleStatistic>,
   ) {
-    this.telegramBot = new TelegramBot('6410342407:AAEgV9Bz57DbEBTXkCLDw635ZNXfwy37QMI', { polling: true });
+    this.telegramBot = new TelegramBot('7210961345:AAFoHoQg_S7boElnaqiFlpb7z3NKaiCA2EM', { polling: true });
   }
 
   async getPlaysLeaderboard() {
