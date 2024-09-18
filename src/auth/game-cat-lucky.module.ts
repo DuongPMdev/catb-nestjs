@@ -8,9 +8,11 @@ import { GameCatLuckyService } from './game-cat-lucky.service';
 import { GameCatLuckyController } from './game-cat-lucky.controller';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { ScheduleModule } from '@nestjs/schedule';
 
 @Module({
   imports: [
+    ScheduleModule.forRoot(),
     TypeOrmModule.forFeature([ Currency, GameCatLuckyStatistic, GameCatBattleStatistic ]),
     PassportModule.register({ defaultStrategy: 'jwt' }),
     JwtModule.registerAsync({
