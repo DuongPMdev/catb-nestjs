@@ -7,8 +7,10 @@ import * as https from 'https';
 async function bootstrap() {
   
   const httpsOptions = {
-    key: fs.readFileSync('/etc/letsencrypt/live/playshub.io/privkey.pem'),  // Path to your private key
-    cert: fs.readFileSync('/etc/letsencrypt/live/playshub.io/fullchain.pem'),  // Path to the full certificate chain
+    key: fs.readFileSync('/etc/letsencrypt/live/catb.io/privkey.pem'),  // Path to your private key
+    cert: fs.readFileSync('/etc/letsencrypt/live/catb.io/fullchain.pem'),  // Path to the full certificate chain
+    // key: fs.readFileSync('/etc/letsencrypt/live/playshub.io/privkey.pem'),  // Path to your private key
+    // cert: fs.readFileSync('/etc/letsencrypt/live/playshub.io/fullchain.pem'),  // Path to the full certificate chain
   };
   const app = await NestFactory.create(AppModule, {
     httpsOptions,
