@@ -54,7 +54,7 @@ export class GameCatLuckyStatistic {
     this.id = 0;
     this.account_id = account_id;
     this.max_ticket = 200;
-    this.ticket = 0;
+    this.ticket = 200;
     this.game_over = 0;
     this.play_on_ticket = 100;
     this.playing_on = 0;

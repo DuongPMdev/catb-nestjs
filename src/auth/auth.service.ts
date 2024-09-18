@@ -136,6 +136,7 @@ export class AuthService {
     let gameCatLuckyStatistic = await this.gameCatLuckyStatisticRepository.findOne({ where: { account_id: account_id } });
     if (gameCatLuckyStatistic == null) {
       gameCatLuckyStatistic = new GameCatLuckyStatistic(account_id);
+      await this.gameCatLuckyStatisticRepository.save(gameCatLuckyStatistic);
     }
     return gameCatLuckyStatistic;
   }
