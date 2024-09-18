@@ -21,7 +21,7 @@ import { PlaysHubModule } from './auth/plays-hub.module';
       type: 'mysql',
       host: 'localhost',
       port: 3306,
-      username: 'duongpm13dev',
+      username: 'duongpm13',
       password: 'NGen2024@',
       database: 'plays_hub',
       entities: [ Account, Currency, Friend, GameCatLuckyStatistic, GameCatBattleStatistic, PlaysHubConfigQuest, PlaysHubProgressQuest ],
