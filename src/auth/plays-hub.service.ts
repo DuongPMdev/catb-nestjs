@@ -36,7 +36,12 @@ export class PlaysHubService {
     const currencies = await this.currencyRepository.find({ order: {plays: 'DESC'} });
     for (const currency of currencies) {
       let account = await this.accountRepository.findOne({ where: { account_id: currency.account_id } });
-      currency["display_name"] = account.display_name;
+      if (account.display_name) {
+        currency["display_name"] = account.display_name;
+      }
+      else {
+        currency["display_name"] = "Deleted Account";
+      }
     }
     return currencies;
   }
