@@ -124,7 +124,7 @@ export class PlaysHubService {
     }
     else if (playsHubProgressQuest.request_type === "JOIN_PLAYS_CHANNEL") {
       const account = await this.accountRepository.findOne({ where: { account_id: account_id } });
-      const isMember = await this.checkIfUserIsMember("7210961345", +account.telegram_id);
+      const isMember = await this.checkIfUserIsMember("PlayshubAnn", +account.telegram_id);
       if (isMember === true) {
         isProceeded = true;
       }
