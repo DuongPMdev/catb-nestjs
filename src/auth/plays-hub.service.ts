@@ -48,7 +48,7 @@ export class PlaysHubService {
 
   async getPlaysLeaderboardPosition(account_id: string) {
     const query = `
-      SELECT plays_rank FROM (
+      SELECT * FROM (
         SELECT account_id, plays, RANK() OVER (ORDER BY plays DESC) AS plays_rank
         FROM currency
       ) AS ranked_users
@@ -56,7 +56,13 @@ export class PlaysHubService {
     `;
     const result = await this.currencyRepository.query(query, [account_id]);
     if (result.length > 0) {
-      return result[0].rank;
+      console.log("result : " + result);
+      console.log("result[0] : " + result[0]);
+      console.log("result[0].rank : " + result[0].rank);
+      console.log("result[0].account_id : " + result[0].account_id);
+      console.log("result[0].plays : " + result[0].plays);
+      console.log("result[0].plays_rank : " + result[0].plays_rank);
+      return result[0].plays_rank;
     }
     return 0;
   }
