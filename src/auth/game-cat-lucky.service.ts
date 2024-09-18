@@ -36,7 +36,7 @@ export class GameCatLuckyService {
     try {
       await this.gameCatLuckyStatisticRepository.createQueryBuilder()
       .update(GameCatLuckyStatistic)
-      .set({ ticket: () => '"ticket" + 1',})
+      .set({ ticket: () => 'ticket + 1',})
       .where('"ticket" < "max_ticket"')
       .execute();
     }
