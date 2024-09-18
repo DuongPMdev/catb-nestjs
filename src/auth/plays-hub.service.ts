@@ -137,7 +137,14 @@ export class PlaysHubService {
       isProceeded = true;
     }
     else if (playsHubProgressQuest.request_type === "CONNECT_TON_WALLET") {
-      isProceeded = false;
+      let currency = await this.currencyRepository.findOne({ where: { account_id: account_id } });
+      if (currency) {
+        if (currency.wallet_address) {
+          if (currency.wallet_address !== "") {
+            isProceeded = true;
+          }
+        }
+      }
     }
     else if (playsHubProgressQuest.request_type === "JOIN_PLAYS_CHANNEL") {
       const account = await this.accountRepository.findOne({ where: { account_id: account_id } });
