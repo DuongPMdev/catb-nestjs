@@ -30,6 +30,10 @@ export class AuthService {
       await this.accountRepository.update({ telegram_id: loginDTO.telegram_id }, { display_name: loginDTO.display_name, last_login: new Date() });
     }
     else {
+      const referralAccount = await this.accountRepository.findOne({ where: { account_id: loginDTO.referral_id } });
+      if (referralAccount === null) {
+        loginDTO.referral_id = "";
+      }
       let account_id = this.generateAccountID(8);
       const newAccount = this.accountRepository.create({
         telegram_id: loginDTO.telegram_id,
