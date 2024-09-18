@@ -92,6 +92,7 @@ export class AuthService {
   console.log("userId : " + userId);
    const profile = await this.getUserProfile(userId);
    console.log("profile : " + profile);
+   console.log('Logging object profile:', JSON.stringify(profile, null, 2));
    console.log("profile.ok : " + profile.ok);
    console.log("profile.result : " + profile.result);
    if (profile.ok && profile.result) {
