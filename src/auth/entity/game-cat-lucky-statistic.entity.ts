@@ -49,9 +49,6 @@ export class GameCatLuckyStatistic {
 
   @Column()
   collected_ticket: number;
-
-  @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
-  lock_until: Date;
   
   constructor(account_id: string) {
     this.id = 0;
@@ -69,7 +66,6 @@ export class GameCatLuckyStatistic {
     this.collected_bnb = 0;
     this.collected_plays = 0;
     this.collected_ticket = 0;
-    this.lock_until = new Date();
   }
 
 }
