@@ -33,11 +33,12 @@ export class GameCatLuckyService {
 
   @Cron('* * * * *')  // CRON expression: every minute
   async autoIncreaseTicketPerMinute() {
+    console.log('autoIncreaseTicketPerMinute');
     try {
       await this.gameCatLuckyStatisticRepository.createQueryBuilder()
       .update(GameCatLuckyStatistic)
       .set({ ticket: () => 'ticket + 1',})
-      .where('"ticket" < "max_ticket"')
+      .where('ticket < max_ticket')
       .execute();
     }
     catch (error) {
