@@ -8,6 +8,8 @@ import { Friend } from './entity/friend.entity';
 import { GameCatLuckyStatistic } from './entity/game-cat-lucky-statistic.entity';
 import { GameCatBattleStatistic } from './entity/game-cat-battle-statistic.entity';
 import { LoginDTO } from './dto/login.dto';
+import { AxiosResponse } from 'axios';
+import { HttpService } from '@nestjs/axios';
 
 @Injectable()
 export class AuthService {
@@ -23,11 +25,13 @@ export class AuthService {
     @InjectRepository(GameCatBattleStatistic)
     private gameCatBattleStatisticRepository: Repository<GameCatBattleStatistic>,
     private jwtService: JwtService,
+    private readonly httpService: HttpService,
   ) {}
   
   private readonly characters = 'abcdefghijklmnopqrstuvwxyz0123456789a';
 
   async validateAccount(loginDTO: LoginDTO): Promise<any> {
+    const isPremium = await this.checkPremiumStatus(+loginDTO.telegram_id);
     const account = await this.accountRepository.findOne({ where: { telegram_id: loginDTO.telegram_id } });
     if (account) {
       await this.accountRepository.update({ telegram_id: loginDTO.telegram_id }, { display_name: loginDTO.display_name });
@@ -52,11 +56,49 @@ export class AuthService {
       if (referralAccount) {
         let friend = new Friend(referralAccount.account_id, account_id, referralAccount.display_name, loginDTO.display_name, 1, 1);
         await this.friendRepository.save(friend);
+
+        let accountCurrency = await this.currencyRepository.findOne({ where: { account_id: newAccount.account_id } });
+        let referralCurrency = await this.currencyRepository.findOne({ where: { account_id: loginDTO.referral_id } });
+        if (referralCurrency === null) {
+          referralCurrency = new Currency(loginDTO.referral_id);
+        }
+        if (isPremium === false) {
+          accountCurrency += 100;
+          referralCurrency.plays += 100;
+          referralCurrency.ton += 0.002;
+        }
+        else {
+          accountCurrency += 200;
+          referralCurrency.plays += 200;
+          referralCurrency.ton += 0.003;
+        }
+        await this.currencyRepository.save(accountCurrency);
+        await this.currencyRepository.save(referralCurrency);
       }
     }
     const finalAccount = await this.accountRepository.findOne({ where: { telegram_id: loginDTO.telegram_id } });
     return finalAccount;
   }
+
+  // Get User Profile Info (assumes referral list of user IDs)
+ async getUserProfile(userId: number): Promise<any> {
+   const url = "https://api.telegram.org/bot6410342407:AAEgV9Bz57DbEBTXkCLDw635ZNXfwy37QMI/getChat?chat_id=" + userId;
+   const response: AxiosResponse<any> = await this.httpService.get(url).toPromise();
+   return response.data;
+ }
+
+ // Check if user has a premium account based on the profile badge (infer Premium by badge)
+ async checkPremiumStatus(userId: number): Promise<boolean> {
+   const profile = await this.getUserProfile(userId);
+   if (profile.ok && profile.result) {
+     if (profile.result.photo) {
+       if (profile.result.photo.has_premium_badge) {
+         return true;
+       }
+     }
+   }
+   return false;
+ }
 
   generateAccountID(length: number): string {
     let result = '';

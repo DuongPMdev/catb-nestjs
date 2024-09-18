@@ -11,6 +11,15 @@ import { PlaysHubQuestDTO } from './dto/plays-hub-quest.dto';
 export class PlaysHubController {
   constructor(private readonly playsHubService: PlaysHubService) {}
   
+  @Get('invite_reward_config')
+  @ApiOperation({ summary: 'Get Plays Hub quests status' })
+  @ApiResponse({ status: 200, description: 'Successful retrieval of Plays Hub quests'})
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  async invite_reward_config(@Request() req) {
+    const inviteRewardConfig = await this.playsHubService.getInviteRewardConfig();
+    return inviteRewardConfig;
+  }
+  
   @Get('plays_leaderboard')
   @ApiOperation({ summary: 'Get Plays Hub quests status' })
   @ApiResponse({ status: 200, description: 'Successful retrieval of Plays Hub quests'})

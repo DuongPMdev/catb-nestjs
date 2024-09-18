@@ -5,8 +5,6 @@ import { LoginDTO } from './dto/login.dto';
 import { ConnectWalletDTO } from './dto/connect-wallet.dto';
 import { ApiBearerAuth, ApiTags, ApiOperation, ApiResponse } from '@nestjs/swagger';
 import { classToPlain } from 'class-transformer';
-import { AxiosResponse } from 'axios';
-import { HttpService } from '@nestjs/axios';
 
 
 @Injectable()
@@ -15,47 +13,13 @@ import { HttpService } from '@nestjs/axios';
 export class AuthController {
   constructor(
     private readonly authService: AuthService,
-    private readonly httpService: HttpService,
   ) { }
-
-   // Get User Profile Info (assumes referral list of user IDs)
-  async getUserProfile(userId: number): Promise<any> {
-    const url = "https://api.telegram.org/bot6410342407:AAEgV9Bz57DbEBTXkCLDw635ZNXfwy37QMI/getChat?chat_id=" + userId;
-    const response: AxiosResponse<any> = await this.httpService.get(url).toPromise();
-    return response.data;
-  }
-
-  // Check if user has a premium account based on the profile badge (infer Premium by badge)
-  async checkPremiumStatus(userId: number): Promise<boolean> {
-    console.log("checkPremiumStatus userId : " + userId);
-    const profile = await this.getUserProfile(userId);
-    console.log("checkPremiumStatus profile : " + profile);
-    console.log("checkPremiumStatus profile.ok : " + profile.ok);
-    console.log("checkPremiumStatus profile.result : " + profile.result);
-    console.log("checkPremiumStatus profile.result.photo : " + profile.result.photo);
-    console.log("checkPremiumStatus profile.result.photo.has_premium_badge : " + profile.result.photo.has_premium_badge);
-    if (profile.ok && profile.result) {
-      if (profile.result.photo) {
-        if (profile.result.photo.has_premium_badge) {
-          return true;
-        }
-      }
-    }
-    return false;
-  }
 
 
   @Post('login')
   @ApiOperation({ summary: 'Login' })
   @ApiResponse({ status: 200, description: 'Successful login', schema: { example: { access_token: 'your-jwt-token-here' }}})
   async login(@Body() loginDTO: LoginDTO) {
-    
-    // const isPremium1894903459 = await this.checkPremiumStatus(1894903459);
-    // console.log("isPremium1894903459 : " + isPremium1894903459);
-    
-    // const isPremium7053215433 = await this.checkPremiumStatus(7053215433);
-    // console.log("isPremium7053215433 : " + isPremium7053215433);
-    
     const account = await this.authService.validateAccount(loginDTO);
     if (loginDTO.telegram_id == "") {
       throw new BadRequestException('Invalid credentials');
@@ -64,6 +28,15 @@ export class AuthController {
       return this.authService.login(account);
     }
     return { message: 'Invalid credentials' };
+  }
+  
+  @Post('check_telegram_premium')
+  @ApiOperation({ summary: 'Get Plays Hub quests status' })
+  @ApiResponse({ status: 200, description: 'Successful retrieval of Plays Hub quests'})
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  async invite_reward_config(@Request() req, @Body() connectWalletDTO: ConnectWalletDTO) {
+    const isPremium = await this.authService.checkPremiumStatus(+connectWalletDTO.wallet_address);
+    return { "is_premium": isPremium };
   }
   
   @UseGuards(JwtAuthGuard)

@@ -32,6 +32,13 @@ export class PlaysHubService {
     this.telegramBot = new TelegramBot('7210961345:AAFoHoQg_S7boElnaqiFlpb7z3NKaiCA2EM', { polling: false });
   }
 
+  async getInviteRewardConfig() {
+    return {
+      "normal_invite": "PLAYS: 100, TON: 0.002",
+      "premium_invite": "PLAYS: 200, TON: 0.003"
+    };
+  }
+
   async getPlaysLeaderboard() {
     const currencies = await this.currencyRepository.find({ order: {plays: 'DESC'} });
     for (const currency of currencies) {
