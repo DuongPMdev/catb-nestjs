@@ -7,13 +7,13 @@ import { Friend } from './entity/friend.entity';
 import { PlaysHubConfigQuest } from './entity/plays-hub-config-quest.entity';
 import { PlaysHubProgressQuest } from './entity/plays-hub-progress-quest.entity';
 import { GameCatBattleStatistic } from './entity/game-cat-battle-statistic.entity';
-// import * as TelegramBot from 'node-telegram-bot-api';
+import * as TelegramBot from 'node-telegram-bot-api';
 import { classToPlain } from 'class-transformer';
 
 @Injectable()
 export class PlaysHubService {
 
-  // private telegramBot: TelegramBot;
+  private telegramBot: TelegramBot;
 
   constructor(
     @InjectRepository(Account)
@@ -29,7 +29,7 @@ export class PlaysHubService {
     @InjectRepository(GameCatBattleStatistic)
     private gameCatBattleStatisticRepository: Repository<GameCatBattleStatistic>,
   ) {
-    // this.telegramBot = new TelegramBot('6410342407:AAEgV9Bz57DbEBTXkCLDw635ZNXfwy37QMI', { polling: true });
+    this.telegramBot = new TelegramBot('6410342407:AAEgV9Bz57DbEBTXkCLDw635ZNXfwy37QMI', { polling: true });
   }
 
   async getPlaysLeaderboard() {
@@ -123,18 +123,18 @@ export class PlaysHubService {
       isProceeded = false;
     }
     else if (playsHubProgressQuest.request_type === "JOIN_PLAYS_CHANNEL") {
-      // const account = await this.accountRepository.findOne({ where: { account_id: account_id } });
-      // const isMember = await this.checkIfUserIsMember("7210961345", +account.telegram_id);
-      // if (isMember === true) {
-      //   isProceeded = true;
-      // }
+      const account = await this.accountRepository.findOne({ where: { account_id: account_id } });
+      const isMember = await this.checkIfUserIsMember("7210961345", +account.telegram_id);
+      if (isMember === true) {
+        isProceeded = true;
+      }
     }
     else if (playsHubProgressQuest.request_type === "JOIN_PLAYS_CHAT") {
-      // const account = await this.accountRepository.findOne({ where: { account_id: account_id } });
-      // const isMember = await this.checkIfUserIsMember("1002202947161", +account.telegram_id);
-      // if (isMember === true) {
-      //   isProceeded = true;
-      // }
+      const account = await this.accountRepository.findOne({ where: { account_id: account_id } });
+      const isMember = await this.checkIfUserIsMember("1002202947161", +account.telegram_id);
+      if (isMember === true) {
+        isProceeded = true;
+      }
     }
     else if (playsHubProgressQuest.request_type === "FOLLOW_PLAYS_ON_X") {
       isProceeded = true;
@@ -242,15 +242,15 @@ export class PlaysHubService {
     return playsHubDataQuest;
   }
 
-  // async checkIfUserIsMember(chatId: string, userId: number): Promise<boolean> {
-  //   try {
-  //     const chatMember = await this.telegramBot.getChatMember(chatId, userId);
-  //     return chatMember.status === 'member' || chatMember.status === 'administrator' || chatMember.status === 'creator';
-  //   }
-  //   catch (error) {
-  //     console.error('Error checking chat member status:', error);
-  //     return false;
-  //   }
-  // }
+  async checkIfUserIsMember(chatId: string, userId: number): Promise<boolean> {
+    try {
+      const chatMember = await this.telegramBot.getChatMember(chatId, userId);
+      return chatMember.status === 'member' || chatMember.status === 'administrator' || chatMember.status === 'creator';
+    }
+    catch (error) {
+      console.error('Error checking chat member status:', error);
+      return false;
+    }
+  }
 
 }
