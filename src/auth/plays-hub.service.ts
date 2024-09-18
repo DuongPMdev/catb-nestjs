@@ -29,7 +29,10 @@ export class PlaysHubService {
     @InjectRepository(GameCatBattleStatistic)
     private gameCatBattleStatisticRepository: Repository<GameCatBattleStatistic>,
   ) {
-    this.telegramBot = new TelegramBot('7210961345:AAFoHoQg_S7boElnaqiFlpb7z3NKaiCA2EM', { webHook: true });
+    this.telegramBot = new TelegramBot('7210961345:AAFoHoQg_S7boElnaqiFlpb7z3NKaiCA2EM');
+    this.telegramBot.deleteWebHook();
+    const url = `https://catb.io:8444/telegram/webhook`;
+    this.telegramBot.setWebHook(url);
   }
 
   async getPlaysLeaderboard() {
