@@ -29,7 +29,7 @@ export class PlaysHubController {
   async plays_leaderboard_position(@Request() req) {
     const account_id = req.user.account_id;
     const playsLeaderboardPosition = await this.playsHubService.getPlaysLeaderboardPosition(account_id);
-    return playsLeaderboardPosition;
+    return { "plays_rank": playsLeaderboardPosition };
   }
   
   @UseGuards(JwtAuthGuard)

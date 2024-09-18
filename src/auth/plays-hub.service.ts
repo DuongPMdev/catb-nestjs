@@ -58,6 +58,7 @@ export class PlaysHubService {
     if (result.length > 0) {
       return result[0].rank;
     }
+    return 0;
   }
 
   async getPlaysHubQuestStatus(account_id: string) {
