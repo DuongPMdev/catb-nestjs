@@ -187,14 +187,14 @@ export class PlaysHubService {
             const dailyPlaysHubConfigQuest = await this.playsHubConfigQuestRepository.findOne({ where: { type: "DAILY", request_type: "COMPLETE_DAILY_TASK" } });
             let dailyPlaysHubDataQuest = await this.getPlaysHubDataQuest(account_id, dailyPlaysHubConfigQuest);
 
-            return { "plays": currency.plays, "data_quest": playsHubDataQuest, "daily_quest": dailyPlaysHubDataQuest};
+            return { "is_successed": true, "plays": currency.plays, "data_quest": playsHubDataQuest, "daily_quest": dailyPlaysHubDataQuest };
           }
 
-          return { "plays": currency.plays, "data_quest": playsHubDataQuest };
+          return { "is_successed": true, "plays": currency.plays, "data_quest": playsHubDataQuest };
         }
       }
     }
-    return {};
+    return { "is_successed": false };
   }
 
   async getPlaysHubDataQuest(account_id: string, playsHubConfigQuest: PlaysHubConfigQuest) {
