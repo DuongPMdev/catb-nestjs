@@ -46,6 +46,20 @@ export class PlaysHubService {
     return currencies;
   }
 
+  async playsLeaderboardPosition(account_id: string) {
+    const query = `
+      SELECT rank FROM (
+        SELECT account_id, plays, RANK() OVER (ORDER BY plays DESC) AS rank
+        FROM currency
+      ) AS ranked_users
+      WHERE account_id = $1
+    `;
+    const result = await this.currencyRepository.query(query, [account_id]);
+    if (result.length > 0) {
+      return result[0].rank;
+    }
+  }
+
   async getPlaysHubQuestStatus(account_id: string) {
     const playsHubDataQuests: object[] = [];
     const playsHubConfigQuests = await this.playsHubConfigQuestRepository.find();
