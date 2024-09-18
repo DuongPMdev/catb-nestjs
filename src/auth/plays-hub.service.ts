@@ -56,13 +56,9 @@ export class PlaysHubService {
     `;
     const result = await this.currencyRepository.query(query, [account_id]);
     if (result.length > 0) {
-      console.log("result : " + result);
-      console.log("result[0] : " + result[0]);
-      console.log("result[0].rank : " + result[0].rank);
-      console.log("result[0].account_id : " + result[0].account_id);
-      console.log("result[0].plays : " + result[0].plays);
-      console.log("result[0].plays_rank : " + result[0].plays_rank);
-      return result[0].plays_rank;
+      if (result[0].plays > 0) {
+        return result[0].plays_rank;
+      }
     }
     return 0;
   }
