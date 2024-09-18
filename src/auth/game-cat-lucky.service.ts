@@ -12,7 +12,15 @@ import * as cronParser from 'cron-parser';
 export class GameCatLuckyService {
 
   private cronExpression = '* * * * *';  // Every minute
-  private itemType = ["GEM", "SHARD", "TON", "BNB", "PLAYS", "TICKET"];
+  
+  private rewardRate = "GEM:20|SHARD:20|TICKET:30|PLAYS:30|TON:5|BNB:5";
+  private gameOver = "START:10|RATE_PERCENT:10|RATE_EACH_LEVEL:5|BONUS:5|MAX:80";
+  private GEM = "START:10|BONUS:5|BASE_MULTIPLIER:1.1|BONUS_MULTIPLIER:1.05|MIN_FACTOR:0.9|MAX_FACTOR:1.1";
+  private SHARD = "START:3|BONUS:5|BASE_MULTIPLIER:1.1|BONUS_MULTIPLIER:1.05|MIN_FACTOR:0.9|MAX_FACTOR:1.1";
+  private TICKET = "START:5|BONUS:5|BASE_MULTIPLIER:1.1|BONUS_MULTIPLIER:1.05|MIN_FACTOR:0.9|MAX_FACTOR:1.1";
+  private PLAYS = "START:5|BONUS:5|BASE_MULTIPLIER:1.1|BONUS_MULTIPLIER:1.05|MIN_FACTOR:0.9|MAX_FACTOR:1.1";
+  private TON = "START:0.01|BONUS:5|BASE_MULTIPLIER:1.05|BONUS_MULTIPLIER:1.02|MIN_FACTOR:0.9|MAX_FACTOR:1.1";
+  private BNB = "START:0.001|BONUS:5|BASE_MULTIPLIER:1.05|BONUS_MULTIPLIER:1.02|MIN_FACTOR:0.9|MAX_FACTOR:1.1";
 
   constructor(
     @InjectRepository(Currency)
@@ -137,47 +145,115 @@ export class GameCatLuckyService {
     return { "is_not_enough_ticket": isNotEnoughTicket, "force_update": forceUpdate, "status": classToPlain(finalGameCatLuckyStatistic) };
   }
   
-
   generateStageResult(stage: number): string {
     let result = '';
-    let gameoverIndex = Math.floor(Math.random() * 4);
-    if (stage % 5 == 0) {
-      gameoverIndex = -1;
-    }
-    for (let i = 0; i < 4; i++) {
-      if (i == gameoverIndex) {
-        result += "GAMEOVER:1";
+
+    let hasGameOver = false;
+    const gameOverConfigs = this.parseConfig(this.gameOver);
+    const isBonusLevel = stage % gameOverConfigs[3] === 0;
+
+    if (isBonusLevel || stage === 0 || stage === 1) {
+      result = this.getRandomReward(stage);
+    } else {
+      let gameOverRate = gameOverConfigs[0] + gameOverConfigs[1] * Math.floor(stage / gameOverConfigs[2]);
+      if (gameOverRate > gameOverConfigs[4]) {
+        gameOverRate = gameOverConfigs[4]; // max rate
       }
-      else {
-        const itemIndex = Math.floor(Math.random() * this.itemType.length);
-        const itemType = this.itemType[itemIndex];
-        let itemValue = 0;
-        if (itemType == "GEM") {
-          itemValue = 100;
-        }
-        else if (itemType == "SHARD") {
-          itemValue = 50;
-        }
-        else if (itemType == "TON") {
-          itemValue = 0.01;
-        }
-        else if (itemType == "BNB") {
-          itemValue = 0.001;
-        }
-        else if (itemType == "PLAYS") {
-          itemValue = 1;
-        }
-        else if (itemType == "TICKET") {
-          itemValue = 10;
-        }
-        result += itemType + ":" + itemValue;
-      }
-      if (i < 3) {
-        result += ",";
+
+      const random = this.getRandomInt(1, 101);
+      if (random <= gameOverRate) {
+        result = 'GAMEOVER:1';
+        hasGameOver = true;
+      } else {
+        result = this.getRandomReward(stage);
       }
     }
-    
+
+    const maxFake = 3;
+    for (let i = 0; i < maxFake; i++) {
+      if (hasGameOver) {
+        result += ',' + this.getRandomReward(stage, true);
+      } else {
+        let gameOverRate = gameOverConfigs[0] + gameOverConfigs[1] * Math.floor(stage / gameOverConfigs[2]);
+        if (gameOverRate > gameOverConfigs[4]) {
+          gameOverRate = gameOverConfigs[4];
+        }
+
+        const random = this.getRandomInt(1, 101);
+        const isNotHaveGameOverCard = isBonusLevel || stage === 0 || stage === 1;
+
+        if (random <= gameOverRate && !isNotHaveGameOverCard) {
+          result += ',GAMEOVER:1';
+          hasGameOver = true;
+        } else {
+          result += ',' + this.getRandomReward(stage, true);
+        }
+      }
+    }
+
     return result;
+  }
+
+  getRandomReward(stage: number, isFake = false): string {
+    let rewardType = 'GEM';
+    let rewardConfig = this.GEM;
+
+    const rewardRates = this.rewardRate.split('|');
+    for (let i = rewardRates.length - 1; i >= 0; i--) {
+      const [type, rateStr] = rewardRates[i].split(':');
+      const rate = parseFloat(rateStr);
+      if (rate === 0) continue;
+
+      const random = this.getRandomInt(1, 101);
+      if (random <= rate) {
+        rewardType = type;
+        rewardConfig = this.getRewardConfig(type);
+        break;
+      }
+    }
+
+    const configs = this.parseConfig(rewardConfig);
+    let rewardValue = configs[0] * Math.pow(configs[2], stage);
+
+    const isBonusLevel = stage % configs[1] === 0;
+    if (stage !== 0 && isBonusLevel) {
+      rewardValue *= Math.pow(configs[3], stage);
+    }
+
+    const factor = isFake
+      ? this.getRandomFloat(0.8, 1.2)
+      : this.getRandomFloat(configs[4], configs[5]);
+
+    rewardValue *= factor;
+
+    if (['TON', 'BNB'].includes(rewardType)) {
+      return `${rewardType}:${rewardValue.toFixed(3)}`;
+    } else {
+      return `${rewardType}:${Math.floor(rewardValue)}`;
+    }
+  }
+
+  parseConfig(configStr: string): number[] {
+    return configStr.split('|').map(str => parseFloat(str.split(':')[1]));
+  }
+
+  getRewardConfig(type: string): string {
+    switch (type) {
+      case 'SHARD': return this.SHARD;
+      case 'TICKET': return this.TICKET;
+      case 'PLAYS': return this.PLAYS;
+      case 'TON': return this.TON;
+      case 'BNB': return this.BNB;
+      default: return this.GEM;
+    }
+  }
+
+  getRandomInt(min: number, max: number): number {
+    return Math.floor(Math.random() * (max - min)) + min;
+  }
+
+  getRandomFloat(min: number, max: number): number {
+    return Math.random() * (max - min) + min;
   }
 
   async finishGameCatLucky(account_id: string, stage: number) {
