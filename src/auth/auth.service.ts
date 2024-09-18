@@ -63,12 +63,12 @@ export class AuthService {
           referralCurrency = new Currency(loginDTO.referral_id);
         }
         if (isPremium === false) {
-          accountCurrency += 100;
+          accountCurrency.plays += 100;
           referralCurrency.plays += 100;
           referralCurrency.ton += 0.002;
         }
         else {
-          accountCurrency += 200;
+          accountCurrency.plays += 200;
           referralCurrency.plays += 200;
           referralCurrency.ton += 0.003;
         }
