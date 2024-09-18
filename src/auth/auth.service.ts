@@ -82,16 +82,22 @@ export class AuthService {
 
   // Get User Profile Info (assumes referral list of user IDs)
  async getUserProfile(userId: number): Promise<any> {
-   const url = "https://api.telegram.org/bot6410342407:AAEgV9Bz57DbEBTXkCLDw635ZNXfwy37QMI/getChat?chat_id=" + userId;
+   const url = "https://api.telegram.org/bot7210961345:AAFoHoQg_S7boElnaqiFlpb7z3NKaiCA2EM/getChat?chat_id=" + userId;
    const response: AxiosResponse<any> = await this.httpService.get(url).toPromise();
    return response.data;
  }
 
  // Check if user has a premium account based on the profile badge (infer Premium by badge)
  async checkPremiumStatus(userId: number): Promise<boolean> {
+  console.log("userId : " + userId);
    const profile = await this.getUserProfile(userId);
+   console.log("profile : " + profile);
+   console.log("profile.ok : " + profile.ok);
+   console.log("profile.result : " + profile.result);
    if (profile.ok && profile.result) {
+    console.log("profile.result.photo : " + profile.result.photo);
      if (profile.result.photo) {
+      console.log("profile.result.photo.has_premium_badge : " + profile.result.photo.has_premium_badge);
        if (profile.result.photo.has_premium_badge) {
          return true;
        }
