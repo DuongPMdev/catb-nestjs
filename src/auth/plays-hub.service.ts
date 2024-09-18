@@ -79,19 +79,16 @@ export class PlaysHubService {
     }
     else if (playsHubProgressQuest.request_type === "PLAY_CAT_BATTLE") {
       const gameCatBattleStatistic = await this.gameCatBattleStatisticRepository.findOne({ where: { account_id: account_id } });
-      console.log("PLAY_CAT_BATTLE : ");
       if (gameCatBattleStatistic) {
-        const today = new Date();
-        today.setHours(0, 0, 0, 0);
-        const lastLogin = gameCatBattleStatistic.last_login_datetime;
-        console.log("gameCatBattleStatistic : ");
-        console.log("today : " + today);
-        console.log("lastLogin : " + lastLogin);
-        lastLogin.setHours(0, 0, 0, 0);
-        if (today === lastLogin) {
-          isProceeded = true;
+        if (gameCatBattleStatistic.last_login_datetime) {
+          const today = new Date();
+          today.setHours(0, 0, 0, 0);
+          const lastLogin = gameCatBattleStatistic.last_login_datetime;
+          lastLogin.setHours(0, 0, 0, 0);
+          if (today === lastLogin) {
+            isProceeded = true;
+          }
         }
-        console.log("isProceeded : " + isProceeded);
       }
     }
     else if (playsHubProgressQuest.request_type === "INVITE") {
