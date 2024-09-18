@@ -9,13 +9,14 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Account } from './entity/account.entity';
 import { Currency } from './entity/currency.entity';
+import { Friend } from './entity/friend.entity';
 import { GameCatLuckyStatistic } from './entity/game-cat-lucky-statistic.entity';
 import { GameCatBattleStatistic } from './entity/game-cat-battle-statistic.entity';
 import { HttpModule } from '@nestjs/axios';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([ Account, Currency, GameCatLuckyStatistic, GameCatBattleStatistic ]),
+    TypeOrmModule.forFeature([ Account, Currency, Friend, GameCatLuckyStatistic, GameCatBattleStatistic ]),
     PassportModule.register({ defaultStrategy: 'jwt' }),
     JwtModule.registerAsync({
       imports: [ConfigModule],

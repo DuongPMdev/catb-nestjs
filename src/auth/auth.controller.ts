@@ -35,8 +35,11 @@ export class AuthController {
     console.log("checkPremiumStatus profile.result.photo : " + profile.result.photo);
     console.log("checkPremiumStatus profile.result.photo.has_premium_badge : " + profile.result.photo.has_premium_badge);
     if (profile.ok && profile.result) {
-      // Check if premium badge exists
-      return profile.result.photo && profile.result.photo.has_premium_badge;
+      if (profile.result.photo) {
+        if (profile.result.photo.has_premium_badge) {
+          return true;
+        }
+      }
     }
     return false;
   }
@@ -53,7 +56,6 @@ export class AuthController {
     // const isPremium7053215433 = await this.checkPremiumStatus(7053215433);
     // console.log("isPremium7053215433 : " + isPremium7053215433);
     
-
     const account = await this.authService.validateAccount(loginDTO);
     if (loginDTO.telegram_id == "") {
       throw new BadRequestException('Invalid credentials');
@@ -62,6 +64,24 @@ export class AuthController {
       return this.authService.login(account);
     }
     return { message: 'Invalid credentials' };
+  }
+  
+  @UseGuards(JwtAuthGuard)
+  @Get('list_friend')
+  @ApiBearerAuth()
+  @ApiOperation({ summary: 'Get Profile' })
+  @ApiResponse({ status: 200, description: 'Successful retrieval of account profile'})
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  async list_friend(@Request() req) {
+    const telegram_id = req.user.telegram_id;
+    const account = await this.authService.getAccountByTelegramID(telegram_id);
+    if (account) {
+      const friends = await this.authService.getFriendsByAccountID(account.account_id);
+      return { "friends": classToPlain(friends) };
+    }
+    else {
+      throw new NotFoundException('Profile not found');
+    }
   }
   
   @UseGuards(JwtAuthGuard)

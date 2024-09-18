@@ -6,6 +6,7 @@ import { AppService } from './app.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Account } from './auth/entity/account.entity';
 import { Currency } from './auth/entity/currency.entity';
+import { Friend } from './auth/entity/friend.entity';
 import { GameCatLuckyStatistic } from './auth/entity/game-cat-lucky-statistic.entity';
 import { GameCatBattleStatistic } from './auth/entity/game-cat-battle-statistic.entity';
 import { PlaysHubConfigQuest } from './auth/entity/plays-hub-config-quest.entity';
@@ -23,10 +24,10 @@ import { PlaysHubModule } from './auth/plays-hub.module';
       username: 'duongpm13',
       password: 'NGen2024@',
       database: 'plays_hub',
-      entities: [ Account, Currency, GameCatLuckyStatistic, GameCatBattleStatistic, PlaysHubConfigQuest, PlaysHubProgressQuest ],
+      entities: [ Account, Currency, Friend, GameCatLuckyStatistic, GameCatBattleStatistic, PlaysHubConfigQuest, PlaysHubProgressQuest ],
       synchronize: false, // never change it to true : true will force clear db
     }),
-    TypeOrmModule.forFeature([Account, Currency, GameCatLuckyStatistic, GameCatBattleStatistic, PlaysHubConfigQuest, PlaysHubProgressQuest]),
+    TypeOrmModule.forFeature([Account, Currency, Friend, GameCatLuckyStatistic, GameCatBattleStatistic, PlaysHubConfigQuest, PlaysHubProgressQuest]),
     ConfigModule.forRoot({ isGlobal: true }),
     AuthModule,
     PlaysHubModule,

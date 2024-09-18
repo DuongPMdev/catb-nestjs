@@ -4,6 +4,7 @@ import { Repository } from 'typeorm';
 import { JwtService } from '@nestjs/jwt';
 import { Account } from './entity/account.entity';
 import { Currency } from './entity/currency.entity';
+import { Friend } from './entity/friend.entity';
 import { GameCatLuckyStatistic } from './entity/game-cat-lucky-statistic.entity';
 import { GameCatBattleStatistic } from './entity/game-cat-battle-statistic.entity';
 import { LoginDTO } from './dto/login.dto';
@@ -15,6 +16,8 @@ export class AuthService {
     private accountRepository: Repository<Account>,
     @InjectRepository(Currency)
     private currencyRepository: Repository<Currency>,
+    @InjectRepository(Friend)
+    private friendRepository: Repository<Friend>,
     @InjectRepository(GameCatLuckyStatistic)
     private gameCatLuckyStatisticRepository: Repository<GameCatLuckyStatistic>,
     @InjectRepository(GameCatBattleStatistic)
@@ -45,6 +48,11 @@ export class AuthService {
         platform: loginDTO.platform
       });
       await this.accountRepository.save(newAccount);
+
+      if (referralAccount) {
+        let friend = new Friend(referralAccount.account_id, account_id, referralAccount.display_name, loginDTO.display_name);
+        await this.friendRepository.save(friend);
+      }
     }
     const finalAccount = await this.accountRepository.findOne({ where: { telegram_id: loginDTO.telegram_id } });
     return finalAccount;
@@ -67,6 +75,10 @@ export class AuthService {
     return {
       access_token: this.jwtService.sign(payload),
     };
+  }
+
+  async getFriendsByAccountID(account_id: string) {
+    return await this.friendRepository.find({ where: [ { request_id: account_id }, { response_id: account_id } ] });
   }
 
   async getAccountByTelegramID(telegram_id: string) {

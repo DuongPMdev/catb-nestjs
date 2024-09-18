@@ -1,10 +1,11 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Between, Repository } from 'typeorm';
-import { PlaysHubConfigQuest } from './entity/plays-hub-config-quest.entity';
-import { PlaysHubProgressQuest } from './entity/plays-hub-progress-quest.entity';
 import { Account } from './entity/account.entity';
 import { Currency } from './entity/currency.entity';
+import { Friend } from './entity/friend.entity';
+import { PlaysHubConfigQuest } from './entity/plays-hub-config-quest.entity';
+import { PlaysHubProgressQuest } from './entity/plays-hub-progress-quest.entity';
 import { GameCatBattleStatistic } from './entity/game-cat-battle-statistic.entity';
 // import * as TelegramBot from 'node-telegram-bot-api';
 import { classToPlain } from 'class-transformer';
@@ -15,14 +16,16 @@ export class PlaysHubService {
   // private telegramBot: TelegramBot;
 
   constructor(
-    @InjectRepository(PlaysHubConfigQuest)
-    private playsHubConfigQuestRepository: Repository<PlaysHubConfigQuest>,
-    @InjectRepository(PlaysHubProgressQuest)
-    private playsHubProgressQuestRepository: Repository<PlaysHubProgressQuest>,
     @InjectRepository(Account)
     private accountRepository: Repository<Account>,
     @InjectRepository(Currency)
     private currencyRepository: Repository<Currency>,
+    @InjectRepository(Friend)
+    private friendRepository: Repository<Friend>,
+    @InjectRepository(PlaysHubConfigQuest)
+    private playsHubConfigQuestRepository: Repository<PlaysHubConfigQuest>,
+    @InjectRepository(PlaysHubProgressQuest)
+    private playsHubProgressQuestRepository: Repository<PlaysHubProgressQuest>,
     @InjectRepository(GameCatBattleStatistic)
     private gameCatBattleStatisticRepository: Repository<GameCatBattleStatistic>,
   ) {
@@ -140,7 +143,7 @@ export class PlaysHubService {
   }
 
   async checkPlaysHubQuest(account_id: string, type: string, request_type: string) {
-    if (request_type === "JOIN_PLAYS_CHANNEL" || request_type === "JOIN_PLAYS_CHAT" || request_type === "PLAY_CAT_BATTLE") {
+    if (request_type === "JOIN_PLAYS_CHANNEL" || request_type === "JOIN_PLAYS_CHAT" || request_type === "PLAY_CAT_BATTLE" || request_type === "INVITE") {
       await this.proceedPlaysHubQuest(account_id, type, request_type);
     }
     const playsHubConfigQuest = await this.playsHubConfigQuestRepository.findOne({ where: { type: type, request_type: request_type } });
