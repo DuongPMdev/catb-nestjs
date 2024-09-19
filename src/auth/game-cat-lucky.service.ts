@@ -13,14 +13,14 @@ export class GameCatLuckyService {
 
   private cronExpression = '* * * * *';  // Every minute
   
-  private rewardRate = "GEM:20|SHARD:20|TICKET:30|PLAYS:30|TON:5|BNB:5";
-  private gameOver = "START:10|RATE_PERCENT:10|RATE_EACH_LEVEL:5|BONUS:5|MAX:80";
+  private rewardRate = "GEM:20|SHARD:20|TICKET:30|PLAYS:35|TON:5|BNB:0";
+  private gameOver = "START:10|RATE_PERCENT:15|RATE_EACH_LEVEL:5|BONUS:5|MAX:80";
   private GEM = "START:10|BONUS:5|BASE_MULTIPLIER:1.1|BONUS_MULTIPLIER:1.05|MIN_FACTOR:0.9|MAX_FACTOR:1.1";
-  private SHARD = "START:3|BONUS:5|BASE_MULTIPLIER:1.1|BONUS_MULTIPLIER:1.05|MIN_FACTOR:0.9|MAX_FACTOR:1.1";
-  private TICKET = "START:5|BONUS:5|BASE_MULTIPLIER:1.1|BONUS_MULTIPLIER:1.05|MIN_FACTOR:0.9|MAX_FACTOR:1.1";
-  private PLAYS = "START:5|BONUS:5|BASE_MULTIPLIER:1.1|BONUS_MULTIPLIER:1.05|MIN_FACTOR:0.9|MAX_FACTOR:1.1";
-  private TON = "START:0.01|BONUS:5|BASE_MULTIPLIER:1.05|BONUS_MULTIPLIER:1.02|MIN_FACTOR:0.9|MAX_FACTOR:1.1";
-  private BNB = "START:0.001|BONUS:5|BASE_MULTIPLIER:1.05|BONUS_MULTIPLIER:1.02|MIN_FACTOR:0.9|MAX_FACTOR:1.1";
+  private SHARD = "START:5|BONUS:5|BASE_MULTIPLIER:1.1|BONUS_MULTIPLIER:1.05|MIN_FACTOR:0.9|MAX_FACTOR:1.1";
+  private TICKET = "START:2|BONUS:5|BASE_MULTIPLIER:1.1|BONUS_MULTIPLIER:1.05|MIN_FACTOR:0.9|MAX_FACTOR:1.1";
+  private PLAYS = "START:10|BONUS:5|BASE_MULTIPLIER:1.1|BONUS_MULTIPLIER:1.05|MIN_FACTOR:0.9|MAX_FACTOR:1.1";
+  private TON = "START:0.01|BONUS:5|BASE_MULTIPLIER:1.1|BONUS_MULTIPLIER:1.02|MIN_FACTOR:0.9|MAX_FACTOR:1.1";
+  private BNB = "START:0.001|BONUS:5|BASE_MULTIPLIER:1.1|BONUS_MULTIPLIER:1.02|MIN_FACTOR:0.9|MAX_FACTOR:1.1";
 
   constructor(
     @InjectRepository(Currency)
@@ -31,7 +31,7 @@ export class GameCatLuckyService {
     private gameCatBattleStatisticRepository: Repository<GameCatBattleStatistic>,
   ) {}
 
-  @Cron('* * * * *')  // CRON expression: every minute
+  @Cron('0 * * * *')  // CRON expression: every hour
   async autoIncreaseTicketPerMinute() {
     try {
       await this.gameCatLuckyStatisticRepository.createQueryBuilder()
@@ -281,7 +281,7 @@ export class GameCatLuckyService {
 
       gameCatLuckyStatistic.game_over = 0;
       gameCatLuckyStatistic.stage = 0;
-      gameCatLuckyStatistic.play_on_ticket = 100 + gameCatLuckyStatistic.stage * 10;
+      gameCatLuckyStatistic.play_on_ticket = 10 + gameCatLuckyStatistic.stage;
       gameCatLuckyStatistic.current_stage_result = "";
       gameCatLuckyStatistic.collected_gem = 0;
       gameCatLuckyStatistic.collected_shard = 0;
@@ -335,7 +335,7 @@ export class GameCatLuckyService {
     if (stage > 0 && stage == gameCatLuckyStatistic.stage) {
       gameCatLuckyStatistic.game_over = 0;
       gameCatLuckyStatistic.stage = 0;
-      gameCatLuckyStatistic.play_on_ticket = 100 + gameCatLuckyStatistic.stage * 10;
+      gameCatLuckyStatistic.play_on_ticket = 10 + gameCatLuckyStatistic.stage;
       gameCatLuckyStatistic.current_stage_result = "";
       gameCatLuckyStatistic.collected_gem = 0;
       gameCatLuckyStatistic.collected_shard = 0;

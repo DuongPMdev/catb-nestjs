@@ -4,6 +4,7 @@ import { PassportModule } from '@nestjs/passport';
 import { Account } from './entity/account.entity';
 import { Currency } from './entity/currency.entity';
 import { Friend } from './entity/friend.entity';
+import { Transaction } from './entity/transaction.entity';
 import { PlaysHubConfigQuest } from './entity/plays-hub-config-quest.entity';
 import { PlaysHubProgressQuest } from './entity/plays-hub-progress-quest.entity';
 import { GameCatBattleStatistic } from './entity/game-cat-battle-statistic.entity';
@@ -14,7 +15,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([ Account, Currency, Friend, PlaysHubConfigQuest, PlaysHubProgressQuest, GameCatBattleStatistic ]),
+    TypeOrmModule.forFeature([ Account, Currency, Friend, Transaction, PlaysHubConfigQuest, PlaysHubProgressQuest, GameCatBattleStatistic ]),
     PassportModule.register({ defaultStrategy: 'jwt' }),
     JwtModule.registerAsync({
       imports: [ConfigModule],
