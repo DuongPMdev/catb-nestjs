@@ -37,19 +37,27 @@ export class PlaysHubService implements OnModuleInit {
   }
 
   private handleCommands() {
-    this.telegramBot.onText(/\/start/, (msg) => {
-      const chatId = msg.chat.id;
-      const photoUrl = "https://game.playshub.io/banner.png"
-      const caption = "📢 Welcome to PLAYS Hub games!\n\n🚀 Hurry up! Tons of games and rewards are waiting for you. The $PLAYS token will be released soon.\n\n👇 Play daily to earn big rewards!👇";
-
-      this.telegramBot.sendPhoto(chatId, photoUrl, { caption })
-        .then(() => {
-          console.log('Photo sent successfully with caption!');
-        })
-        .catch((error) => {
-          console.error('Error sending photo:', error);
-        });
-    });
+    this.telegramBot.onText(/\/start/, (msg, [source, match]) => {
+      const {chat: {id, username}} = msg
+      const photoUrl = "https://game.catb.io/banner.png"
+      const captionDes = `Welcome to Cat Battle Game!\n\nDive into a captivating storyline and experience deep gameplay that will keep you hooked for hours everyday.\n\nBOOST CAT POWER TO EARN!`
+      this.telegramBot.sendPhoto(id, photoUrl, {
+        caption: captionDes,
+        reply_markup: {
+          inline_keyboard:
+          [
+            [
+              {
+                text: '🤜🤛 Play Game',
+                web_app:{
+                  url: "https://game.playshub.io/",
+                } 
+              }
+            ]
+          ]
+        }
+      })
+    })
   }
 
   async getInviteRewardConfig() {
