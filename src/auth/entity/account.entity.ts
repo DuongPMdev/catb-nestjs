@@ -23,7 +23,7 @@ export class Account {
   @Column({ unique: true })
   account_id: string;
   
-  @Column({ unique: true })
+  @Column()
   referral_id: string;
   
   @Column()

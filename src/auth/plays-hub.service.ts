@@ -4,6 +4,7 @@ import { Between, Repository } from 'typeorm';
 import { Account } from './entity/account.entity';
 import { Currency } from './entity/currency.entity';
 import { Friend } from './entity/friend.entity';
+import { Transaction } from './entity/transaction.entity';
 import { PlaysHubConfigQuest } from './entity/plays-hub-config-quest.entity';
 import { PlaysHubProgressQuest } from './entity/plays-hub-progress-quest.entity';
 import { GameCatBattleStatistic } from './entity/game-cat-battle-statistic.entity';
@@ -22,6 +23,8 @@ export class PlaysHubService implements OnModuleInit {
     private currencyRepository: Repository<Currency>,
     @InjectRepository(Friend)
     private friendRepository: Repository<Friend>,
+    @InjectRepository(Friend)
+    private transactionRepository: Repository<Transaction>,
     @InjectRepository(PlaysHubConfigQuest)
     private playsHubConfigQuestRepository: Repository<PlaysHubConfigQuest>,
     @InjectRepository(PlaysHubProgressQuest)
@@ -110,6 +113,12 @@ export class PlaysHubService implements OnModuleInit {
   }
 
   async proceedPlaysHubQuest(account_id: string, type: string, request_type: string) {
+    const today = new Date();
+    const startOfDay = new Date(today);
+    startOfDay.setHours(0, 0, 0, 0);
+    const endOfDay = new Date(today);
+    endOfDay.setHours(23, 59, 59, 999);
+
     let playsHubProgressQuest = null;
     if (type === "DAILY") {
       const today = new Date();
@@ -135,25 +144,18 @@ export class PlaysHubService implements OnModuleInit {
 
     let isProceeded = false;
     if (playsHubProgressQuest.request_type === "CHECK_IN_TON_WALLET") {
-      isProceeded = false;
+      const transactions = await this.transactionRepository.find({ where: { account_id: account_id, created_datetime: Between(startOfDay, endOfDay) } });
+      if (transactions.length > 0) {
+        isProceeded = true;
+      }
     }
     else if (playsHubProgressQuest.request_type === "PLAY_CAT_BATTLE") {
-      const today = new Date();
-      const startOfDay = new Date(today);
-      startOfDay.setHours(0, 0, 0, 0);
-      const endOfDay = new Date(today);
-      endOfDay.setHours(23, 59, 59, 999);
       const gameCatBattleStatistics = await this.gameCatBattleStatisticRepository.find({ where: { account_id: account_id, last_login_datetime: Between(startOfDay, endOfDay) } });
       if (gameCatBattleStatistics.length > 0) {
         isProceeded = true;
       }
     }
     else if (playsHubProgressQuest.request_type === "INVITE") {
-      const today = new Date();
-      const startOfDay = new Date(today);
-      startOfDay.setHours(0, 0, 0, 0);
-      const endOfDay = new Date(today);
-      endOfDay.setHours(23, 59, 59, 999);
       const referralAccounts = await this.accountRepository.find({ where: { referral_id: account_id, created_datetime: Between(startOfDay, endOfDay) } });
       if (referralAccounts.length > 0) {
         isProceeded = true;
