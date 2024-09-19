@@ -45,17 +45,14 @@ export class GameCatLuckyService {
     }
   }
 
-  getNextExecution(): Date {
-    const options = { currentDate: new Date() };
-    const interval = cronParser.parseExpression(this.cronExpression, options);
-    const nextExecution = interval.next().toDate();
-    return nextExecution;
-  }
-
-  getSecondsUntilNextExecution(nextExecution: Date): number {
+  getSecondsUntilNextExecution(): number {
     const now = new Date();
-    const timeDifference = (nextExecution.getTime() - now.getTime()) / 1000;
-    return Math.floor(timeDifference);
+    const interval = cronParser.parseExpression(this.cronExpression, { currentDate: now });
+    const nextFire = interval.next().toDate();
+
+    // Calculate the difference in seconds
+    const diffInSeconds = Math.floor((nextFire.getTime() - now.getTime()) / 1000);
+    return diffInSeconds;
   }
 
   async getGameCatLuckyTicket(account_id: string) {
@@ -67,8 +64,7 @@ export class GameCatLuckyService {
   }
 
   async getGameCatLuckySecondToFreeTicket() {
-    const nextExecution = this.getNextExecution();
-    let seconds = this.getSecondsUntilNextExecution(nextExecution);
+    let seconds = this.getSecondsUntilNextExecution();
     seconds += +3;
     return { "second": seconds };
   }
