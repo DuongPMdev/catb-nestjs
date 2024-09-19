@@ -11,7 +11,7 @@ import * as TelegramBot from 'node-telegram-bot-api';
 import { classToPlain } from 'class-transformer';
 
 @Injectable()
-export class PlaysHubService {
+export class PlaysHubService implements OnModuleInit {
 
   private telegramBot: TelegramBot;
 
@@ -30,6 +30,38 @@ export class PlaysHubService {
     private gameCatBattleStatisticRepository: Repository<GameCatBattleStatistic>,
   ) {
     this.telegramBot = new TelegramBot('7210961345:AAFoHoQg_S7boElnaqiFlpb7z3NKaiCA2EM', { polling: false });
+  }
+
+  OnModuleInit() {
+    this.handleCommands();
+  }
+
+  handleCommands() {
+    this.telegramBot.onText(/\/start/, (msg, [source, match]) => {
+      const {chat: {id, username}} = msg
+      const photoUrl = "https://game.playshub.io/banner.png"
+      const captionDes = `📢 Welcome to PLAYS Hub games!
+    
+    🚀 Hurry up! Tons of games and rewards are waiting for you. The $PLAYS token will be released soon.
+    
+    👇 Play daily to earn big rewards!👇`
+    this.telegramBot.sendPhoto(id, photoUrl, {
+        caption: captionDes,
+        reply_markup: {
+          inline_keyboard:
+          [
+            [
+              {
+                text: '🤜🤛 Play Game',
+                web_app:{
+                  url: "https://game.playshub.io/",
+                } 
+              }
+            ]
+          ]
+        }
+      })
+    })
   }
 
   async getInviteRewardConfig() {
@@ -227,6 +259,9 @@ export class PlaysHubService {
 
           return { "is_successed": true, "plays": currency.plays, "data_quest": playsHubDataQuest };
         }
+      }
+      else {
+        return { "is_successed": true };
       }
     }
     return { "is_successed": false };
