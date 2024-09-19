@@ -54,7 +54,7 @@ export class PlaysHubService implements OnModuleInit {
               {
                 text: '🤜🤛 Play Game',
                 web_app:{
-                  url: "https://game.playshub.io/",
+                  url: "https://google.com/",
                 } 
               }
             ]
