@@ -12,6 +12,9 @@ export class GameCatLuckyStatistic {
   account_id: string;
 
   @Column()
+  max_ticket: number;
+
+  @Column()
   ticket: number;
 
   @Column()
@@ -35,28 +38,23 @@ export class GameCatLuckyStatistic {
   @Column()
   collected_shard: number;
 
-  @Column()
+  @Column('float')
   collected_ton: number;
 
-  @Column()
-  collected_star: number;
-
-  @Column()
+  @Column('float')
   collected_bnb: number;
 
-  @Column()
+  @Column('float')
   collected_plays: number;
 
   @Column()
   collected_ticket: number;
-
-  @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
-  lock_until: Date;
   
   constructor(account_id: string) {
     this.id = 0;
     this.account_id = account_id;
-    this.ticket = 0;
+    this.max_ticket = 200;
+    this.ticket = 200;
     this.game_over = 0;
     this.play_on_ticket = 100;
     this.playing_on = 0;
@@ -65,11 +63,9 @@ export class GameCatLuckyStatistic {
     this.collected_gem = 0;
     this.collected_shard = 0;
     this.collected_ton = 0;
-    this.collected_star = 0;
     this.collected_bnb = 0;
     this.collected_plays = 0;
     this.collected_ticket = 0;
-    this.lock_until = new Date();
   }
 
 }

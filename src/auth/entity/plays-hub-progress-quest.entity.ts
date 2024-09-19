@@ -27,7 +27,6 @@ export class PlaysHubProgressQuest {
   daily_date: Date;
   
   constructor(account_id: string) {
-    this.id = 0;
     this.account_id = account_id;
     this.type = "";
     this.request_type = "";

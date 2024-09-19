@@ -11,6 +11,36 @@ import { PlaysHubQuestDTO } from './dto/plays-hub-quest.dto';
 export class PlaysHubController {
   constructor(private readonly playsHubService: PlaysHubService) {}
   
+  @Get('invite_reward_config')
+  @ApiOperation({ summary: 'Get Plays Hub quests status' })
+  @ApiResponse({ status: 200, description: 'Successful retrieval of Plays Hub quests'})
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  async invite_reward_config(@Request() req) {
+    const inviteRewardConfig = await this.playsHubService.getInviteRewardConfig();
+    return inviteRewardConfig;
+  }
+  
+  @Get('plays_leaderboard')
+  @ApiOperation({ summary: 'Get Plays Hub quests status' })
+  @ApiResponse({ status: 200, description: 'Successful retrieval of Plays Hub quests'})
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  async plays_leaderboard(@Request() req) {
+    const playsLeaderboard = await this.playsHubService.getPlaysLeaderboard();
+    return playsLeaderboard;
+  }
+  
+  @UseGuards(JwtAuthGuard)
+  @Get('plays_leaderboard_position')
+  @ApiBearerAuth()
+  @ApiOperation({ summary: 'Get Plays Hub quests status' })
+  @ApiResponse({ status: 200, description: 'Successful retrieval of Plays Hub quests'})
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  async plays_leaderboard_position(@Request() req) {
+    const account_id = req.user.account_id;
+    const playsLeaderboardPosition = await this.playsHubService.getPlaysLeaderboardPosition(account_id);
+    return { "plays_rank": playsLeaderboardPosition };
+  }
+  
   @UseGuards(JwtAuthGuard)
   @Get('quest_status')
   @ApiBearerAuth()
