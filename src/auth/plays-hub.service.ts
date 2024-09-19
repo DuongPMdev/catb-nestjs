@@ -208,7 +208,7 @@ export class PlaysHubService implements OnModuleInit {
   }
 
   async checkPlaysHubQuest(account_id: string, type: string, request_type: string) {
-    if (request_type === "JOIN_PLAYS_CHANNEL" || request_type === "JOIN_PLAYS_CHAT" || request_type === "PLAY_CAT_BATTLE" || request_type === "INVITE") {
+    if (request_type === "JOIN_PLAYS_CHANNEL" || request_type === "JOIN_PLAYS_CHAT" || request_type === "PLAY_CAT_BATTLE" || request_type === "INVITE" || request_type === "CHECK_IN_TON_WALLET") {
       await this.proceedPlaysHubQuest(account_id, type, request_type);
     }
     const playsHubConfigQuest = await this.playsHubConfigQuestRepository.findOne({ where: { type: type, request_type: request_type } });
