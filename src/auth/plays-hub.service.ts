@@ -153,6 +153,7 @@ export class PlaysHubService {
     else if (playsHubProgressQuest.request_type === "JOIN_PLAYS_CHANNEL") {
       const account = await this.accountRepository.findOne({ where: { account_id: account_id } });
       const isMember = await this.checkIfUserIsMember(-1002149848750, +account.telegram_id);
+      console.log("isMember JOIN_PLAYS_CHANNEL : " + isMember);
       if (isMember === true) {
         isProceeded = true;
       }
@@ -160,6 +161,7 @@ export class PlaysHubService {
     else if (playsHubProgressQuest.request_type === "JOIN_PLAYS_CHAT") {
       const account = await this.accountRepository.findOne({ where: { account_id: account_id } });
       const isMember = await this.checkIfUserIsMember(-1002202947161, +account.telegram_id);
+      console.log("isMember JOIN_PLAYS_CHAT : " + isMember);
       if (isMember === true) {
         isProceeded = true;
       }
