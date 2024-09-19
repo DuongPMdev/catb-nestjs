@@ -11,7 +11,7 @@ import * as cronParser from 'cron-parser';
 @Injectable()
 export class GameCatLuckyService {
 
-  private cronExpression = '* * * * *';  // Every minute
+  private cronExpression = '0 * * * *';  // Every minute
   
   private rewardRate = "GEM:20|SHARD:20|TICKET:30|PLAYS:35|TON:5|BNB:0";
   private gameOver = "START:10|RATE_PERCENT:15|RATE_EACH_LEVEL:5|BONUS:5|MAX:80";
