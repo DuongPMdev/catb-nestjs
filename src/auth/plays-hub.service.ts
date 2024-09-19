@@ -23,7 +23,7 @@ export class PlaysHubService implements OnModuleInit {
     private currencyRepository: Repository<Currency>,
     @InjectRepository(Friend)
     private friendRepository: Repository<Friend>,
-    @InjectRepository(Friend)
+    @InjectRepository(Transaction)
     private transactionRepository: Repository<Transaction>,
     @InjectRepository(PlaysHubConfigQuest)
     private playsHubConfigQuestRepository: Repository<PlaysHubConfigQuest>,
