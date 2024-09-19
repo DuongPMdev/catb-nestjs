@@ -89,16 +89,9 @@ export class AuthService {
 
  // Check if user has a premium account based on the profile badge (infer Premium by badge)
  async checkPremiumStatus(userId: number): Promise<boolean> {
-  console.log("userId : " + userId);
    const profile = await this.getUserProfile(userId);
-   console.log("profile : " + profile);
-   console.log('Logging object profile:', JSON.stringify(profile, null, 2));
-   console.log("profile.ok : " + profile.ok);
-   console.log("profile.result : " + profile.result);
    if (profile.ok && profile.result) {
-    console.log("profile.result.photo : " + profile.result.photo);
      if (profile.result.photo) {
-      console.log("profile.result.photo.has_premium_badge : " + profile.result.photo.has_premium_badge);
        if (profile.result.photo.has_premium_badge) {
          return true;
        }
