@@ -32,11 +32,11 @@ export class PlaysHubService implements OnModuleInit {
     this.telegramBot = new TelegramBot('7210961345:AAFoHoQg_S7boElnaqiFlpb7z3NKaiCA2EM', { polling: false });
   }
 
-  OnModuleInit() {
+  onModuleInit() {
     this.handleCommands();
   }
 
-  handleCommands() {
+  private handleCommands() {
     this.telegramBot.onText(/\/start/, (msg, [source, match]) => {
       const {chat: {id, username}} = msg
       const photoUrl = "https://game.playshub.io/banner.png"
