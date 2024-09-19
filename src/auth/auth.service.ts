@@ -59,6 +59,9 @@ export class AuthService {
 
         let accountCurrency = await this.currencyRepository.findOne({ where: { account_id: newAccount.account_id } });
         let referralCurrency = await this.currencyRepository.findOne({ where: { account_id: loginDTO.referral_id } });
+        if (accountCurrency === null) {
+          accountCurrency = new Currency(newAccount.account_id);
+        }
         if (referralCurrency === null) {
           referralCurrency = new Currency(loginDTO.referral_id);
         }
