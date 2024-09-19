@@ -281,6 +281,7 @@ export class GameCatLuckyService {
 
       gameCatLuckyStatistic.game_over = 0;
       gameCatLuckyStatistic.stage = 0;
+      gameCatLuckyStatistic.play_on_ticket = 100 + gameCatLuckyStatistic.stage * 10;
       gameCatLuckyStatistic.current_stage_result = "";
       gameCatLuckyStatistic.collected_gem = 0;
       gameCatLuckyStatistic.collected_shard = 0;
@@ -334,6 +335,7 @@ export class GameCatLuckyService {
     if (stage > 0 && stage == gameCatLuckyStatistic.stage) {
       gameCatLuckyStatistic.game_over = 0;
       gameCatLuckyStatistic.stage = 0;
+      gameCatLuckyStatistic.play_on_ticket = 100 + gameCatLuckyStatistic.stage * 10;
       gameCatLuckyStatistic.current_stage_result = "";
       gameCatLuckyStatistic.collected_gem = 0;
       gameCatLuckyStatistic.collected_shard = 0;
