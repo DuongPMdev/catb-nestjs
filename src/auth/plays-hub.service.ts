@@ -55,6 +55,45 @@ export class PlaysHubService {
     return { "data_quests": playsHubDataQuests };
   }
 
+  async proceedPlaysHubQuest(account_id: string, type: string, request_type: string) {
+    let playHubDataQuest = {
+      "type": type,
+      "request_type": request_type,
+    };
+    const playsHubConfigQuest = await this.playsHubConfigQuestRepository.findOne({ where: { type: type, request_type: request_type } });
+    if (playsHubConfigQuest) {
+      playHubDataQuest["icon_name"] = playsHubConfigQuest.icon_name;
+      playHubDataQuest["description"] = playsHubConfigQuest.description;
+      playHubDataQuest["request_amount"] = playsHubConfigQuest.request_amount;
+      playHubDataQuest["reward"] = playsHubConfigQuest.reward;
+      playHubDataQuest["additional"] = playsHubConfigQuest.additional;
+      let playsHubProgressQuest = null;
+      if (type == "DAILY") {
+        playsHubProgressQuest = await this.playsHubProgressQuestRepository.findOne({ where: { account_id: account_id, type: type, request_type:request_type } });
+        if (playsHubProgressQuest == null) {
+          playsHubProgressQuest = new PlaysHubProgressQuest(account_id);
+        }
+        playHubDataQuest["progress_amount"] = playsHubProgressQuest.progress_amount;
+        playHubDataQuest["rewarded_step"] = playsHubProgressQuest.rewarded_step;
+        playHubDataQuest["daily_date"] = playsHubProgressQuest.daily_date;
+      }
+      else {
+        playsHubProgressQuest = await this.playsHubProgressQuestRepository.findOne({ where: { account_id: account_id, type: type, request_type:request_type } });
+        if (playsHubProgressQuest == null) {
+          playsHubProgressQuest = new PlaysHubProgressQuest(account_id);
+        }
+        playHubDataQuest["progress_amount"] = playsHubProgressQuest.progress_amount;
+        playHubDataQuest["rewarded_step"] = playsHubProgressQuest.rewarded_step;
+        playHubDataQuest["daily_date"] = playsHubProgressQuest.daily_date;
+      }
+      playsHubProgressQuest.progress_amount++;
+      await this.playsHubProgressQuestRepository.save(playsHubProgressQuest);
+      playHubDataQuest["progress_amount"]++;
+      return { "playHubDataQuest": playHubDataQuest };
+    }
+    return {};
+  }
+
   async checkPlaysHubQuest(account_id: string, type: string, request_type: string) {
     let playHubDataQuest = {
       "type": type,
@@ -67,8 +106,9 @@ export class PlaysHubService {
       playHubDataQuest["request_amount"] = playsHubConfigQuest.request_amount;
       playHubDataQuest["reward"] = playsHubConfigQuest.reward;
       playHubDataQuest["additional"] = playsHubConfigQuest.additional;
+      let playsHubProgressQuest = null;
       if (type == "DAILY") {
-        let playsHubProgressQuest = await this.playsHubProgressQuestRepository.findOne({ where: { account_id: account_id, type: type, request_type:request_type } });
+        playsHubProgressQuest = await this.playsHubProgressQuestRepository.findOne({ where: { account_id: account_id, type: type, request_type:request_type } });
         if (playsHubProgressQuest == null) {
           playsHubProgressQuest = new PlaysHubProgressQuest(account_id);
         }
@@ -77,7 +117,7 @@ export class PlaysHubService {
         playHubDataQuest["daily_date"] = playsHubProgressQuest.daily_date;
       }
       else {
-        let playsHubProgressQuest = await this.playsHubProgressQuestRepository.findOne({ where: { account_id: account_id, type: type, request_type:request_type } });
+        playsHubProgressQuest = await this.playsHubProgressQuestRepository.findOne({ where: { account_id: account_id, type: type, request_type:request_type } });
         if (playsHubProgressQuest == null) {
           playsHubProgressQuest = new PlaysHubProgressQuest(account_id);
         }
@@ -88,6 +128,8 @@ export class PlaysHubService {
       if (playHubDataQuest["rewarded_step"] == 0) {
         if (playHubDataQuest["progress_amount"] >= playHubDataQuest["request_amount"]) {
           playHubDataQuest["rewarded_step"]++;
+          playsHubProgressQuest.rewarded_step++;
+          await this.playsHubProgressQuestRepository.save(playsHubProgressQuest);
         }
       }
       let currency = await this.currencyRepository.findOne({ where: { account_id: account_id } });
