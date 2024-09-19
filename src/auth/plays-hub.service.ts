@@ -40,24 +40,9 @@ export class PlaysHubService implements OnModuleInit {
     this.telegramBot.onText(/\/start/, (msg) => {
       const chatId = msg.chat.id;
       const photoUrl = "https://game.playshub.io/banner.png"
-      const fullCaption = {
-        caption: "📢 Welcome to PLAYS Hub games!\n\n🚀 Hurry up! Tons of games and rewards are waiting for you. The $PLAYS token will be released soon.\n\n👇 Play daily to earn big rewards!👇",
-        reply_markup: {
-          inline_keyboard:
-          [
-            [
-              {
-                text: '🤜🤛 Play Game',
-                web_app:{
-                  url: "https://google.com/",
-                } 
-              }
-            ]
-          ]
-        }
-      };
+      const caption = "📢 Welcome to PLAYS Hub games!\n\n🚀 Hurry up! Tons of games and rewards are waiting for you. The $PLAYS token will be released soon.\n\n👇 Play daily to earn big rewards!👇";
 
-      this.telegramBot.sendPhoto(chatId, photoUrl, { fullCaption })
+      this.telegramBot.sendPhoto(chatId, photoUrl, { caption })
         .then(() => {
           console.log('Photo sent successfully with caption!');
         })
