@@ -8,6 +8,7 @@ import { Transaction } from './entity/transaction.entity';
 import { PlaysHubConfigQuest } from './entity/plays-hub-config-quest.entity';
 import { PlaysHubProgressQuest } from './entity/plays-hub-progress-quest.entity';
 import { GameCatBattleStatistic } from './entity/game-cat-battle-statistic.entity';
+import { GameCatLuckyStatistic } from './entity/game-cat-lucky-statistic.entity';
 import * as TelegramBot from 'node-telegram-bot-api';
 import { classToPlain } from 'class-transformer';
 
@@ -31,6 +32,8 @@ export class PlaysHubService {
     private playsHubProgressQuestRepository: Repository<PlaysHubProgressQuest>,
     @InjectRepository(GameCatBattleStatistic)
     private gameCatBattleStatisticRepository: Repository<GameCatBattleStatistic>,
+    @InjectRepository(GameCatLuckyStatistic)
+    private gameCatLuckyStatisticRepository: Repository<GameCatLuckyStatistic>,
   ) {
     this.telegramBot = new TelegramBot('7651056072:AAFrFB72faSt4e4NtqFJPaiGvrUGuoOT70o', { polling: true });
   }
@@ -127,6 +130,12 @@ export class PlaysHubService {
         isProceeded = true;
       }
     }
+    else if (playsHubProgressQuest.request_type === "PLAY_CAT_LUCKY") {
+      const gameCatLuckyStatistics = await this.gameCatLuckyStatisticRepository.find({ where: { account_id: account_id, last_play_datetime: Between(startOfDay, endOfDay) } });
+      if (gameCatLuckyStatistics.length > 0) {
+        isProceeded = true;
+      }
+    }
     else if (playsHubProgressQuest.request_type === "INVITE") {
       const referralAccounts = await this.accountRepository.find({ where: { referral_id: account_id, created_datetime: Between(startOfDay, endOfDay) } });
       if (referralAccounts.length > 0) {
@@ -180,7 +189,7 @@ export class PlaysHubService {
   }
 
   async checkPlaysHubQuest(account_id: string, type: string, request_type: string) {
-    if (request_type === "JOIN_PLAYS_CHANNEL" || request_type === "JOIN_PLAYS_CHAT" || request_type === "PLAY_CAT_BATTLE" || request_type === "INVITE" || request_type === "CHECK_IN_TON_WALLET") {
+    if (request_type === "JOIN_PLAYS_CHANNEL" || request_type === "JOIN_PLAYS_CHAT" || request_type === "PLAY_CAT_LUCKY" || request_type === "PLAY_CAT_BATTLE" || request_type === "INVITE" || request_type === "CHECK_IN_TON_WALLET") {
       await this.proceedPlaysHubQuest(account_id, type, request_type);
     }
     const playsHubConfigQuest = await this.playsHubConfigQuestRepository.findOne({ where: { type: type, request_type: request_type } });
@@ -247,6 +256,8 @@ export class PlaysHubService {
 
     playsHubDataQuest["icon_name"] = playsHubConfigQuest.icon_name;
     playsHubDataQuest["description"] = playsHubConfigQuest.description;
+    playsHubDataQuest["label_proceed"] = playsHubConfigQuest.label_proceed;
+    playsHubDataQuest["label_check"] = playsHubConfigQuest.label_check;
     playsHubDataQuest["request_amount"] = playsHubConfigQuest.request_amount;
     playsHubDataQuest["reward"] = playsHubConfigQuest.reward;
     playsHubDataQuest["additional"] = playsHubConfigQuest.additional;

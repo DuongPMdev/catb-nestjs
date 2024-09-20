@@ -74,6 +74,8 @@ export class GameCatLuckyService {
     if (finalGameCatLuckyStatistic == null) {
       finalGameCatLuckyStatistic = new GameCatLuckyStatistic(account_id);
     }
+    finalGameCatLuckyStatistic.last_play_datetime = new Date();
+    this.gameCatLuckyStatisticRepository.save(finalGameCatLuckyStatistic);
     return { "statistic": classToPlain(finalGameCatLuckyStatistic) };
   }
 
@@ -116,12 +118,12 @@ export class GameCatLuckyService {
           gameCatLuckyStatistic.stage++;
           gameCatLuckyStatistic.game_over = 0;
           gameCatLuckyStatistic.playing_on = 0;
-          gameCatLuckyStatistic.play_on_ticket = 100 + gameCatLuckyStatistic.stage * 10;
+          gameCatLuckyStatistic.play_on_ticket = 10 + gameCatLuckyStatistic.stage;
           gameCatLuckyStatistic.current_stage_result = this.generateStageResult(gameCatLuckyStatistic.stage);
         }
       }
       else {
-        gameCatLuckyStatistic.play_on_ticket = 100 + gameCatLuckyStatistic.stage * 10;
+        gameCatLuckyStatistic.play_on_ticket = 10 + gameCatLuckyStatistic.stage;
         if (gameCatLuckyStatistic.ticket >= gameCatLuckyStatistic.play_on_ticket) {
           gameCatLuckyStatistic.stage++;
           gameCatLuckyStatistic.ticket -= gameCatLuckyStatistic.play_on_ticket;

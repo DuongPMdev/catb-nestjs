@@ -49,6 +49,9 @@ export class GameCatLuckyStatistic {
 
   @Column()
   collected_ticket: number;
+
+  @Column()
+  last_play_datetime: Date;
   
   constructor(account_id: string) {
     this.id = 0;
@@ -66,6 +69,7 @@ export class GameCatLuckyStatistic {
     this.collected_bnb = 0;
     this.collected_plays = 0;
     this.collected_ticket = 0;
+    this.last_play_datetime = null;
   }
 
 }

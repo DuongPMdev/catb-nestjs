@@ -18,6 +18,12 @@ export class PlaysHubConfigQuest {
   description: string;
 
   @Column()
+  label_proceed: string;
+
+  @Column()
+  label_check: string;
+
+  @Column()
   request_type: string;
 
   @Column()
