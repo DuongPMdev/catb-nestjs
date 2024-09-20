@@ -13,7 +13,7 @@ export class GameCatLuckyService {
 
   private cronExpression = '0 * * * *';  // Every minute
   
-  private rewardRate = "GEM:20|SHARD:20|TICKET:30|PLAYS:35|TON:95|BNB:0";
+  private rewardRate = "GEM:20|SHARD:20|TICKET:30|PLAYS:35|TON:5|BNB:0";
   private gameOver = "START:10|RATE_PERCENT:15|RATE_EACH_LEVEL:5|BONUS:5|MAX:80";
   private GEM = "START:10|BONUS:5|BASE_MULTIPLIER:1.1|BONUS_MULTIPLIER:1.05|MIN_FACTOR:0.9|MAX_FACTOR:1.1";
   private SHARD = "START:5|BONUS:5|BASE_MULTIPLIER:1.1|BONUS_MULTIPLIER:1.05|MIN_FACTOR:0.9|MAX_FACTOR:1.1";
