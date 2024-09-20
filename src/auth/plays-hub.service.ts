@@ -1,4 +1,4 @@
-import { Injectable, OnModuleInit } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Between, Repository } from 'typeorm';
 import { Account } from './entity/account.entity';
@@ -12,7 +12,7 @@ import * as TelegramBot from 'node-telegram-bot-api';
 import { classToPlain } from 'class-transformer';
 
 @Injectable()
-export class PlaysHubService implements OnModuleInit {
+export class PlaysHubService {
 
   private telegramBot: TelegramBot;
 
@@ -32,35 +32,7 @@ export class PlaysHubService implements OnModuleInit {
     @InjectRepository(GameCatBattleStatistic)
     private gameCatBattleStatisticRepository: Repository<GameCatBattleStatistic>,
   ) {
-    this.telegramBot = new TelegramBot('7210961345:AAFoHoQg_S7boElnaqiFlpb7z3NKaiCA2EM', { polling: true });
-  }
-
-  onModuleInit() {
-    this.handleCommands();
-  }
-
-  private handleCommands() {
-    this.telegramBot.onText(/\/start/, (msg, [source, match]) => {
-      const {chat: {id, username}} = msg
-      const photoUrl = "https://game.catb.io/banner.png"
-      const captionDes = `📢 Welcome to PLAYS Hub games!\n\n🚀 Hurry up! Tons of games and rewards are waiting for you. The $PLAYS token will be released soon.\n\n👇 Play daily to earn big rewards!👇`
-      this.telegramBot.sendPhoto(id, photoUrl, {
-        caption: captionDes,
-        reply_markup: {
-          inline_keyboard:
-          [
-            [
-              {
-                text: '🤜🤛 Play Game',
-                web_app:{
-                  url: "https://game.playshub.io/",
-                } 
-              }
-            ]
-          ]
-        }
-      })
-    })
+    this.telegramBot = new TelegramBot('7651056072:AAFrFB72faSt4e4NtqFJPaiGvrUGuoOT70o', { polling: true });
   }
 
   async getInviteRewardConfig() {
