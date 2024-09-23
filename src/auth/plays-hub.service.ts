@@ -46,7 +46,7 @@ export class PlaysHubService {
   }
 
   async getPlaysLeaderboard() {
-    const currencies = await this.currencyRepository.find({ order: {plays: 'DESC'} });
+    const currencies = await this.currencyRepository.find({ order: { plays: 'DESC' }, take: 100 });
     for (const currency of currencies) {
       let account = await this.accountRepository.findOne({ where: { account_id: currency.account_id } });
       if (account.display_name) {
@@ -65,7 +65,7 @@ export class PlaysHubService {
         SELECT account_id, plays, RANK() OVER (ORDER BY plays DESC) AS plays_rank
         FROM currency
       ) AS ranked_users
-      WHERE account_id = ? LIMIT 100;
+      WHERE account_id = ?;
     `;
     const result = await this.currencyRepository.query(query, [account_id]);
     if (result.length > 0) {
