@@ -34,7 +34,7 @@ export class AuthService {
     const isPremium = await this.checkPremiumStatus(+loginDTO.telegram_id);
     const account = await this.accountRepository.findOne({ where: { telegram_id: loginDTO.telegram_id } });
     if (account) {
-      await this.accountRepository.update({ telegram_id: loginDTO.telegram_id }, { display_name: loginDTO.display_name });
+      await this.accountRepository.update({ telegram_id: loginDTO.telegram_id }, { display_name: loginDTO.display_name }, { language_code: loginDTO.language_code });
     }
     else {
       let referralAccount = null;
