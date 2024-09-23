@@ -65,7 +65,7 @@ export class PlaysHubService {
         SELECT account_id, plays, RANK() OVER (ORDER BY plays DESC) AS plays_rank
         FROM currency
       ) AS ranked_users
-      WHERE account_id = ?
+      WHERE account_id = ? LIMIT 100;
     `;
     const result = await this.currencyRepository.query(query, [account_id]);
     if (result.length > 0) {
