@@ -15,11 +15,7 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
   // Enable CORS
-  app.enableCors({
-    origin: '*', // Allow all origins (you can restrict to specific domains here)
-    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
-    credentials: true, // Enable sending credentials like cookies
-  });
+  app.enableCors();
 
   const config = new DocumentBuilder()
   .setTitle('NestJS API')
