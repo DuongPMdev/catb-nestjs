@@ -92,7 +92,18 @@ export class GameCatLuckyService {
         gameCatLuckyStatistic["display_name"] = "Deleted Account";
       }
     }
-    return gameCatLuckyStatistics;
+
+    let playedPointLeaderboard = [];
+    for (const gameCatLuckyStatistic of gameCatLuckyStatistics) {
+      let account = await this.accountRepository.findOne({ where: { account_id: gameCatLuckyStatistic.account_id } });
+      let record = {
+        "display_name": account.display_name,
+        "played_point": gameCatLuckyStatistic.played_point,
+      };
+      playedPointLeaderboard.push(record);
+    }
+
+    return playedPointLeaderboard;
   }
 
   async getGameCatLuckySecondToFreeTicket() {
