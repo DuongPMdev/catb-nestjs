@@ -69,7 +69,11 @@ export class GameCatLuckyService {
   async getGameCatLuckyConfigShops() {
     let finalGameCatLuckyConfigShops = await this.gameCatLuckyConfigShopRepository.find();
     for (const finalGameCatLuckyConfigShop of finalGameCatLuckyConfigShops) {
-      finalGameCatLuckyConfigShop["bnb"] = 0.0;
+      if (finalGameCatLuckyConfigShop.request_type === "USD") {
+        finalGameCatLuckyConfigShop["usd"] = finalGameCatLuckyConfigShop.request_amount;
+        finalGameCatLuckyConfigShop["ton"] = finalGameCatLuckyConfigShop.request_amount / 5.0;
+        finalGameCatLuckyConfigShop["bnb"] = finalGameCatLuckyConfigShop.request_amount / 550.0;
+      }
     }
     return finalGameCatLuckyConfigShops;
   }
