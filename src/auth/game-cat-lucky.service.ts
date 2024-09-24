@@ -115,6 +115,7 @@ export class GameCatLuckyService {
           else if (itemType == "TICKET") {
             gameCatLuckyStatistic.collected_ticket += +itemValue;
           }
+          gameCatLuckyStatistic.played_point += gameCatLuckyStatistic.stage;
           gameCatLuckyStatistic.stage++;
           gameCatLuckyStatistic.game_over = 0;
           gameCatLuckyStatistic.playing_on = 0;
@@ -125,6 +126,7 @@ export class GameCatLuckyService {
       else {
         gameCatLuckyStatistic.play_on_ticket = 10 + gameCatLuckyStatistic.stage;
         if (gameCatLuckyStatistic.ticket >= gameCatLuckyStatistic.play_on_ticket) {
+          gameCatLuckyStatistic.played_point += gameCatLuckyStatistic.stage;
           gameCatLuckyStatistic.stage++;
           gameCatLuckyStatistic.ticket -= gameCatLuckyStatistic.play_on_ticket;
           gameCatLuckyStatistic.playing_on = 0;
