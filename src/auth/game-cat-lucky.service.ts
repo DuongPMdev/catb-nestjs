@@ -3,7 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Currency } from './entity/currency.entity';
 import { GameCatLuckyStatistic } from './entity/game-cat-lucky-statistic.entity';
-import { GameCatLuckyConfigShop } from './auth/entity/game-cat-lucky-config-shop.entity';
+import { GameCatLuckyConfigShop } from './entity/game-cat-lucky-config-shop.entity';
 import { GameCatBattleStatistic } from './entity/game-cat-battle-statistic.entity';
 import { classToPlain } from 'class-transformer';
 import { Cron } from '@nestjs/schedule';
