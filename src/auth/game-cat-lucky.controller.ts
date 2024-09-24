@@ -23,6 +23,18 @@ export class GameCatLuckyController {
   }
   
   @UseGuards(JwtAuthGuard)
+  @Get('played_point_leaderboard_position')
+  @ApiBearerAuth()
+  @ApiOperation({ summary: 'Get Plays Hub quests status' })
+  @ApiResponse({ status: 200, description: 'Successful retrieval of Plays Hub quests'})
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  async plays_leaderboard_position(@Request() req) {
+    const account_id = req.user.account_id;
+    const playsLeaderboardPosition = await this.gameCatLuckyService.getPlayedPointLeaderboardPosition(account_id);
+    return { "played_point_rank": playsLeaderboardPosition };
+  }
+  
+  @UseGuards(JwtAuthGuard)
   @Get('config_shop')
   @ApiBearerAuth()
   @ApiOperation({ summary: 'Get Cat Lucky Game statistic' })

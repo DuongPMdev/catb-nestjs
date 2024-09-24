@@ -97,6 +97,23 @@ export class GameCatLuckyService {
     return playedPointLeaderboard;
   }
 
+  async getPlayedPointLeaderboardPosition(account_id: string) {
+    const query = `
+      SELECT * FROM (
+        SELECT account_id, played_point, RANK() OVER (ORDER BY played_point DESC) AS played_point_rank
+        FROM game_cat_lucky_statistic
+      ) AS ranked_users
+      WHERE account_id = ?;
+    `;
+    const result = await this.currencyRepository.query(query, [account_id]);
+    if (result.length > 0) {
+      if (result[0].plays > 0) {
+        return result[0].plays_rank;
+      }
+    }
+    return 0;
+  }
+
   async getGameCatLuckySecondToFreeTicket() {
     let seconds = this.getSecondsUntilNextExecution();
     seconds += +3;
