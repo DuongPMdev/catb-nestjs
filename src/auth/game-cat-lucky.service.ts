@@ -3,6 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Currency } from './entity/currency.entity';
 import { GameCatLuckyStatistic } from './entity/game-cat-lucky-statistic.entity';
+import { GameCatLuckyConfigShop } from './auth/entity/game-cat-lucky-config-shop.entity';
 import { GameCatBattleStatistic } from './entity/game-cat-battle-statistic.entity';
 import { classToPlain } from 'class-transformer';
 import { Cron } from '@nestjs/schedule';
@@ -27,6 +28,8 @@ export class GameCatLuckyService {
     private currencyRepository: Repository<Currency>,
     @InjectRepository(GameCatLuckyStatistic)
     private gameCatLuckyStatisticRepository: Repository<GameCatLuckyStatistic>,
+    @InjectRepository(GameCatLuckyConfigShop)
+    private gameCatLuckyConfigShopRepository: Repository<GameCatLuckyConfigShop>,
     @InjectRepository(GameCatBattleStatistic)
     private gameCatBattleStatisticRepository: Repository<GameCatBattleStatistic>,
   ) {}
@@ -61,6 +64,14 @@ export class GameCatLuckyService {
       finalGameCatLuckyStatistic = new GameCatLuckyStatistic(account_id);
     }
     return { "ticket": finalGameCatLuckyStatistic.ticket };
+  }
+
+  async getGameCatLuckyConfigShops() {
+    let finalGameCatLuckyConfigShops = await this.gameCatLuckyConfigShopRepository.find();
+    for (const finalGameCatLuckyConfigShop of finalGameCatLuckyConfigShops) {
+      finalGameCatLuckyConfigShop["bnb"] = 0.0;
+    }
+    return finalGameCatLuckyConfigShops;
   }
 
   async getGameCatLuckySecondToFreeTicket() {
