@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
+import { Account } from './entity/account.entity';
 import { Currency } from './entity/currency.entity';
 import { GameCatLuckyStatistic } from './entity/game-cat-lucky-statistic.entity';
 import { GameCatLuckyConfigShop } from './entity/game-cat-lucky-config-shop.entity';
@@ -24,6 +25,8 @@ export class GameCatLuckyService {
   private BNB = "START:0.001|BONUS:5|BASE_MULTIPLIER:1.1|BONUS_MULTIPLIER:1.02|MIN_FACTOR:0.9|MAX_FACTOR:1.1";
 
   constructor(
+    @InjectRepository(Account)
+    private accountRepository: Repository<Account>,
     @InjectRepository(Currency)
     private currencyRepository: Repository<Currency>,
     @InjectRepository(GameCatLuckyStatistic)
@@ -76,6 +79,20 @@ export class GameCatLuckyService {
       }
     }
     return finalGameCatLuckyConfigShops;
+  }
+
+  async getPlayedPointLeaderboard() {
+    const gameCatLuckyStatistics = await this.gameCatLuckyStatisticRepository.find({ order: { played_point: 'DESC' }, take: 100 });
+    for (const gameCatLuckyStatistic of gameCatLuckyStatistics) {
+      let account = await this.accountRepository.findOne({ where: { account_id: gameCatLuckyStatistic.account_id } });
+      if (account.display_name) {
+        gameCatLuckyStatistic["display_name"] = account.display_name;
+      }
+      else {
+        gameCatLuckyStatistic["display_name"] = "Deleted Account";
+      }
+    }
+    return gameCatLuckyStatistics;
   }
 
   async getGameCatLuckySecondToFreeTicket() {

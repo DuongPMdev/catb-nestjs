@@ -10,6 +10,17 @@ import { GameCatLuckyDTO } from './dto/game-cat-lucky.dto';
 @Controller('game-cat-lucky')
 export class GameCatLuckyController {
   constructor(private readonly gameCatLuckyService: GameCatLuckyService) {}
+
+  @UseGuards(JwtAuthGuard)
+  @Get('played_point_leaderboard')
+  @ApiBearerAuth()
+  @ApiOperation({ summary: 'Get Cat Lucky Game statistic' })
+  @ApiResponse({ status: 200, description: 'Successful retrieval of Cat Lucky Game statistic'})
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  async played_point_leaderboard(@Request() req) {
+    const playedPointLeaderboard = await this.gameCatLuckyService.getPlayedPointLeaderboard();
+    return playedPointLeaderboard;
+  }
   
   @UseGuards(JwtAuthGuard)
   @Get('config_shop')
