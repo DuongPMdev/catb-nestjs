@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { MoreThan, Repository } from 'typeorm';
 import { Account } from './entity/account.entity';
 import { Currency } from './entity/currency.entity';
 import { GameCatLuckyStatistic } from './entity/game-cat-lucky-statistic.entity';
@@ -82,16 +82,7 @@ export class GameCatLuckyService {
   }
 
   async getPlayedPointLeaderboard() {
-    const gameCatLuckyStatistics = await this.gameCatLuckyStatisticRepository.find({ order: { played_point: 'DESC' }, take: 100 });
-    for (const gameCatLuckyStatistic of gameCatLuckyStatistics) {
-      let account = await this.accountRepository.findOne({ where: { account_id: gameCatLuckyStatistic.account_id } });
-      if (account.display_name) {
-        gameCatLuckyStatistic["display_name"] = account.display_name;
-      }
-      else {
-        gameCatLuckyStatistic["display_name"] = "Deleted Account";
-      }
-    }
+    const gameCatLuckyStatistics = await this.gameCatLuckyStatisticRepository.find({ order: { played_point: 'DESC' }, where: { played_point: MoreThan(0) }, take: 100 });
 
     let playedPointLeaderboard = [];
     for (const gameCatLuckyStatistic of gameCatLuckyStatistics) {
