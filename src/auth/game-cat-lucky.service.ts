@@ -106,9 +106,9 @@ export class GameCatLuckyService {
       WHERE account_id = ?;
     `;
     const result = await this.currencyRepository.query(query, [account_id]);
-    result.played_point_rank = Number(result.played_point_rank);
     if (result.length > 0) {
       if (result[0].played_point > 0) {
+        result[0].played_point_rank = Number(result[0].played_point_rank);
         return result[0];
       }
     }
