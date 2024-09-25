@@ -127,7 +127,7 @@ export class GameCatLuckyService {
     }
     finalGameCatLuckyStatistic.last_play_datetime = new Date();
     this.gameCatLuckyStatisticRepository.save(finalGameCatLuckyStatistic);
-    return { "statistic": classToPlain(finalGameCatLuckyStatistic) };
+    return classToPlain(finalGameCatLuckyStatistic);
   }
 
   async playGameCatLucky(account_id: string, stage: number) {
