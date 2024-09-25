@@ -107,11 +107,11 @@ export class GameCatLuckyService {
     `;
     const result = await this.currencyRepository.query(query, [account_id]);
     if (result.length > 0) {
-      if (result[0].plays > 0) {
-        return result[0].plays_rank;
+      if (result[0].played_point > 0) {
+        return result[0];
       }
     }
-    return 0;
+    return null;
   }
 
   async getGameCatLuckySecondToFreeTicket() {
