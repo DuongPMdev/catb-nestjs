@@ -31,7 +31,7 @@ export class GameCatLuckyController {
   async plays_leaderboard_position(@Request() req) {
     const account_id = req.user.account_id;
     const playsLeaderboardPosition = await this.gameCatLuckyService.getPlayedPointLeaderboardPosition(account_id);
-    return { "played_point_rank": playsLeaderboardPosition };
+    return playsLeaderboardPosition;
   }
   
   @UseGuards(JwtAuthGuard)

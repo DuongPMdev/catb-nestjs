@@ -106,6 +106,7 @@ export class GameCatLuckyService {
       WHERE account_id = ?;
     `;
     const result = await this.currencyRepository.query(query, [account_id]);
+    result.played_point_rank = Number(result.played_point_rank);
     if (result.length > 0) {
       if (result[0].played_point > 0) {
         return result[0];
@@ -127,7 +128,7 @@ export class GameCatLuckyService {
     }
     finalGameCatLuckyStatistic.last_play_datetime = new Date();
     this.gameCatLuckyStatisticRepository.save(finalGameCatLuckyStatistic);
-    return classToPlain(finalGameCatLuckyStatistic);
+    return { "statistic": classToPlain(finalGameCatLuckyStatistic) };
   }
 
   async playGameCatLucky(account_id: string, stage: number) {
