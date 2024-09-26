@@ -46,6 +46,17 @@ export class GameCatLuckyController {
   }
   
   @UseGuards(JwtAuthGuard)
+  @Get('config_leaderboard_reward')
+  @ApiBearerAuth()
+  @ApiOperation({ summary: 'Get Cat Lucky Game statistic' })
+  @ApiResponse({ status: 200, description: 'Successful retrieval of Cat Lucky Game statistic'})
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  async config_leaderboard_reward(@Request() req) {
+    const gameCatLuckyConfigLeaderboardRewards = await this.gameCatLuckyService.getGameCatLuckyConfigLeaderboardRewards();
+    return gameCatLuckyConfigLeaderboardRewards;
+  }
+  
+  @UseGuards(JwtAuthGuard)
   @Get('ticket')
   @ApiBearerAuth()
   @ApiOperation({ summary: 'Get Cat Lucky Game statistic' })

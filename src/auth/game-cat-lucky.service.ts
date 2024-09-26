@@ -5,6 +5,7 @@ import { Account } from './entity/account.entity';
 import { Currency } from './entity/currency.entity';
 import { GameCatLuckyStatistic } from './entity/game-cat-lucky-statistic.entity';
 import { GameCatLuckyConfigShop } from './entity/game-cat-lucky-config-shop.entity';
+import { GameCatLuckyConfigLeaderboardReward } from './entity/game-cat-lucky-config-leaderboard-reward.entity';
 import { GameCatBattleStatistic } from './entity/game-cat-battle-statistic.entity';
 import { classToPlain } from 'class-transformer';
 import { Cron } from '@nestjs/schedule';
@@ -33,6 +34,8 @@ export class GameCatLuckyService {
     private gameCatLuckyStatisticRepository: Repository<GameCatLuckyStatistic>,
     @InjectRepository(GameCatLuckyConfigShop)
     private gameCatLuckyConfigShopRepository: Repository<GameCatLuckyConfigShop>,
+    @InjectRepository(GameCatLuckyConfigLeaderboardReward)
+    private gameCatLuckyConfigLeaderboardRewardRepository: Repository<GameCatLuckyConfigLeaderboardReward>,
     @InjectRepository(GameCatBattleStatistic)
     private gameCatBattleStatisticRepository: Repository<GameCatBattleStatistic>,
   ) {}
@@ -79,6 +82,11 @@ export class GameCatLuckyService {
       }
     }
     return finalGameCatLuckyConfigShops;
+  }
+
+  async getGameCatLuckyConfigLeaderboardRewards() {
+    let finalGameCatLuckyConfigLeaderboardRewards = await this.gameCatLuckyConfigLeaderboardRewardRepository.find();
+    return finalGameCatLuckyConfigLeaderboardRewards;
   }
 
   async getPlayedPointLeaderboard() {

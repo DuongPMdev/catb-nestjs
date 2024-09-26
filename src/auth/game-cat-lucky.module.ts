@@ -5,6 +5,7 @@ import { Account } from './entity/account.entity';
 import { Currency } from './entity/currency.entity';
 import { GameCatLuckyStatistic } from './entity/game-cat-lucky-statistic.entity';
 import { GameCatLuckyConfigShop } from './entity/game-cat-lucky-config-shop.entity';
+import { GameCatLuckyConfigLeaderboardReward } from './entity/game-cat-lucky-config-leaderboard-reward.entity';
 import { GameCatBattleStatistic } from './entity/game-cat-battle-statistic.entity';
 import { GameCatLuckyService } from './game-cat-lucky.service';
 import { GameCatLuckyController } from './game-cat-lucky.controller';
@@ -15,7 +16,7 @@ import { ScheduleModule } from '@nestjs/schedule';
 @Module({
   imports: [
     ScheduleModule.forRoot(),
-    TypeOrmModule.forFeature([ Account, Currency, GameCatLuckyStatistic, GameCatLuckyConfigShop, GameCatBattleStatistic ]),
+    TypeOrmModule.forFeature([ Account, Currency, GameCatLuckyStatistic, GameCatLuckyConfigShop, GameCatLuckyConfigLeaderboardReward, GameCatBattleStatistic ]),
     PassportModule.register({ defaultStrategy: 'jwt' }),
     JwtModule.registerAsync({
       imports: [ConfigModule],
