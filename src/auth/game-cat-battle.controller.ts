@@ -22,12 +22,9 @@ export class GameCatBattleController {
     return gameCatBattleStatistic;
   }
   
-  @UseGuards(JwtAuthGuard)
   @Get('ads_impression')
-  @ApiBearerAuth()
-  @ApiOperation({ summary: 'Get Cat Battle Game statistic' })
-  @ApiResponse({ status: 200, description: 'Successful retrieval of Cat Battle Game statistic'})
-  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @ApiOperation({ summary: '' })
+  @ApiResponse({ status: 200, description: ''})
   async ads_impression(@Request() req, @Query() query: any) {
     const { userid, key } = query;
     console.log('ads_impression : ' + userid + ', ' + key);
