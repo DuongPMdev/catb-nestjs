@@ -1,7 +1,7 @@
 import { Controller, Post, Get, Body, Request, Query, UseGuards, Injectable, NotFoundException} from '@nestjs/common';
 import { GameCatBattleService } from './game-cat-battle.service';
 import { JwtAuthGuard } from './jwt-auth.guard';
-import { ApiBearerAuth, ApiTags, ApiOperation, ApiResponse } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiTags, ApiOperation, ApiResponse, ApiQuery} from '@nestjs/swagger';
 
 
 @Injectable()
@@ -25,6 +25,8 @@ export class GameCatBattleController {
   @Get('ads_impression')
   @ApiOperation({ summary: '' })
   @ApiResponse({ status: 200, description: ''})
+  @ApiQuery({ name: 'userid', required: true, description: 'Telegram ID' })
+  @ApiQuery({ name: 'key', required: true, description: 'Server secret Key' })
   async ads_impression(@Request() req, @Query() query: any) {
     const { userid, key } = query;
     console.log('ads_impression : ' + userid + ', ' + key);
