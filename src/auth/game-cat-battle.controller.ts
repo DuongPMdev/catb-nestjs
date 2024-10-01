@@ -26,10 +26,9 @@ export class GameCatBattleController {
   @ApiOperation({ summary: '' })
   @ApiResponse({ status: 200, description: ''})
   @ApiQuery({ name: 'userid', required: true, description: 'Telegram ID' })
-  @ApiQuery({ name: 'key', required: true, description: 'Server secret Key' })
   async ads_impression(@Request() req, @Query() query: any) {
-    const { userid, key } = query;
-    console.log('ads_impression : ' + userid + ', ' + key);
+    const { userid } = query;
+    console.log('ads_impression : ' + userid);
     return { 'successed': true };
   }
 
