@@ -42,6 +42,9 @@ export class Account {
   @Column()
   platform: string;
 
+  @Column()
+  last_login_datetime: Date;
+
   @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
   created_datetime: Date;
 
