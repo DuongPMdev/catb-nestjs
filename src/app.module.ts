@@ -8,7 +8,9 @@ import { Account } from './auth/entity/account.entity';
 import { Currency } from './auth/entity/currency.entity';
 import { Friend } from './auth/entity/friend.entity';
 import { Transaction } from './auth/entity/transaction.entity';
+import { TelegramAdsConfig } from './auth/entity/telegram_ads_config.entity';
 import { GameCatLuckyStatistic } from './auth/entity/game-cat-lucky-statistic.entity';
+import { GameCatLuckyTimeLocker } from './auth/entity/game-cat-lucky-time_locker.entity';
 import { GameCatLuckyConfigShop } from './auth/entity/game-cat-lucky-config-shop.entity';
 import { GameCatLuckyConfigLeaderboardReward } from './auth/entity/game-cat-lucky-config-leaderboard-reward.entity';
 import { GameCatBattleStatistic } from './auth/entity/game-cat-battle-statistic.entity';
@@ -27,10 +29,10 @@ import { PlaysHubModule } from './auth/plays-hub.module';
       username: 'duongpm13dev',
       password: 'NGen2024@',
       database: 'plays_hub',
-      entities: [ Account, Currency, Friend, Transaction, GameCatLuckyStatistic, GameCatLuckyConfigShop, GameCatLuckyConfigLeaderboardReward, GameCatBattleStatistic, PlaysHubConfigQuest, PlaysHubProgressQuest ],
+      entities: [ Account, Currency, Friend, Transaction, TelegramAdsConfig, GameCatLuckyStatistic, GameCatLuckyTimeLocker, GameCatLuckyConfigShop, GameCatLuckyConfigLeaderboardReward, GameCatBattleStatistic, PlaysHubConfigQuest, PlaysHubProgressQuest ],
       synchronize: false, // never change it to true : true will force clear db
     }),
-    TypeOrmModule.forFeature([Account, Currency, Friend, Transaction, GameCatLuckyStatistic, GameCatLuckyConfigShop, GameCatLuckyConfigLeaderboardReward, GameCatBattleStatistic, PlaysHubConfigQuest, PlaysHubProgressQuest]),
+    TypeOrmModule.forFeature([Account, Currency, Friend, Transaction, TelegramAdsConfig, GameCatLuckyStatistic, GameCatLuckyTimeLocker, GameCatLuckyConfigShop, GameCatLuckyConfigLeaderboardReward, GameCatBattleStatistic, PlaysHubConfigQuest, PlaysHubProgressQuest]),
     ConfigModule.forRoot({ isGlobal: true }),
     AuthModule,
     PlaysHubModule,

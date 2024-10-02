@@ -138,5 +138,17 @@ export class GameCatLuckyController {
     const gameCatLuckyStatus = await this.gameCatLuckyService.giveUpGameCatLucky(account_id, gameCatLuckyDTO.stage);
     return gameCatLuckyStatus;
   }
+  
+  @UseGuards(JwtAuthGuard)
+  @Get('get_game_cat_lucky_ads_config')
+  @ApiBearerAuth()
+  @ApiOperation({ summary: 'Get Cat Lucky Game statistic' })
+  @ApiResponse({ status: 200, description: 'Successful retrieval of Cat Lucky Game statistic'})
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  async get_game_cat_lucky_ads_config(@Request() req) {
+    const account_id = req.user.account_id;
+    const gameCatLuckyAdsConfig = await this.gameCatLuckyService.getGameCatLuckyAdsConfig(account_id);
+    return gameCatLuckyAdsConfig;
+  }
 
 }

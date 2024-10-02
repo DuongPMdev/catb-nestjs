@@ -3,7 +3,6 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { MoreThan, Repository } from 'typeorm';
 import { Account } from './entity/account.entity';
 import { Currency } from './entity/currency.entity';
-import { TelegramAdsConfig } from './entity/telegram_ads_config.entity';
 import { GameCatLuckyStatistic } from './entity/game-cat-lucky-statistic.entity';
 import { GameCatLuckyTimeLocker } from './entity/game-cat-lucky-time_locker.entity';
 import { GameCatLuckyConfigShop } from './entity/game-cat-lucky-config-shop.entity';
@@ -32,8 +31,6 @@ export class GameCatLuckyService {
     private accountRepository: Repository<Account>,
     @InjectRepository(Currency)
     private currencyRepository: Repository<Currency>,
-    @InjectRepository(TelegramAdsConfig)
-    private telegramAdsConfigRepository: Repository<TelegramAdsConfig>,
     @InjectRepository(GameCatLuckyStatistic)
     private gameCatLuckyStatisticRepository: Repository<GameCatLuckyStatistic>,
     @InjectRepository(GameCatLuckyTimeLocker)
@@ -419,7 +416,6 @@ export class GameCatLuckyService {
   }
 
   async getGameCatLuckyAdsConfig(account_id: string) {
-    const telegramAdsConfig = await this.telegramAdsConfigRepository.find({ where: { game: 'CAT_LUCKY' } });
     let gameCatLuckyTimeLocker = await this.gameCatLuckyTimeLockerRepository.findOne({ where: { account_id: account_id } });
     if (gameCatLuckyTimeLocker == null) {
       gameCatLuckyTimeLocker = new GameCatLuckyTimeLocker(account_id);
@@ -432,7 +428,7 @@ export class GameCatLuckyService {
     return {
       "ticket_per_ads": 1,
       "next_ads_second": seconds,
-      'telegram_ads_config': telegramAdsConfig,
+      'ads_config': 0;
     };
   }
 

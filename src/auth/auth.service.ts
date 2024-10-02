@@ -36,6 +36,7 @@ export class AuthService {
     if (account) {
       await this.accountRepository.update({ telegram_id: loginDTO.telegram_id }, { display_name: loginDTO.display_name });
       await this.accountRepository.update({ telegram_id: loginDTO.telegram_id }, { language_code: loginDTO.language_code });
+      await this.accountRepository.update({ telegram_id: loginDTO.telegram_id }, { last_login_datetime: () => 'CURRENT_TIMESTAMP', });
     }
     else {
       let referralAccount = null;
