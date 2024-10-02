@@ -425,7 +425,7 @@ export class GameCatLuckyService {
       gameCatLuckyTimeLocker = new GameCatLuckyTimeLocker(account_id);
     }
     const now = new Date();
-    let seconds = (now.getTime() - gameCatLuckyTimeLocker.lock_ads) / 1000;
+    let seconds = (now.getTime() - gameCatLuckyTimeLocker.lock_ads.getTime()) / 1000;
     if (seconds < 0) {
       seconds = 0;
     }
